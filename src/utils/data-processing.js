@@ -61,6 +61,9 @@ export const getQQPoints = (data) => {
 function computeDeviationMagnitude (x,y) {
     if(x===y) return 0
     const absoluteDeviation =  Math.abs(x-y) * Math.sin(45 * Math.PI/180);
-    const remainder = Math.min(x,y) / Math.sin(45 * Math.PI / 180);
+    const min = Math.min(x,y)
+    const max = Math.max(x,y)
+    const mirroredMin = min > 0.5 ? (1-max):(min)
+    const remainder = mirroredMin / Math.sin(45 * Math.PI / 180);
     return absoluteDeviation / (absoluteDeviation+remainder);
 }
