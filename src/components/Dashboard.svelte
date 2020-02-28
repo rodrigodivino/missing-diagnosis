@@ -1,11 +1,11 @@
 <script>
 import QQplot from './visualizations/QQplot.svelte';
-import {getLineObjects} from '../utils/data-processing'
+import {getQQPoints} from '../utils/data-processing'
 import {canvasWidth, canvasHeight} from "../stores";
 
 export let data;
 
-$: qqplotData = getLineObjects(data);
+$: qqplotData = getQQPoints(data);
 </script>
 
 

@@ -1,6 +1,6 @@
 import {quantile} from 'd3'
 
-export const getLineObjects = (data) => {
+export const getQQPoints = (data) => {
     const dataObjects = []
     for (const treatmentVariable of data.columns){
         for (const measurementVariable of data.columns){
@@ -37,20 +37,20 @@ export const getLineObjects = (data) => {
         const quantilesOfMissingDistribution = quantilePercentages.map(p=>quantile(normMissingDist, p))
         const quantilesOfWholeDistribution = quantilePercentages.map(p=>quantile(normPresentDist, p))
         
-        const lineObject =[];
+        const points =[];
         for (let i=0; i<quantilePercentages.length; i++){
 
-            lineObject.push({
+            points.push({
                 x: quantilesOfMissingDistribution[i],
                 y: quantilesOfWholeDistribution[i],
-                mag: computeMagnitude(quantilesOfMissingDistribution[i], quantilesOfWholeDistribution[i])
+                mag: computeDeviationMagnitude(quantilesOfMissingDistribution[i], quantilesOfWholeDistribution[i])
             })
         }
         
         const dataObject = {
             treatmentVariable,
             measurementVariable,
-            lineObject
+            points
         }
         dataObjects.push(dataObject)
     } 
@@ -58,6 +58,9 @@ export const getLineObjects = (data) => {
     return dataObjects
 }
 
-function computeMagnitude (x,y) {
-    return x + y
+function computeDeviationMagnitude (x,y) {
+    if(x===y) return 0
+    const absoluteDeviation =  Math.abs(x-y) * Math.sin(45 * Math.PI/180);
+    const remainder = Math.min(x,y) / Math.sin(45 * Math.PI / 180);
+    return absoluteDeviation / (absoluteDeviation+remainder);
 }

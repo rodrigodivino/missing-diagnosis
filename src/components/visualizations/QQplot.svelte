@@ -57,7 +57,7 @@
             <g class="lines">
                 {#each data as d}
                     {console.log(d)}
-                    <path class="data" d={lineGenerator(d.lineObject)}></path>
+                    <path class="data" d={lineGenerator(d.points)}></path>
 	            {/each}
             </g>
         </g>
