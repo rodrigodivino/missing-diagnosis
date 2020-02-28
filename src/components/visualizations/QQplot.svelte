@@ -1,6 +1,5 @@
 <script>
     import {canvasWidth, canvasHeight} from "../../stores.js";
-    import {getLineObjects} from "./QQplot.functions.js";
     import {select} from "d3";
     import {scaleLinear, axisLeft, axisBottom} from "d3";
     import {line} from "d3";
@@ -15,8 +14,6 @@
     $: innerWidth = width * $canvasWidth - margin.left - margin. right;
     $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
-    $: dataObjects = getLineObjects(data)
-
     $: xScale = scaleLinear().domain([0, 1]).range([0, innerWidth])
     $: yScale = scaleLinear().domain([0, 1]).range([innerHeight, 0])
 
@@ -28,18 +25,19 @@
     $: xAxis = axisBottom(xScale)
     $: yAxis = axisLeft(yScale)
 
-    const placeAxes = (xAxis, xAxisGroup, yAxis, yAxisGroup) => {
+    const renderAxes = (xAxis, xAxisGroup, yAxis, yAxisGroup) => {
         if(xAxisGroup && yAxisGroup){
-            select(xAxisGroup).selectAll().remove()
-            select(xAxisGroup).call(xAxis)
-            select(yAxisGroup).selectAll().remove()
-            select(yAxisGroup).call(yAxis)
+            const xg = select(xAxisGroup)
+            xg.selectAll().remove()
+            xg.call(xAxis)
+            
+            const yg = select(yAxisGroup)
+            yg.selectAll().remove()
+            yg.call(yAxis)
         }
-    }; $: placeAxes(xAxis, xAxisGroup, yAxis, yAxisGroup)
-
+    }; $: renderAxes(xAxis, xAxisGroup, yAxis, yAxisGroup)
 
 </script>
-
 
 
 <g class="outerRing" transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
@@ -47,13 +45,17 @@
     <g class="marginConvention" transform="translate({margin.left},{margin.top})">
         <g class="background">
             <g class="x-axis" transform="translate(0,{innerHeight})" bind:this={xAxisGroup}></g>
+            <g class="x-legend" transform="translate({innerWidth/2}, {innerHeight + 20})">
+                <text class="x-label">Quantiles from the Missing Sample</text>
+            </g> 
             <g class="y-axis" bind:this={yAxisGroup}></g>
+            
             <line class="diagonal" x1={xScale(0)} y1={yScale(0)} x2={xScale(1)} y2={yScale(1)}></line>
         
         </g>
         <g class="foreground">
             <g class="lines">
-                {#each dataObjects as d}
+                {#each data as d}
                     {console.log(d)}
                     <path class="data" d={lineGenerator(d.lineObject)}></path>
 	            {/each}
@@ -72,6 +74,10 @@
     line.diagonal {
         stroke: black;
         stroke-width: 5;
+    }
+    text.x-label {
+        alignment-baseline: hanging;
+        text-anchor: middle;
     }
 </style>
 

@@ -1,5 +1,5 @@
 <script>
-	import QQplot from '../components/visualizations/QQplot.svelte';
+	import Dashboard from '../components/Dashboard.svelte'
 	import {canvasWidth, canvasHeight} from "../stores";
 	import {csvParse, autoType} from 'd3';
 
@@ -30,9 +30,7 @@
 	{#await parseFile(loadedFile)}
 		<p>...parsing data</p>
 	{:then data}
-	<svg width={$canvasWidth} height={$canvasHeight}>
-		<QQplot x={0} y={0} width={1} height={1} {data}></QQplot>
-	</svg>
+	<Dashboard {data}></Dashboard>
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
