@@ -8,7 +8,17 @@
 
 	// This parse function is on protyping mode, hardcoding missing values as -999 noises
 	const parseFile = async file => {
-		const text = await file.text()
+		
+
+		const text = await new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = fileLoadedEvent => {
+				const text = fileLoadedEvent.target.result;
+				resolve(text)
+			}
+			reader.readAsText(file	, "UTF-8");
+		})
+
 		const data = await csvParse(text, autoType)
 		for (let entry of data){
 			// Here the noises are recoded as null
