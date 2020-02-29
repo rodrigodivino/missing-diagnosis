@@ -7,6 +7,7 @@ import {mean} from "d3"
 
 export let data;
 
+
 $: QQpoints = getQQPoints(data);
 
 $: BeeswarmData = QQpoints.map(d=> ({

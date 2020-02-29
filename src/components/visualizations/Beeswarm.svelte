@@ -1,6 +1,6 @@
 <script>
     import {canvasWidth, canvasHeight} from "../../stores.js";
-    import {scaleLinear, axisBottom, select, forceSimulation, forceX, forceY, forceCollide, brushX} from 'd3';
+    import {event, scaleLinear, axisBottom, select, forceSimulation, forceX, forceY, forceCollide, brushX} from 'd3';
 
     export let x = 0;
     export let y = 0;
@@ -39,10 +39,17 @@
     }
 
     $: layoutPromise = computeLayout(data);
+    let forcedData;
 
     let brushGroup;
+    let selectedInterval = null;
+
+    $: console.log(selectedInterval)
     $: brush = brushX()
-        .extent([[0,0], [innerWidth, innerHeight]]);
+        .extent([[0,0], [innerWidth, innerHeight]])
+        .on("start brush end", () => {
+            selectedInterval = event.selection ? event.selection.map(px=> xScale.invert(px)) : null
+        })
 
     const placeBrush = (brushGroup, brush) => {
         if(brushGroup && brush){
