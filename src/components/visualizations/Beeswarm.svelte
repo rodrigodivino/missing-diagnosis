@@ -1,6 +1,10 @@
 <script>
     import {canvasWidth, canvasHeight} from "../../stores.js";
-    import {event, scaleLinear, axisBottom, select, forceSimulation, forceX, forceY, forceCollide, brushX} from 'd3';
+    import {event, select} from "d3-selection"
+    import {scaleLinear} from "d3-scale"
+    import {axisBottom} from "d3-axis"
+    import {forceSimulation, forceX, forceY, forceCollide} from "d3-force"
+    import {brushX} from 'd3-brush';
 
     export let x = 0;
     export let y = 0;
@@ -15,17 +19,16 @@
     $: xScale = scaleLinear().domain([0,1]).range([0,innerWidth])
     $: xAxis = axisBottom(xScale);
 
-    let xAxisGroup;
-    const placeAxis = (xAxis, xAxisGroup) => {
-        if (xAxisGroup){
-            const xg = select(xAxisGroup)
+    let xAxisDOM;
+    const placeAxis = (xAxis, xAxisDOM) => {
+        if (xAxisDOM){
+            const xg = select(xAxisDOM)
             xg.selectAll().remove()
             xg.call(xAxis)
         }
-    }; $: placeAxis(xAxis, xAxisGroup);
+    }; $: placeAxis(xAxis, xAxisDOM);
 
     
-
     const computeLayout = async data => {
         const simulation = forceSimulation(data)
             .force("x", forceX(d=>xScale(d.averageMagnitude)).strength(5))
@@ -36,27 +39,30 @@
         for (let i = 0; i < 120; ++i) simulation.tick();
 
         return data
-    }
+    }; $: layoutPromise = computeLayout(data);
 
-    $: layoutPromise = computeLayout(data);
-    let forcedData;
 
-    let brushGroup;
+    
     let selectedInterval = null;
-
-    $: console.log(selectedInterval)
     $: brush = brushX()
         .extent([[0,0], [innerWidth, innerHeight]])
         .on("start brush end", () => {
-            selectedInterval = event.selection ? event.selection.map(px=> xScale.invert(px)) : null
+            selectedInterval =
+            event.selection
+            ? event.selection.map(px=> xScale.invert(px))
+            : null
         })
 
-    const placeBrush = (brushGroup, brush) => {
-        if(brushGroup && brush){
-            select(brushGroup).call(brush)
-            console.log('brush applied')
+
+    let brushDOM;
+    const placeBrush = (brushDOM, brush) => {
+        if(brushDOM && brush){
+            select(brushDOM).call(brush)
         }
-    }; $: placeBrush(brushGroup, brush);
+    }; $: placeBrush(brushDOM, brush);
+
+
+    // TODO: bind the datapoints to the selected interval
 
 </script>
 
@@ -78,9 +84,9 @@
            {/await}
         </g>
         <g class="axes">
-            <g class="x-axis" bind:this={xAxisGroup} transform="translate(0,{innerHeight/2})"></g>
+            <g class="x-axis" bind:this={xAxisDOM} transform="translate(0,{innerHeight/2})"></g>
         </g>
-        <g class="brush" bind:this={brushGroup}></g>
+        <g class="brush" bind:this={brushDOM}></g>
     </g>
 </g>
 

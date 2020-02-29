@@ -1,7 +1,7 @@
 <script>
 	import Dashboard from '../components/Dashboard.svelte'
 	import {canvasWidth, canvasHeight} from "../stores";
-	import {csvParse, autoType} from 'd3';
+	import {csvParse, autoType} from 'd3-dsv';
 
 	let files;
 	$: loadedFile = files && files[0];

@@ -3,7 +3,7 @@ import QQplot from './visualizations/QQplot.svelte';
 import Beeswarm from './visualizations/Beeswarm.svelte';
 import {getQQPoints} from '../utils/data-processing'
 import {canvasWidth, canvasHeight} from "../stores";
-import {mean} from "d3"
+import {mean} from "d3-array"
 
 export let data;
 
@@ -17,7 +17,6 @@ $: BeeswarmData = QQpoints.map(d=> ({
 }))
 
 
-$: console.log(BeeswarmData);
 </script>
 
 

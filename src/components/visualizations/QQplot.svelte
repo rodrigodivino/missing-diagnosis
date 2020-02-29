@@ -1,9 +1,10 @@
 <script>
     import {canvasWidth, canvasHeight} from "../../stores.js";
-    import {select} from "d3";
-    import {scaleLinear, axisLeft, axisBottom} from "d3";
-    import {line} from "d3";
-    import {onMount} from 'svelte';
+    import {select} from "d3-selection";
+    import {scaleLinear} from "d3-scale"
+    import {axisLeft, axisBottom} from "d3-axis";
+    import {line} from "d3-shape";
+    
     export let x = 0;
     export let y = 0;
     export let width = 1;
@@ -20,22 +21,22 @@
     $: lineGenerator = line().x(d=>xScale(d.x)).y(d=> yScale(d.y))
 
 
-    let xAxisGroup, yAxisGroup;
+    let xAxisDOM, yAxisDOM;
 
     $: xAxis = axisBottom(xScale)
     $: yAxis = axisLeft(yScale)
 
-    const renderAxes = (xAxis, xAxisGroup, yAxis, yAxisGroup) => {
-        if(xAxisGroup && yAxisGroup){
-            const xg = select(xAxisGroup)
+    const renderAxes = (xAxis, xAxisDOM, yAxis, yAxisDOM) => {
+        if(xAxisDOM && yAxisDOM){
+            const xg = select(xAxisDOM)
             xg.selectAll().remove()
             xg.call(xAxis)
             
-            const yg = select(yAxisGroup)
+            const yg = select(yAxisDOM)
             yg.selectAll().remove()
             yg.call(yAxis)
         }
-    }; $: renderAxes(xAxis, xAxisGroup, yAxis, yAxisGroup)
+    }; $: renderAxes(xAxis, xAxisDOM, yAxis, yAxisDOM)
 
 </script>
 
@@ -44,11 +45,11 @@
     <rect width={width * $canvasWidth} height={height * $canvasHeight} fill='none' stroke='dimgray'></rect>
     <g class="marginConvention" transform="translate({margin.left},{margin.top})">
         <g class="background">
-            <g class="x-axis" transform="translate(0,{innerHeight})" bind:this={xAxisGroup}></g>
+            <g class="x-axis" transform="translate(0,{innerHeight})" bind:this={xAxisDOM}></g>
             <g class="x-legend" transform="translate({innerWidth/2}, {innerHeight + 20})">
                 <text class="x-label">Quantiles from the Missing Sample</text>
             </g> 
-            <g class="y-axis" bind:this={yAxisGroup}></g>
+            <g class="y-axis" bind:this={yAxisDOM}></g>
             
             <line class="diagonal" x1={xScale(0)} y1={yScale(0)} x2={xScale(1)} y2={yScale(1)}></line>
         
@@ -56,7 +57,6 @@
         <g class="foreground">
             <g class="lines">
                 {#each data as d}
-                    {console.log(d)}
                     <path class="data" d={lineGenerator(d.points)}></path>
 	            {/each}
             </g>
