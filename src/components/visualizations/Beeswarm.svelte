@@ -1,6 +1,6 @@
 <script>
     import {canvasWidth, canvasHeight} from "../../stores.js";
-    import {scaleLinear, axisBottom, select, forceSimulation, forceX, forceY, forceCollide} from 'd3';
+    import {scaleLinear, axisBottom, select, forceSimulation, forceX, forceY, forceCollide, brushX} from 'd3';
 
     export let x = 0;
     export let y = 0;
@@ -8,7 +8,7 @@
     export let height = 1;
     export let data;
 
-    const margin = {top:20, left:20, right:20, bottom: 20};
+    const margin = {top:20, left:50, right:50, bottom: 20};
     $: innerWidth = width * $canvasWidth - margin.left - margin. right;
     $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
     
@@ -40,17 +40,28 @@
 
     $: layoutPromise = computeLayout(data);
 
-    
+    let brushGroup;
+    $: brush = brushX()
+        .extent([[0,0], [innerWidth, innerHeight]]);
+
+    const placeBrush = (brushGroup, brush) => {
+        if(brushGroup && brush){
+            select(brushGroup).call(brush)
+            console.log('brush applied')
+        }
+    }; $: placeBrush(brushGroup, brush);
+
 </script>
 
 <g class="outerRing" transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
     <rect class="outerBackground" width={width * $canvasWidth} height={height * $canvasHeight}></rect>
     <g class="marginConvention" transform="translate({margin.left},{margin.top})">
         <g class="background">
+            
         </g>
         <g class="foreground">
            {#await layoutPromise}
-                {console.log('computing layout')}
+                <rect class="loading" width={innerWidth} height={innerHeight}></rect>
            {:then data}
                 {#each data as d}
                     <circle class='data' cx={d.x} cy={d.y}></circle>
@@ -62,6 +73,7 @@
         <g class="axes">
             <g class="x-axis" bind:this={xAxisGroup} transform="translate(0,{innerHeight/2})"></g>
         </g>
+        <g class="brush" bind:this={brushGroup}></g>
     </g>
 </g>
 
@@ -77,4 +89,7 @@
         fill: steelblue;
     }
 
+    g.brush {
+        opacity: .7;
+    }
 </style>

@@ -15,12 +15,14 @@ $: BeeswarmData = QQpoints.map(d=> ({
 	averageMagnitude: mean(d.points, v=>v.mag)
 }))
 
+
 $: console.log(BeeswarmData);
 </script>
 
 
 <svg width={$canvasWidth} height={$canvasHeight}>
-	<Beeswarm x={0} y={0} width={1} height={1} data={BeeswarmData}></Beeswarm>
+	<Beeswarm x={0} y={0} width={1} height={.2} data={BeeswarmData}></Beeswarm>
+	<QQplot x={0} y={.2} width={1} height={.8} data={QQpoints}></QQplot>
 </svg>
 
 <style>
