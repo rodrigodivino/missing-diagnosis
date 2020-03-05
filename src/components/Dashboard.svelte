@@ -1,28 +1,28 @@
 <script>
-import QQplot from './visualizations/QQplot.svelte';
-import Beeswarm from './visualizations/Beeswarm.svelte';
+import Arc from './visualizations/Arc.svelte';
 import {getQQPoints} from '../utils/data-processing'
+import {computeMCARProbabilities} from "../utils/compute-probabilities"
 import {canvasWidth, canvasHeight} from "../stores";
 import {mean} from "d3-array"
 
 export let data;
 
+console.log(computeMCARProbabilities(data, data.columns))
+// $: QQpoints = getQQPoints(data);
 
-$: QQpoints = getQQPoints(data);
-
-$: BeeswarmData = QQpoints.map(d=> ({
-	treatmentVariable: d.treatmentVariable,
-	measurementVariable: d.measurementVariable,
-	averageMagnitude: mean(d.points, v=>v.mag)
-}))
+// $: BeeswarmData = QQpoints.map(d=> ({
+// 	treatmentVariable: d.treatmentVariable,
+// 	measurementVariable: d.measurementVariable,
+// 	averageMagnitude: mean(d.points, v=>v.mag)
+// }))
 
 
 </script>
 
 
 <svg width={$canvasWidth} height={$canvasHeight}>
-	<Beeswarm x={0} y={0} width={1} height={.2} data={BeeswarmData}></Beeswarm>
-	<QQplot x={0} y={.2} width={1} height={.8} data={QQpoints}></QQplot>
+
+	<Arc x={0} y={0} width={1} height={1} data={data}></Arc>
 </svg>
 
 <style>
