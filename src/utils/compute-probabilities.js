@@ -3,46 +3,64 @@ import {ascending, quantile, extent, mean} from "d3";
 export function computeMCARProbabilities(data, variables) {
     const probabilityData = [];
     for (let treatmentVariable of variables) {
-        const treatmentIsNull = data.map(d=>d[treatmentVariable] === null)
-        if(treatmentIsNull.every(b => b===false)) continue
+        const treatmentIsNull = new Array(data.length);
 
-        for (let measurementVariable of variables) {
-            if (treatmentVariable === measurementVariable) continue;
-            const population = data.map(d=> d[measurementVariable]);
-
-            const subsample = data.filter(d => d[treatmentVariable] === null).map(d=> d[measurementVariable]);
-            if(subsample.length === 0) continue;
-
-            const sampleSize = subsample.length/data.length;
-
-
-            const binner = new Binner(population)
-            const populationBins = binner.bin(population)
-            const subsampleBins = binner.bin(subsample)
-            
-            for (let i=0; i< subsampleBins.length; i++) {
-                const bin = subsampleBins[i]
-                const subsampleCount = bin.count;
-                const expectedCount = populationBins[i].count * sampleSize
-                const squareError = Math.pow((subsampleCount - expectedCount), 2);
-
-                bin.expectedCount = expectedCount
-                bin.squareError = squareError;
-            }
+        let sampleSize = 0;
         
-            const RMSEList = bootstrapRMSE(population, sampleSize, populationBins, binner)
-            const RMSE = Math.sqrt(mean(subsampleBins.map(v=>v.squareError)))
-
-            let MCARchance = 1;
-            for (let bootRMSE of RMSEList) {
-                if (RMSE < bootRMSE) MCARchance++;
-            }
-            MCARchance = MCARchance / (RMSEList.length+1)
-            probabilityData.push({
-                treatmentVariable, measurementVariable, MCARchance,
-                populationBins, subsampleBins
-            })
+        for(let i=0;i<data.length;i++){
+            if(data[i][treatmentVariable] === null){
+                treatmentIsNull[i] = true;
+                sampleSize++;
+            }     
+            else {
+                treatmentIsNull[i] = false;
+            } 
         }
+
+        
+        if(sampleSize > 0) {
+            for (let measurementVariable of variables) {
+                if (treatmentVariable !== measurementVariable) {
+
+                    const population = data.map(d=> d[measurementVariable]);
+
+                    const subsample = data.filter(d => d[treatmentVariable] === null).map(d=> d[measurementVariable]);
+                    
+                    if(subsample.length === 0) continue;
+        
+                    const sampleSize = subsample.length/data.length;
+        
+        
+                    const binner = new Binner(population)
+                    const populationBins = binner.bin(population)
+                    const subsampleBins = binner.bin(subsample)
+                    
+                    for (let i=0; i< subsampleBins.length; i++) {
+                        const bin = subsampleBins[i]
+                        const subsampleCount = bin.count;
+                        const expectedCount = populationBins[i].count * sampleSize
+                        const squareError = Math.pow((subsampleCount - expectedCount), 2);
+        
+                        bin.expectedCount = expectedCount
+                        bin.squareError = squareError;
+                    }
+                
+                    const RMSEList = bootstrapRMSE(population, sampleSize, populationBins, binner)
+                    const RMSE = Math.sqrt(mean(subsampleBins.map(v=>v.squareError)))
+        
+                    let MCARchance = 1;
+                    for (let bootRMSE of RMSEList) {
+                        if (RMSE < bootRMSE) MCARchance++;
+                    }
+                    MCARchance = MCARchance / (RMSEList.length+1)
+                    probabilityData.push({
+                        treatmentVariable, measurementVariable, MCARchance,
+                        populationBins, subsampleBins
+                    })
+                }
+            }
+        }
+
     }
     return probabilityData;
 
@@ -69,7 +87,7 @@ function bootstrapRMSE(population, sampleSize, populationBins, binner){
         }
     
         const RMSE = Math.sqrt(mean(resampleBins.map(v=>v.squareError)))
-        RMSEList.push(RMSE)
+        RMSEList.push(RMSE);
     }
     return RMSEList;
 }

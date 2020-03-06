@@ -22,6 +22,7 @@
     $: xAxis = axisBottom(xScale);
     $: yAxis = axisLeft(yScale);
 
+
     let xAxisDOM, yAxisDOM;
     const placeAxes = (xAxisDOM, yAxisDOM, xAxis, yAxis) => {
         if(xAxisDOM && yAxisDOM && xScale && yScale){
