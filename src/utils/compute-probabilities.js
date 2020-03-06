@@ -1,6 +1,7 @@
 import {ascending, quantile, extent, mean} from "d3";
 
 export function computeMCARProbabilities(data, variables) {
+    const probabilityData = [];
     for (let treatmentVariable of variables) {
         const treatmentIsNull = data.map(d=>d[treatmentVariable] === null)
         if(treatmentIsNull.every(b => b===false)) continue
@@ -37,15 +38,20 @@ export function computeMCARProbabilities(data, variables) {
                 if (RMSE < bootRMSE) MCARchance++;
             }
             MCARchance = MCARchance / (RMSEList.length+1)
-            console.log(MCARchance)
+            probabilityData.push({
+                treatmentVariable, measurementVariable, MCARchance,
+                populationBins, subsampleBins
+            })
         }
     }
+    return probabilityData;
+
 }
 
 
 
 function bootstrapRMSE(population, sampleSize, populationBins, binner){
-    const REPETITIONS = 20000;
+    const REPETITIONS = 100;
     const RMSEList = [];
     for(let n=0; n<REPETITIONS; n++){
         const resample = doResample(population, sampleSize)

@@ -7,7 +7,8 @@ import {mean} from "d3-array"
 
 export let data;
 
-console.log(computeMCARProbabilities(data, data.columns))
+const probabilityData = computeMCARProbabilities(data, data.columns);
+probabilityData.columns = data.columns;
 // $: QQpoints = getQQPoints(data);
 
 // $: BeeswarmData = QQpoints.map(d=> ({
@@ -22,7 +23,7 @@ console.log(computeMCARProbabilities(data, data.columns))
 
 <svg width={$canvasWidth} height={$canvasHeight}>
 
-	<Arc x={0} y={0} width={1} height={1} data={data}></Arc>
+	<Arc x={0} y={0} width={1} height={1} data={probabilityData}></Arc>
 </svg>
 
 <style>
