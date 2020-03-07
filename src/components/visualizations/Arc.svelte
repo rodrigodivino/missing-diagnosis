@@ -11,12 +11,13 @@
     export let width = 1;
     export let height = 1;
     export let data;
+    export let columns;
 
     const margin = {top: 50, bottom: 50, left: 50, right: 50};
     $: innerWidth = width * $canvasWidth - margin.left - margin. right;
     $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
-    $: xScale = scaleBand().domain(data.columns).range([0, innerWidth]);
+    $: xScale = scaleBand().domain(columns).range([0, innerWidth]);
     $: yScale = scaleLinear().domain([0, 200]).range([0, innerHeight]);
 
     $: xAxis = axisBottom(xScale);
@@ -68,11 +69,17 @@
            <g class='y-axis' bind:this={yAxisDOM}></g>
         </g>
         <g class="foreground">
-           {#each data as d}
-           {console.log(d)}
-            <path class="data"
-                d={drawEdge(d.treatmentVariable, d.measurementVariable, d.MCARchance)}></path>
+           {console.log('redrawing')}
+           {#each data as vector, i}
+            {#each vector as value, j}
+                {#if (i!==j) && (value !== null)}
+                    <path class="data"
+                    d={drawEdge(columns[i], columns[j], value)}></path>
+                {/if}
+            {/each}
            {/each}
+            
+           
         </g>
     </g>
 </g>

@@ -18,17 +18,15 @@ export let data;
 // }))
 
 const errorMatrix = computeErrorMatrix(data, data.columns, data.columns.map(()=>"Continuous"))
+let arcData = RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix);
 
-const t1 = RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix);
-const t2 = RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix,t1);
-const t3 = RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix,t2);
-const t4 = RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix,t3);
+
 </script>
 
 
 <svg width={$canvasWidth} height={$canvasHeight}>
 
-	<Arc x={0} y={0} width={1} height={1} data={[]}></Arc>
+	<Arc x={0} y={0} width={1} height={1} data={arcData} columns={data.columns}></Arc>
 </svg>
 
 <style>
