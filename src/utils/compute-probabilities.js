@@ -1,4 +1,78 @@
-import {ascending, quantile, extent, mean} from "d3";
+import {ascending, quantile, extent, mean, sum} from "d3";
+
+export function computeErrorMatrix(data, columns, columnTypes) {
+    const errorMatrix = new Array(columns.length).fill(0).map(()=>new Array(columns.length).fill(null))
+    for(let i=0;i<columns.length;i++){
+        const iDim = columns[i];
+        const samplingMask = data.map(d=> d[iDim] === null);
+        const sampleSize = sum(samplingMask);
+        if(sampleSize === 0) continue;
+
+        for (let j=0;j<columns.length;j++){
+            if(i===j) continue;
+            const jDim = columns[j];
+            let population = new Array(data.length);
+            let subsample = new Array(sampleSize);
+            let subsampleIndex = 0;
+            for(let d=0; d<data.length;d++){
+                population[d] = data[d][jDim];
+                if(samplingMask[d]){
+                    subsample[subsampleIndex] = data[d][jDim];
+                    subsampleIndex++;
+                }
+            }
+            if(columnTypes[j] === "Continuous"){
+                const binRules = FreedmanDiaconis(population); 
+                const populationBins = Histogram(population, binRules);
+                const subsampleBins = Histogram(subsample, binRules);
+                console.log(populationBins, subsampleBins)
+            } else {
+                
+            }
+        }
+    }
+}
+
+function Histogram(array, rules){
+    let binName = 0;
+        let bins = new Array(rules.numOfBins+1);
+        for(let i = 0; i < rules.numOfBins; i++){
+          bins[i] = {
+            name: binName,
+            minNum: rules.min+i*rules.binWidth,
+            maxNum: rules.min+(i+1)*rules.binWidth,
+            count: 0
+          };
+          binName++;
+        }
+        
+        for (let i = 0; i < array.length; i++){
+          const value = array[i];
+          if(value===null) continue;
+          const binNumber = Math.floor((value - rules.min) / rules.binWidth);
+          bins[binNumber].count++ 
+        }
+        bins.push({name: 'miss', count: array.filter(v=>v===null).length})
+
+        return bins;
+}
+function FreedmanDiaconis(population) {
+    const iqr = (array) => {
+        array.sort(ascending);
+        const q1 = quantile(array, .25)
+        const q3 = quantile(array, .75)
+        return q3 - q1
+    }
+    const freedmanDiaconis = (array) => {
+        return 2*(iqr(array)/Math.pow(array.length, 1/3));
+    }
+
+    const binWidth = freedmanDiaconis(population.filter(d=> d !== null ));
+    const [min,max] = extent(population);
+    const numOfBins = Math.ceil ( Math.abs(min-max) / binWidth );
+    return {binWidth, min, numOfBins};
+}
+
 
 export function computeMCARProbabilities(data, variables) {
     const probabilityData = [];

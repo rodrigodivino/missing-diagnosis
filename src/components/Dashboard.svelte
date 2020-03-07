@@ -1,13 +1,13 @@
 <script>
 import Arc from './visualizations/Arc.svelte';
 import {getQQPoints} from '../utils/data-processing'
-import {computeMCARProbabilities} from "../utils/compute-probabilities"
+import {computeMCARProbabilities, computeErrorMatrix} from "../utils/compute-probabilities"
 import {canvasWidth, canvasHeight} from "../stores";
 import {mean} from "d3-array"
 
 export let data;
 
-const probabilityData = computeMCARProbabilities(data, data.columns);
+const probabilityData = computeErrorMatrix(data, data.columns, data.columns.map(()=>"Continuous"));
 probabilityData.columns = data.columns;
 // $: QQpoints = getQQPoints(data);
 
