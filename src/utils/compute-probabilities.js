@@ -57,7 +57,7 @@ function RefineEstimative(data, columns, columnTypes, errorMatrix, binsMatrix, p
                 } else {
                     subsampleBins = Count(subsample, levels);
                 }
-                estimativeMatrix[i][j] += CompareBins(subsampleBins,expectedBins) >= errorMatrix[i][j]? 1: 0
+                estimativeMatrix[i][j] += CompareBins(subsampleBins,expectedBins) <= errorMatrix[i][j]? 1: 0
             }
             estimativeMatrix[i][j] = estimativeMatrix[i][j]/R;
             if(previousEstimative){
