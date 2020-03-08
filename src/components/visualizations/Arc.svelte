@@ -5,6 +5,7 @@
     import {axisLeft, axisBottom} from "d3-axis";
     import {line} from "d3-shape";
     import {path} from "d3-path";
+    import {onMount, afterUpdate, tick} from 'svelte';
     
     export let x = 0;
     export let y = 0;
@@ -12,6 +13,7 @@
     export let height = 1;
     export let data;
     export let columns;
+    export let refine;
 
     const margin = {top: 50, bottom: 50, left: 50, right: 50};
     $: innerWidth = width * $canvasWidth - margin.left - margin. right;
@@ -23,6 +25,8 @@
     $: xAxis = axisBottom(xScale);
     $: yAxis = axisLeft(yScale);
 
+    $: refineLevel = data[1][1];
+    $: console.log(data);
 
     let xAxisDOM, yAxisDOM;
     const placeAxes = (xAxisDOM, yAxisDOM, xAxis, yAxis) => {
@@ -58,6 +62,16 @@
         return p.toString()
     }
 
+   afterUpdate(async() => {
+       
+       console.log('current level: ', data[1][1])
+       const nextData = await refine(data);
+       await tick();
+       if (nextData[1][1] < 1000)
+            data = nextData;
+   })
+    
+
 </script>
 
 
@@ -69,7 +83,6 @@
            <g class='y-axis' bind:this={yAxisDOM}></g>
         </g>
         <g class="foreground">
-           {console.log('redrawing')}
            {#each data as vector, i}
             {#each vector as value, j}
                 {#if (i!==j) && (value !== null)}
@@ -78,8 +91,6 @@
                 {/if}
             {/each}
            {/each}
-            
-           
         </g>
     </g>
 </g>

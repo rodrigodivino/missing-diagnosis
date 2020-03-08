@@ -70,7 +70,6 @@ export function RefineEstimative(data, columns, columnTypes, errorMatrix, previo
     
     estimativeMatrix[0][0]++;
     estimativeMatrix[1][1] += R;
-    console.log(estimativeMatrix);
     return estimativeMatrix;
     
 }
