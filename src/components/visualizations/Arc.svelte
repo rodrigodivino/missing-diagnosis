@@ -26,7 +26,7 @@
     $: yAxis = axisLeft(yScale);
 
     $: refineLevel = data[1][1];
-    $: console.log(data);
+    const colorScale = scaleLinear().domain([0,20000]).range(['gray', 'green'])
 
     let xAxisDOM, yAxisDOM;
     const placeAxes = (xAxisDOM, yAxisDOM, xAxis, yAxis) => {
@@ -63,12 +63,14 @@
     }
 
    afterUpdate(async() => {
-       
-       console.log('current level: ', data[1][1])
-       const nextData = await refine(data);
-       await tick();
-       if (nextData[1][1] < 1000)
-            data = nextData;
+        console.log('current level: ', data[1][1])
+        const nextData = await refine(data, 100);
+        await tick();
+
+        setTimeout(()=>{
+            if (nextData[1][1] < 20000)
+                data = nextData;
+        }, 1)
    })
     
 
@@ -87,6 +89,7 @@
             {#each vector as value, j}
                 {#if (i!==j) && (value !== null)}
                     <path class="data"
+                    stroke={colorScale(refineLevel)}
                     d={drawEdge(columns[i], columns[j], value)}></path>
                 {/if}
             {/each}
@@ -99,7 +102,6 @@
 <style>
     path.data {
         fill: none;
-        stroke: steelblue;
         stroke-width: 1px;
     }
 </style>

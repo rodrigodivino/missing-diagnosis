@@ -21,8 +21,8 @@ export let data;
 const errorMatrix = computeErrorMatrix(data, data.columns, data.columns.map(()=>"Continuous"))
 let arcData = RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix);
 
-async function refineArc(currentArc) {
-	return  RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix, currentArc);
+async function refineArc(currentArc, R=100) {
+	return  RefineEstimative(data, data.columns, data.columns.map(()=>"Continuous"), errorMatrix, currentArc, R);
 }
 
 
