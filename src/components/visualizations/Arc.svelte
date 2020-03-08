@@ -26,7 +26,7 @@
     $: yAxis = axisLeft(yScale);
 
     $: refineLevel = data[1][1];
-    const colorScale = scaleLinear().domain([0,20000]).range(['gray', 'green'])
+    const colorScale = scaleLinear().domain([0,400]).range(['gray', 'green'])
 
     let xAxisDOM, yAxisDOM;
     const placeAxes = (xAxisDOM, yAxisDOM, xAxis, yAxis) => {
@@ -68,7 +68,7 @@
         await tick();
 
         setTimeout(()=>{
-            if (nextData[1][1] < 20000)
+            if (nextData[1][1] < 400)
                 data = nextData;
         }, 1)
    })

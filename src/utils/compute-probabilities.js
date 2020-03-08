@@ -1,7 +1,8 @@
 import {ascending, quantile, extent, mean, sum} from "d3";
 
-export function computeErrorMatrix(data, columns, columnTypes) {
-    const errorMatrix = new Array(columns.length).fill(0).map(()=>new Array(columns.length).fill(null))
+export function computeEstimativeMatrix(data, columns, columnTypes) {
+    const errorMatrix = new Array(columns.length).fill(0).map(()=>new Array(columns.length).fill(null));
+    const binsMatrix = new Array(columns.length).fill(0).map(()=>new Array(columns.length).fill(null));
     for(let i=0;i<columns.length;i++){
         const iDim = columns[i];
         const sampleSize = sum(data.map(d=>d[iDim] === null));
@@ -14,23 +15,29 @@ export function computeErrorMatrix(data, columns, columnTypes) {
             let subsample = data.filter(d=>d[iDim]===null).map(d=>d[jDim]);
             if(columnTypes[j] === "Continuous"){
                 const binRules = FreedmanDiaconis(population); 
-                const populationBins = Histogram(population, binRules);
+                const populationBins = binsMatrix[j][j] ? binsMatrix[j][j] : Histogram(population, binRules);
                 const expectedBins = populationBins.map(b=>({...b, count:(sampleSize/data.length)*b.count}));
                 const subsampleBins = Histogram(subsample, binRules);
                 errorMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
+                if(binsMatrix[j][j]===null) binsMatrix[j][j] = populationBins
+                binsMatrix[i][j] = [expectedBins, subsampleBins];
             } else {
                 const levels = Levels(population)
-                const populationBins = Count(population, levels)
+                const populationBins = binsMatrix[j][j] ? binsMatrix[j][j] : Count(population, levels)
                 const expectedBins = populationBins.map(b=>({...b, count:(sampleSize/data.length)*b.count}));
                 const subsampleBins = Count(subsample, levels);
                 errorMatrix[i][j] = CompareBins(expectedBins, subsampleBins)
+                if(binsMatrix[j][j]===null) binsMatrix[j][j] = populationBins
+                binsMatrix[i][j] = [expectedBins, subsampleBins];
             }
         }
     }
-    return errorMatrix;
+    const estimativeMatrix = RefineEstimative(data, data.columns, columnTypes, errorMatrix, binsMatrix)
+    const refineEstimative = (currentEstimative, R) => RefineEstimative(data, data.columns, columnTypes, errorMatrix, binsMatrix, currentEstimative, R)
+    return [estimativeMatrix, binsMatrix, refineEstimative];
 }
 
-export function RefineEstimative(data, columns, columnTypes, errorMatrix, previousEstimative=null, R=100) {
+function RefineEstimative(data, columns, columnTypes, errorMatrix, binsMatrix, previousEstimative=null, R=100) {
     const estimativeMatrix = new Array(columns.length).fill(0).map(()=>new Array(columns.length).fill(null));
     for(let i=0;i<columns.length;i++){
         const sampleSize = errorMatrix[i][i];
@@ -39,14 +46,8 @@ export function RefineEstimative(data, columns, columnTypes, errorMatrix, previo
             if(i===j) continue;
             const jDim = columns[j];
             let population = data.map(d=>d[jDim]);
-            const binRules = FreedmanDiaconis(population);             
-            let populationBins;
-            if(columnTypes[j] === "Continuous"){
-                populationBins = Histogram(population, binRules);
-            } else {
-                populationBins = Count(population, levels);
-            }
-            const expectedBins = populationBins.map(b=>({...b, count:(sampleSize/data.length)*b.count}));
+            const binRules = FreedmanDiaconis(population);
+            const expectedBins = binsMatrix[i][j][0];
             estimativeMatrix[i][j] = 0;
             for(let n=0;n<R;n++){
                 let subsample = Resample(population, sampleSize);
@@ -151,97 +152,6 @@ function FreedmanDiaconis(population) {
 }
 
 
-export function computeMCARProbabilities(data, variables) {
-    const probabilityData = [];
-    for (let treatmentVariable of variables) {
-        const treatmentIsNull = new Array(data.length);
-
-        let sampleSize = 0;
-        
-        for(let i=0;i<data.length;i++){
-            if(data[i][treatmentVariable] === null){
-                treatmentIsNull[i] = true;
-                sampleSize++;
-            }     
-            else {
-                treatmentIsNull[i] = false;
-            } 
-        }
-
-        
-        if(sampleSize > 0) {
-            for (let measurementVariable of variables) {
-                if (treatmentVariable !== measurementVariable) {
-
-                    const population = data.map(d=> d[measurementVariable]);
-
-                    const subsample = data.filter(d => d[treatmentVariable] === null).map(d=> d[measurementVariable]);
-                    
-                    if(subsample.length === 0) continue;
-        
-                    const sampleSize = subsample.length/data.length;
-        
-        
-                    const binner = new Binner(population)
-                    const populationBins = binner.bin(population)
-                    const subsampleBins = binner.bin(subsample)
-                    
-                    for (let i=0; i< subsampleBins.length; i++) {
-                        const bin = subsampleBins[i]
-                        const subsampleCount = bin.count;
-                        const expectedCount = populationBins[i].count * sampleSize
-                        const squareError = Math.pow((subsampleCount - expectedCount), 2);
-        
-                        bin.expectedCount = expectedCount
-                        bin.squareError = squareError;
-                    }
-                
-                    const RMSEList = bootstrapRMSE(population, sampleSize, populationBins, binner)
-                    const RMSE = Math.sqrt(mean(subsampleBins.map(v=>v.squareError)))
-        
-                    let MCARchance = 1;
-                    for (let bootRMSE of RMSEList) {
-                        if (RMSE < bootRMSE) MCARchance++;
-                    }
-                    MCARchance = MCARchance / (RMSEList.length+1)
-                    probabilityData.push({
-                        treatmentVariable, measurementVariable, MCARchance,
-                        populationBins, subsampleBins
-                    })
-                }
-            }
-        }
-
-    }
-    return probabilityData;
-
-}
-
-
-
-function bootstrapRMSE(population, sampleSize, populationBins, binner){
-    const REPETITIONS = 100;
-    const RMSEList = [];
-    for(let n=0; n<REPETITIONS; n++){
-        const resample = Resample(population, sampleSize)
-        const resampleBins = binner.bin(resample)
-    
-    
-        for (let i=0; i< resampleBins.length; i++) {
-            const bin = resampleBins[i]
-            const resampleCount = bin.count;
-            const expectedCount = populationBins[i].count * sampleSize
-            const squareError = Math.pow((resampleCount - expectedCount), 2);
-    
-            bin.expectedCount = expectedCount
-            bin.squareError = squareError;
-        }
-    
-        const RMSE = Math.sqrt(mean(resampleBins.map(v=>v.squareError)))
-        RMSEList.push(RMSE);
-    }
-    return RMSEList;
-}
 
 function Resample(array, sampleSize) {
     const bucket = [];
@@ -261,50 +171,5 @@ function Resample(array, sampleSize) {
     }
     
     return resample
-}
-
-
-class Binner {
-    constructor(domain){
-        this.binWidth = this.freedmanDiaconis(domain.filter(d=> d !== null ));
-        const [min,max] = extent(domain)
-        this.min = min;
-        this.numOfBuckets = Math.ceil ( Math.abs(min-max) / this.binWidth );
-    }
-
-    
-    bin(array) { 
-        let binName = 0;
-        let bins = [];
-        for(let i = 0; i < this.numOfBuckets; i++){
-          bins.push({
-            name: binName,
-            minNum: this.min+i*this.binWidth,
-            maxNum: this.min+(i+1)*this.binWidth,
-            count: 0
-          });
-          binName++;
-        }
-    
-        for (let i = 0; i < array.length; i++){
-          const value = array[i];
-          const binNumber = Math.floor((value - this.min) / this.binWidth);
-          bins[binNumber].count++ 
-        }
-        bins.push({name: 'miss', count: array.filter(v=>v===null).length})
-
-        return bins;
-    }
-
-    freedmanDiaconis(array){
-        return 2*(this.iqr(array)/Math.pow(array.length, 1/3));
-    }
-
-    iqr(array){
-        array.sort(ascending);
-        const q1 = quantile(array, .25)
-        const q3 = quantile(array, .75)
-        return q3 - q1
-    }
 }
 
