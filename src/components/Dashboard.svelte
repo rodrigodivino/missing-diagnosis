@@ -8,8 +8,9 @@ import {onMount, tick} from "svelte";
 export let data;
 
 
-const columnTypes = data.columns.map(()=>"Continuous")
+const columnTypes = ['Continuous','Continuous','Continuous','Continuous','Continuous','Continuous','Categorical']
 const [estimativeMatrix, binsMatrix, refineEstimative] = computeEstimativeMatrix(data, data.columns, columnTypes);
+const columnsWithMissingValues = ['Dimension 2', 'Dimension 4', 'Dimension 6']
 
 
 
@@ -22,7 +23,9 @@ const [estimativeMatrix, binsMatrix, refineEstimative] = computeEstimativeMatrix
 	<Matrix x={0} y={0} width={1} height={1}
 	colordata={estimativeMatrix}
 	glyphdata={binsMatrix}
-	columns={data.columns} refine={refineEstimative}></Matrix>
+	columns={data.columns} 
+	{columnsWithMissingValues}
+	refine={refineEstimative}></Matrix>
 </svg>
 
 <style>

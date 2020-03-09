@@ -46,15 +46,16 @@ function RefineEstimative(data, columns, columnTypes, errorMatrix, binsMatrix, p
             if(i===j) continue;
             const jDim = columns[j];
             let population = data.map(d=>d[jDim]);
-            const binRules = FreedmanDiaconis(population);
             const expectedBins = binsMatrix[i][j][0];
             estimativeMatrix[i][j] = 0;
             for(let n=0;n<R;n++){
                 let subsample = Resample(population, sampleSize);
                 let subsampleBins;
                 if(columnTypes[j] === "Continuous"){
+                    const binRules = FreedmanDiaconis(population);
                     subsampleBins = Histogram(subsample, binRules);
                 } else {
+                    const levels = Levels(population)
                     subsampleBins = Count(subsample, levels);
                 }
                 estimativeMatrix[i][j] += CompareBins(subsampleBins,expectedBins) <= errorMatrix[i][j]? 1: 0
