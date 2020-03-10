@@ -13,7 +13,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
             const jDim = columns[j];
             let population = data.map(d=>d[jDim]);
             let subsample = data.filter(d=>d[iDim]===null).map(d=>d[jDim]);
-            if(columnTypes[j] === "Continuous"){
+            if(columnTypes[j] === "Quantitative"){
                 const binRules = FreedmanDiaconis(population); 
                 const populationBins = binsMatrix[j][j] ? binsMatrix[j][j] : Histogram(population, binRules);
                 const expectedBins = populationBins.map(b=>({...b, count:(sampleSize/data.length)*b.count}));
@@ -51,14 +51,14 @@ function RefineEstimative(data, columns, columnTypes, errorMatrix, binsMatrix, p
             for(let n=0;n<R;n++){
                 let subsample = Resample(population, sampleSize);
                 let subsampleBins;
-                if(columnTypes[j] === "Continuous"){
+                if(columnTypes[j] === "Quantitative"){
                     const binRules = FreedmanDiaconis(population);
                     subsampleBins = Histogram(subsample, binRules);
                 } else {
                     const levels = Levels(population)
                     subsampleBins = Count(subsample, levels);
                 }
-                estimativeMatrix[i][j] += CompareBins(subsampleBins,expectedBins) <= errorMatrix[i][j]? 1: 0
+                estimativeMatrix[i][j] += CompareBins(subsampleBins,expectedBins) < errorMatrix[i][j]? 1: 0
             }
             estimativeMatrix[i][j] = estimativeMatrix[i][j]/R;
             if(previousEstimative){
@@ -96,13 +96,14 @@ function Count(array, levels){
     return bins;
 }
 
-function Levels(array){
+export function Levels(array){
     return array.filter((value, index, self) => {
         return self.indexOf(value) === index;
     })
 }
 
 function CompareBins(bins1, bins2) {
+    const diffArray = bins2.map((b2,i)=>b2.count - bins1[i].count);
     const squareErrors = [];
     for (let i=0; i< bins1.length; i++) {
         const bin1 = bins1[i];
@@ -110,7 +111,15 @@ function CompareBins(bins1, bins2) {
         squareErrors.push(Math.pow((bin2.count - bin1.count), 2));
     }
     
-    return Math.sqrt(mean(squareErrors));
+    let swaps = 0;
+    let prevSign = Math.sign(diffArray[0]);
+    for(let i=1; i<diffArray.length; i++) {
+        if(Math.sign(diffArray[i]) !== prevSign){
+            prevSign = Math.sign(diffArray[i])
+            swaps++;
+        }
+    }
+    return (Math.sqrt(mean(squareErrors)))/swaps;
 }
 
 function Histogram(array, rules){

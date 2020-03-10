@@ -2,13 +2,16 @@
 	import Dashboard from '../components/Dashboard.svelte'
 	import {canvasWidth, canvasHeight} from "../stores";
 	import {csvParse, autoType} from 'd3-dsv';
+	import {Levels} from '../utils/compute-probabilities'
 
 	let files;
 	$: loadedFile = files && files[0];
+	let text;
+	let click;
 
-	// This parse function is on protyping mode, hardcoding missing values as -999 noises
-	const parseFile = async file => {
-		
+	let ok = false;
+
+	const parseFile = async (file, encoding) => {
 		const text = await new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onerror = reject;
@@ -19,16 +22,49 @@
 			reader.readAsText(file	, "UTF-8");
 		})
 
-		const data = await csvParse(text, autoType)
+		
+		const regex = new RegExp(`${encoding==="?"?"\\?":encoding}`, 'gi');
+		const replacedText = encoding===',,' ? text : text.replace(regex, '')
+		const data = await csvParse(replacedText, autoType)
 
-		for (let entry of data){
-			// Here the noises are recoded as null
-			for (let column of data.columns){
-				if (entry[column] < -500)
-					entry[column] = null
+		data.types = data.columns.map(c=>{
+			const column = data.map(e=>e[c])
+			const levelDepth = Levels(column).length
+
+			if(levelDepth<30){
+				return 'Categorical'
+			} else {
+				if(column.some(v=> typeof v === "string")){
+					return 'Nominal'
+				} else {
+					return 'Quantitative'
+				}
 			}
-		}
+		})
+
+		data.validColumns = data.columns.filter((c,i) => {
+			return data.types[i] !== "Nominal";
+		})
+		
+		data.columnsWithMissingValues = data.columns.filter(c=>{
+			return data.map(e=>e[c]).some(v=>v===null)
+		})
+
+		console.log(data.types)
 		return data
+	}
+
+
+	const handleStart = () => {
+		if(text && loadedFile) {
+			ok = true;
+		} else if (text) {
+			alert('Please specify data');
+		} else if (loadedFile){
+			alert('Please specify missing encoding')
+		} else {
+			alert('Please specify data and missing encoding')
+		}
 	}
 </script>
 
@@ -37,18 +73,33 @@
 </svelte:head>
 
 
-{#if loadedFile}
-	{#await parseFile(loadedFile)}
+{#if ok}
+	{#await parseFile(loadedFile, text)}
 		<p>...parsing data</p>
 	{:then data}
 	<Dashboard {data}></Dashboard>
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
-
-
 {:else}
-	<input type="file" bind:files>
+<form>
+
+  <div>
+    <label for="example">Upload Data</label>
+    <input type="file" bind:files>
+  </div>
+
+  <div>
+  	<label for="example">Missing Encoding</label>
+    <input type="text" bind:value={text} placeholder="ex.: | ,, | null | miss | ?">
+  </div>
+
+  <div>
+  	<button type="button" on:click={handleStart}>Start</button>
+  </div>
+
+</form>
+
 {/if}
 
 

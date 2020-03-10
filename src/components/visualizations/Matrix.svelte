@@ -6,9 +6,9 @@
     import {line} from "d3-shape";
     import {path} from "d3-path";
     import {max} from "d3-array";
-    import {interpolateViridis} from "d3-scale-chromatic";
+    import {interpolateViridis, interpolateSpectral} from "d3-scale-chromatic";
     import {afterUpdate, onMount, tick} from 'svelte';
-    import {quantization as vsupQuantization, scale as vsupScale, legend as vsupLegend} from 'vsup';
+    import {quantization as vsupQuantization, squareQuantization as vsupSquare, scale as vsupScale, legend as vsupLegend} from 'vsup';
     import Tooltip from "./Tooltip.svelte";
 
     export let x = 0;
@@ -25,6 +25,7 @@
     export let columns;
     export let columnsWithMissingValues;
     export let refine;
+    export let progress;
 
     
     const margin = {top: 50, bottom: 50, left: 100, right: 200};
@@ -40,8 +41,9 @@
     $: yAxis = axisLeft(yScale)
     $: refineLevel = colordata[1][1];
    
-    $: quantization = vsupQuantization().branching(2).layers(4).valueDomain([0,1]).uncertaintyDomain([1000, 0]);
-    $: colorScale = vsupScale().quantize(quantization).range(interpolateViridis)
+    // $: quantization = vsupQuantization().branching(2).layers(4).valueDomain([0,1]).uncertaintyDomain([0, 1]);
+    $: quantization = vsupSquare(5);
+    $: colorScale = vsupScale().quantize(quantization).range(v=>interpolateSpectral(1-v))
 
     $: tooltipWidth = innerWidth/2;
     $: tooltipHeight = innerHeight/4;
@@ -74,23 +76,54 @@
         }
         return glyphPaths;
     }; $: glyphPaths = getGlyphPaths(cellWidth, cellHeight, glyphdata);
+
+    const getCrossData = (glyphdata) => {
+        const crossdata = new Array(columns.length).fill(0).map(()=>new Array(columns.length).fill(null))
+        const countCrosses = diffArray => {
+            const filtered = diffArray.filter(v=>v!==0);
+            let crossess = 0;
+            let prevSign = Math.sign(filtered[0]);
+            for(let i=1;i<filtered.length;i++){
+                if (prevSign !== Math.sign(filtered[i])){
+                    crossess++;
+                    prevSign = prevSign * -1;
+                }
+            }
+            return crossess / (filtered.length -1)
+
+        }
+
+        for(let i=0;i<columns.length;i++){
+            for(let j=0;j<columns.length;j++){
+                if(i!==j && columnsWithMissingValues.includes(columns[i])) {
+                    const expectedCount = glyphdata[i][j][0].map(b=>b.count);
+                    const sampleCount = glyphdata[i][j][1].map(b=>b.count);
+                    const diffArray = expectedCount.map((c,i) => c-sampleCount[i]);
+                    crossdata[i][j] = countCrosses(diffArray);
+                }
+            }
+        }
+        return crossdata;
+    }; $: crossdata = getCrossData(glyphdata);
     
-    
+    const maxRefineLevel = 1000;
     const updateData = async colordata => {
-        if(refineLevel < 1000){
-            console.log(refineLevel)
-            const nextColor = await refine(colordata);
+        if(refineLevel <= maxRefineLevel){
+            const nextColor = await refine(colordata, 100);
+            progress = (refineLevel / maxRefineLevel);
             setColordata(nextColor)
+        } else {
+            progress = 1;
         }
     }; $: updateData(colordata);
 
-   $: colorLegend = vsupLegend.arcmapLegend()
+   $: colorLegend = vsupLegend.heatmapLegend()
           .scale(colorScale)
           .size(margin.right-50-25)
           .x(25)
           .y(0)
           .vtitle("Chance of Error in MCAR")
-          .utitle("Bootstrap Iterations");
+          .utitle("Noisy Behavior");
 
     let xAxisDOM, yAxisDOM, colorLegendDOM;
     const placeLegends = (xAxisDOM, yAxisDOM, colorLegendDOM, xAxis, yAxis, colorLegend) => {
@@ -104,7 +137,7 @@
             xg.call(xAxis);
             yg.call(yAxis);
             cg.call(colorLegend)
-            cg.selectAll('g').selectAll('g.tick').selectAll('text').text(t=>t/1000+'K')
+            cg.selectAll('g').selectAll('g.tick').selectAll('text').text(t=>t*100+'%')
         }
     }; $: placeLegends(xAxisDOM, yAxisDOM, colorLegendDOM, xAxis, yAxis, colorLegend);
 
@@ -130,7 +163,6 @@
         })
     })
     
-   
  </script>
 
  <g class="outerRing" transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
@@ -152,7 +184,8 @@
                         <rect i={i} j={j} class="cell" width={cellWidth} height={cellHeight}
                         stroke={(tooltipContent[0] === i && tooltipContent[1] === j) ? 'black':'none'}
                         stroke-width='2px'
-                        fill={colorScale(colordata[i][j], refineLevel)}></rect>
+                        fill={colorScale(colordata[i][j], crossdata[i][j])}>
+                        </rect>
                         <path class="glyph" d={glyphPaths[i][j]}></path>
                     </g>
                     {:else if columnsWithMissingValues.includes(iName) && i===j}
