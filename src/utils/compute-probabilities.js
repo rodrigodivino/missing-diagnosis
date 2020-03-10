@@ -78,6 +78,9 @@ function RefineEstimative(data, columns, columnTypes, errorMatrix, binsMatrix, p
 
 
 function Count(array, levels){
+    if(typeof levels[0] === 'number'){
+        levels.sort(ascending)
+    }
     let bins = new Array(levels.length+1);
     for(let i = 0; i < levels.length; i++){
         bins[i] = {
@@ -111,15 +114,15 @@ function CompareBins(bins1, bins2) {
         squareErrors.push(Math.pow((bin2.count - bin1.count), 2));
     }
     
-    let swaps = 0;
-    let prevSign = Math.sign(diffArray[0]);
-    for(let i=1; i<diffArray.length; i++) {
-        if(Math.sign(diffArray[i]) !== prevSign){
-            prevSign = Math.sign(diffArray[i])
-            swaps++;
-        }
-    }
-    return (Math.sqrt(mean(squareErrors)))/swaps;
+    // let swaps = 0;
+    // let prevSign = Math.sign(diffArray[0]);
+    // for(let i=1; i<diffArray.length; i++) {
+    //     if(Math.sign(diffArray[i]) !== prevSign){
+    //         prevSign = Math.sign(diffArray[i])
+    //         swaps++;
+    //     }
+    // }
+    return (Math.sqrt(mean(squareErrors)));
 }
 
 function Histogram(array, rules){

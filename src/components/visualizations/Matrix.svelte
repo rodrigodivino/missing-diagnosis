@@ -5,7 +5,7 @@
     import {axisLeft, axisBottom} from "d3-axis";
     import {line} from "d3-shape";
     import {path} from "d3-path";
-    import {max} from "d3-array";
+    import {max, ascending} from "d3-array";
     import {interpolateViridis, interpolateSpectral} from "d3-scale-chromatic";
     import {afterUpdate, onMount, tick} from 'svelte';
     import {quantization as vsupQuantization, squareQuantization as vsupSquare, scale as vsupScale, legend as vsupLegend} from 'vsup';
@@ -24,11 +24,12 @@
     export let glyphdata;
     export let columns;
     export let columnsWithMissingValues;
+    export let columnTypes;
     export let refine;
     export let progress;
 
     
-    const margin = {top: 50, bottom: 50, left: 100, right: 200};
+    const margin = {top: 50, bottom: 100, left: 100, right: 200};
     const cellMargin = {top:1, left:1, right:1, bottom:1}
     $: innerWidth = width * $canvasWidth - margin.left - margin. right;
     $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
@@ -41,8 +42,7 @@
     $: yAxis = axisLeft(yScale)
     $: refineLevel = colordata[1][1];
    
-    // $: quantization = vsupQuantization().branching(2).layers(4).valueDomain([0,1]).uncertaintyDomain([0, 1]);
-    $: quantization = vsupSquare(5);
+    $: quantization = vsupQuantization().branching(2).layers(4).valueDomain([0,1]).uncertaintyDomain([0, 1]);
     $: colorScale = vsupScale().quantize(quantization).range(v=>interpolateSpectral(1-v))
 
     $: tooltipWidth = innerWidth/2;
@@ -117,7 +117,7 @@
         }
     }; $: updateData(colordata);
 
-   $: colorLegend = vsupLegend.heatmapLegend()
+   $: colorLegend = vsupLegend.arcmapLegend()
           .scale(colorScale)
           .size(margin.right-50-25)
           .x(25)
@@ -134,10 +134,15 @@
             xg.selectAll().remove();
             yg.selectAll().remove();
             cg.selectAll().remove();
-            xg.call(xAxis);
+            xg.call(xAxis).selectAll('text')
+            .attr('x', xScale.bandwidth()/2)
+            .attr('y', -xScale.bandwidth()/4)
+            .attr("transform", "rotate(90)")
+            .attr('alignment-baseline', 'middle')
+            .style("text-anchor", "start")
             yg.call(yAxis);
             cg.call(colorLegend)
-            cg.selectAll('g').selectAll('g.tick').selectAll('text').text(t=>t*100+'%')
+            cg.selectAll('g').selectAll('g.tick').selectAll('text').text(t=>(t*100).toFixed(0)+'%')
         }
     }; $: placeLegends(xAxisDOM, yAxisDOM, colorLegendDOM, xAxis, yAxis, colorLegend);
 
@@ -162,6 +167,14 @@
             }
         })
     })
+
+    const handleColor = (i,j) => {
+        if(columnTypes[j] === "Quantitative" || columnTypes[j] === "Ordinal") {
+            return colorScale(colordata[i][j], crossdata[i][j])
+        } else {
+            return colorScale(colordata[i][j], 0)
+        }
+    }
     
  </script>
 
@@ -177,16 +190,18 @@
            
         </g>
         <g bind:this={foreground} class="foreground">
+        {console.log(glyphdata)}
             {#each columns as iName, i}
                 {#each columns as jName, j}
                     {#if i!==j && colordata[i][j] !== null}
+                    
                     <g  transform="translate({cellMargin.left + xScale(jName)},{cellMargin.top + yScale(iName)})">
                         <rect i={i} j={j} class="cell" width={cellWidth} height={cellHeight}
                         stroke={(tooltipContent[0] === i && tooltipContent[1] === j) ? 'black':'none'}
                         stroke-width='2px'
-                        fill={colorScale(colordata[i][j], crossdata[i][j])}>
+                        fill={handleColor(i,j)}>
                         </rect>
-                        <path class="glyph" d={glyphPaths[i][j]}></path>
+                        <!-- <path class="glyph" d={glyphPaths[i][j]}></path> -->
                     </g>
                     {:else if columnsWithMissingValues.includes(iName) && i===j}
                     <g  transform="translate({cellMargin.left + xScale(jName)},{cellMargin.top + yScale(iName)})">

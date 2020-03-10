@@ -24,7 +24,8 @@ let progress = 0;
 	<Matrix x={0} y={progress<1?.05:0} width={1} height={progress<1?.95:1}
 	colordata={estimativeMatrix}
 	glyphdata={binsMatrix}
-	columns={data.columns} 
+	columns={data.columns}
+	columnTypes={data.types}
 	{columnsWithMissingValues}
 	refine={refineEstimative}
 	bind:progress

@@ -32,12 +32,17 @@
 			const levelDepth = Levels(column).length
 
 			if(levelDepth<30){
-				return 'Categorical'
-			} else {
-				if(column.some(v=> typeof v === "string")){
-					return 'Nominal'
+				if(column.some(v=>typeof v === "number")){
+					return 'Ordinal'
 				} else {
+					return 'Categorical'
+				}
+				
+			} else {
+				if(column.some(v=> typeof v === "number")){
 					return 'Quantitative'
+				} else {
+					return 'Nominal'
 				}
 			}
 		})

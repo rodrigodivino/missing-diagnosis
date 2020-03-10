@@ -1,6 +1,6 @@
 <script>
     import {scaleLinear, scaleBand} from 'd3-scale';
-    import {max, range} from 'd3-array';
+    import {max, sum, range} from 'd3-array';
     import {axisLeft, axisBottom} from 'd3-axis';
     import {select} from 'd3-selection';
 
@@ -11,11 +11,12 @@
     export let sampleBins;
     
     const margin = {top:35, left:35, right:35, bottom: 35}
+    $: sampleSize = sum(sampleBins.map(b=>b.count))
     $: innerWidth = width - margin.left - margin.right;
     $: innerHeight = height - margin.top - margin.bottom;
 
-    $: xScale = scaleBand().domain(range(totalBins.length)).range([0, innerWidth]);
-    $: yScale = scaleLinear().domain([0, max(totalBins, b=>b.count)]).range([innerHeight, 0]);
+    $: xScale = scaleBand().domain(totalBins.filter(b=>b.count>0).map(b=>b.name)).range([0, innerWidth]);
+    $: yScale = scaleLinear().domain([-sampleSize, sampleSize]).range([innerHeight, 0]);
 
     
     $: xAxis = axisBottom(xScale);
@@ -48,25 +49,22 @@
     </g>
     <g class='foreground'>
         {#each totalBins as bin, i}
-            <rect class="total" 
-            x={xScale(i)+barPadding/2} 
-            y={yScale(bin.count)} 
-            height={innerHeight - yScale(bin.count)} 
-            width={barWidth-barPadding}>
-            </rect>
-            <rect class="expected" 
-            x={xScale(i)+barPadding/2} 
-            y={yScale(expectedBins[i].count) - .5} 
-            height={1} 
-            width={barWidth-barPadding}>
-            </rect>
-            <rect class="sample" 
-            x={xScale(i)+barPadding/2} 
-            y={Math.min(yScale(sampleBins[i].count),yScale(expectedBins[i].count))} 
-            height={Math.abs(yScale(sampleBins[i].count) - yScale(expectedBins[i].count))} 
-            fill={(yScale(sampleBins[i].count) - yScale(expectedBins[i].count) > 0? 'firebrick':'steelblue')}
-            width={barWidth-barPadding}>
-            </rect>
+            {#if bin.count > 0}
+                <rect class="sample" 
+                x={xScale(bin.name)+barPadding/2} 
+
+                y={
+                    Math.min(yScale(sampleBins[i].count - expectedBins[i].count), yScale(0))
+                } 
+
+
+                height={
+                    Math.abs(yScale(sampleBins[i].count - expectedBins[i].count) - yScale(0))
+                } 
+                fill={(yScale(sampleBins[i].count) - yScale(expectedBins[i].count) > 0? 'firebrick':'steelblue')}
+                width={barWidth-barPadding}>
+                </rect>
+            {/if}
         {/each}
     </g> 
     </g>
@@ -79,13 +77,5 @@
         stroke-width: 2px;
     } 
 
-    rect.total {
-        fill: gainsboro;
-        stroke: none;
-        stroke-width: .5px;
-    }
-
-    rect.expected {
-        fill: black;
-    }
+    
 </style>
