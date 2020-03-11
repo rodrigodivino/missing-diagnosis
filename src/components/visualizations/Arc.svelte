@@ -5,7 +5,7 @@
   import { axisLeft, axisRight, axisBottom } from "d3-axis";
   import { line } from "d3-shape";
   import { path } from "d3-path";
-  import { range } from "d3-array";
+  import { range, mean } from "d3-array";
   import { onMount } from "svelte";
   import { interpolateRdYlBu, interpolateYlOrRd } from "d3-scale-chromatic";
 
@@ -24,7 +24,7 @@
   export let columnTypes;
   export let columnsWithMissingValues;
   export let refine;
-  export let progress;
+  export let convergence;
 
   const margin = { top: 50, bottom: 75, left: 120, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -111,19 +111,22 @@
     return p.toString();
   };
 
-  const maxRefineLevel = 1000;
+  const errorThreshold = 0.1;
   const updateData = async arcdata => {
-    let step;
-    if (progress < 0.1) step = 1;
-    else if (progress < 0.5) step = 10;
-    else step = 100;
+    const nextdata = await refine(arcdata, 1);
+    let maxError = -Infinity;
+    for (let i = 0; i < columns.length; i++) {
+      for (let j = 0; j < columns.length; j++) {
+        if (i !== j && arcdata[i][j] !== null) {
+          const diff = Math.abs(arcdata[i][j] - nextdata[i][j]) * 100;
+          maxError = diff > maxError ? diff : maxError;
+        }
+      }
+    }
 
-    if (refineLevel <= maxRefineLevel) {
-      const nextArc = await refine(arcdata, 1);
-      progress = refineLevel / maxRefineLevel;
-      setArcdata(nextArc);
-    } else {
-      progress = 1;
+    if (maxError >= errorThreshold) {
+      convergence = maxError;
+      setArcdata(nextdata);
     }
   };
   $: updateData(arcdata);

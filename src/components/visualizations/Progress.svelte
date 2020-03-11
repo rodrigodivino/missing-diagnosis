@@ -4,7 +4,7 @@
   export let y = 0;
   export let width = 1;
   export let height = 1;
-  export let progress = 1;
+  export let convergence;
 
   const margin = { top: 2, bottom: 2, left: 0, right: 0 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -21,7 +21,7 @@
   text.label {
     stroke: black;
     font-weight: bold;
-    text-anchor: end;
+    text-anchor: start;
     alignment-baseline: middle;
   }
 </style>
@@ -33,10 +33,13 @@
     <rect class="background" width={innerWidth} height={innerHeight} />
     <rect
       class="foreground"
-      width={innerWidth * progress}
+      width={innerWidth * (convergence / 100)}
       height={innerHeight} />
-    <text class="label" x={innerWidth * progress} y={innerHeight / 2}>
-      {(progress * 100).toFixed(2)}%
+    <text
+      class="label"
+      x={innerWidth * (convergence / 100)}
+      y={innerHeight / 2}>
+      {((convergence / 100) * 100).toFixed(2)}%
     </text>
   </g>
 </g>
