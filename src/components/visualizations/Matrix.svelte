@@ -83,13 +83,13 @@
             const filtered = diffArray.filter(v=>v!==0);
             let crossess = 0;
             let prevSign = Math.sign(filtered[0]);
-            for(let i=1;i<filtered.length;i++){
+            for(let i=1;i<filtered.length-1;i++){
                 if (prevSign !== Math.sign(filtered[i])){
                     crossess++;
                     prevSign = prevSign * -1;
                 }
             }
-            return crossess / (filtered.length -1)
+            return crossess / (filtered.length -2)
 
         }
 

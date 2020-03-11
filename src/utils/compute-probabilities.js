@@ -95,7 +95,6 @@ function Count(array, levels){
         bins[bin].count++;
     }
     bins[bins.length-1] = {name: 'miss', count: array.filter(v=>v===null).length}
-
     return bins;
 }
 
@@ -106,7 +105,6 @@ export function Levels(array){
 }
 
 function CompareBins(bins1, bins2) {
-    const diffArray = bins2.map((b2,i)=>b2.count - bins1[i].count);
     const squareErrors = [];
     for (let i=0; i< bins1.length; i++) {
         const bin1 = bins1[i];
@@ -114,14 +112,6 @@ function CompareBins(bins1, bins2) {
         squareErrors.push(Math.pow((bin2.count - bin1.count), 2));
     }
     
-    // let swaps = 0;
-    // let prevSign = Math.sign(diffArray[0]);
-    // for(let i=1; i<diffArray.length; i++) {
-    //     if(Math.sign(diffArray[i]) !== prevSign){
-    //         prevSign = Math.sign(diffArray[i])
-    //         swaps++;
-    //     }
-    // }
     return (Math.sqrt(mean(squareErrors)));
 }
 

@@ -57,10 +57,10 @@
                     Math.min(yScale(sampleBins[i].count - expectedBins[i].count), yScale(0))
                 } 
 
-
                 height={
                     Math.abs(yScale(sampleBins[i].count - expectedBins[i].count) - yScale(0))
-                } 
+                }
+                                
                 fill={(yScale(sampleBins[i].count) - yScale(expectedBins[i].count) > 0? 'firebrick':'steelblue')}
                 width={barWidth-barPadding}>
                 </rect>
