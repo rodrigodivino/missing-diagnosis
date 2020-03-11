@@ -26,6 +26,7 @@ let progress = 0;
 	glyphdata={binsMatrix}
 	columns={data.columns}
 	columnTypes={data.types}
+	
 	{columnsWithMissingValues}
 	refine={refineEstimative}
 	bind:progress
