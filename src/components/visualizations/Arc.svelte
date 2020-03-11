@@ -2,10 +2,12 @@
   import { canvasWidth, canvasHeight } from "../../stores.js";
   import { select } from "d3-selection";
   import { scaleLinear, scaleBand } from "d3-scale";
-  import { axisLeft, axisBottom } from "d3-axis";
+  import { axisLeft, axisRight, axisBottom } from "d3-axis";
   import { line } from "d3-shape";
   import { path } from "d3-path";
+  import { range } from "d3-array";
   import { onMount } from "svelte";
+  import { interpolateRdYlBu, interpolateYlOrRd } from "d3-scale-chromatic";
 
   export let x = 0;
   export let y = 0;
@@ -24,67 +26,135 @@
   export let refine;
   export let progress;
 
-  const margin = { top: 50, bottom: 50, left: 50, right: 50 };
+  const margin = { top: 50, bottom: 75, left: 75, right: 75 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
-  $: xScale = scaleBand()
-    .domain(columns)
-    .range([0, innerWidth]);
-  $: yScale = scaleLinear()
-    .domain([0, 200])
-    .range([0, innerHeight]);
+  $: ratioScale = scaleLinear()
+    .domain([0, 1])
+    .range([innerHeight, 0]);
+  $: samplingScale = scaleBand()
+    .domain(columnsWithMissingValues)
+    .range([innerHeight, 0])
+    .padding(0.1);
 
-  $: xAxis = axisBottom(xScale);
-  $: yAxis = axisLeft(yScale);
+  $: measurementScale = scaleBand()
+    .domain(columns)
+    .range([innerHeight, 0])
+    .padding(0.1);
+
+  $: colorScale = scaleLinear()
+    .domain([0, 1])
+    .range([0, innerWidth]);
+
+  $: ratioAxis = axisLeft(ratioScale);
+  $: samplingAxis = axisLeft(samplingScale);
+  $: measurementAxis = axisRight(measurementScale);
+  $: colorAxis = axisBottom(colorScale);
 
   $: refineLevel = arcdata[1][1];
 
-  let xAxisDOM, yAxisDOM;
-  const placeAxes = (xAxisDOM, yAxisDOM, xAxis, yAxis) => {
-    if (xAxisDOM && yAxisDOM && xScale && yScale) {
-      const xg = select(xAxisDOM);
-      const yg = select(yAxisDOM);
-      xg.selectAll().remove();
-      yg.selectAll().remove();
-      xg.call(xAxis);
-      yg.call(yAxis);
-      yg.selectAll("g.tick")
-        .select("text")
-        .text(t => {
-          const n = parseInt(t);
-          return n > 100 ? 200 - n : n;
-        });
+  let ratioAxisDOM, samplingAxisDOM, measurementAxisDOM, colorAxisDOM;
+  const placeAxes = (
+    ratioAxisDOM,
+    samplingAxisDOM,
+    measurementAxisDOM,
+    colorAxisDOM,
+    ratioAxis,
+    samplingAxis,
+    measurementAxis,
+    colorAxis
+  ) => {
+    if (
+      ratioAxisDOM &&
+      samplingAxisDOM &&
+      measurementAxisDOM &&
+      ratioAxis &&
+      samplingAxis &&
+      measurementAxis
+    ) {
+      const rg = select(ratioAxisDOM);
+      const sg = select(samplingAxisDOM);
+      const mg = select(measurementAxisDOM);
+      const cg = select(colorAxisDOM);
+      rg.selectAll().remove();
+      sg.selectAll().remove();
+      mg.selectAll().remove();
+      cg.selectAll().remove();
+      rg.call(ratioAxis);
+      sg.call(samplingAxis);
+      mg.call(measurementAxis);
+      cg.call(colorAxis)
+        .selectAll("g.tick")
+        .selectAll("text")
+        .text(t => +t * 100 + "%");
     }
   };
-  $: placeAxes(xAxisDOM, yAxisDOM, xAxis, yAxis);
+  $: placeAxes(
+    ratioAxisDOM,
+    samplingAxisDOM,
+    measurementAxisDOM,
+    colorAxisDOM,
+    ratioAxis,
+    samplingAxis,
+    measurementAxis,
+    colorAxis
+  );
 
-  const drawEdge = (source, target, value) => {
-    const orientation = Math.sign(xScale(target) - xScale(source));
-    const percentValue = 100 * value;
-    const correctedValue = orientation > 0 ? percentValue : 200 - percentValue;
-    const band = xScale.bandwidth() / 2;
+  const drawEdge = (
+    source,
+    target,
+    value,
+    samplingScale,
+    measurementScale,
+    ratioScale
+  ) => {
+    const samplingBand = samplingScale.bandwidth();
+    const measurementBand = measurementScale.bandwidth();
+
     const p = path();
-    p.moveTo(band + xScale(source), yScale(100));
-    p.quadraticCurveTo(
-      band + xScale(source),
-      yScale(correctedValue),
-      band + xScale(source) + (xScale(target) - xScale(source)) / 2,
-      yScale(correctedValue)
+
+    const sourceY = samplingScale(source) + samplingBand / 2;
+    const sourceX = 0;
+    const valueY = ratioScale(value);
+    const valueX = innerWidth / 2;
+    const targetY = measurementScale(target) + measurementBand / 2;
+    const targetX = innerWidth;
+
+    const xDisplacement = innerWidth / 4;
+
+    p.moveTo(0, sourceY);
+
+    p.bezierCurveTo(
+      sourceX + xDisplacement,
+      sourceY,
+      valueX - xDisplacement,
+      valueY,
+      valueX,
+      valueY
     );
-    p.quadraticCurveTo(
-      band + xScale(target),
-      yScale(correctedValue),
-      band + xScale(target),
-      yScale(100)
+
+    p.bezierCurveTo(
+      valueX + xDisplacement,
+      valueY,
+      targetX - xDisplacement,
+      targetY,
+      targetX,
+      targetY
     );
+
     return p.toString();
   };
 
   const maxRefineLevel = 1000;
   const updateData = async arcdata => {
+    let step;
+    if (progress < 0.1) step = 1;
+    else if (progress < 0.5) step = 10;
+    else step = 100;
+
     if (refineLevel <= maxRefineLevel) {
-      const nextArc = await refine(arcdata, 100);
+      const nextArc = await refine(arcdata, step);
       progress = refineLevel / maxRefineLevel;
       setArcdata(nextArc);
     } else {
@@ -92,12 +162,54 @@
     }
   };
   $: updateData(arcdata);
+
+  const getCrossData = colordata => {
+    const crossdata = new Array(columns.length)
+      .fill(0)
+      .map(() => new Array(columns.length).fill(null));
+    const countCrosses = diffArray => {
+      const filtered = diffArray.filter(v => v !== 0);
+      if (filtered.length < 3) return 0;
+      let crossess = 0;
+      let prevSign = Math.sign(filtered[0]);
+      for (let i = 1; i < filtered.length - 1; i++) {
+        if (prevSign !== Math.sign(filtered[i])) {
+          crossess++;
+          prevSign = prevSign * -1;
+        }
+      }
+      return crossess / (filtered.length - 2);
+    };
+
+    for (let i = 0; i < columns.length; i++) {
+      for (let j = 0; j < columns.length; j++) {
+        if (
+          i !== j &&
+          columnsWithMissingValues.includes(columns[i]) &&
+          (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative")
+        ) {
+          const expectedCount = colordata[i][j][0].map(b => b.count);
+          const sampleCount = colordata[i][j][1].map(b => b.count);
+          const diffArray = expectedCount.map((c, i) => c - sampleCount[i]);
+          crossdata[i][j] = countCrosses(diffArray);
+        }
+      }
+    }
+    return crossdata;
+  };
+  $: crossdata = getCrossData(colordata);
 </script>
 
 <style>
-  path.arcdata {
+  path.data {
     fill: none;
     stroke-width: 1px;
+    opacity: 0.7;
+  }
+
+  text.color-axis-label {
+    text-anchor: middle;
+    font-size: 1em;
   }
 </style>
 
@@ -111,22 +223,63 @@
     stroke="dimgray" />
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
     <g class="background">
+      <g class="sampling-axis" bind:this={samplingAxisDOM} />
+      <g>
+        {#each columnsWithMissingValues as columnMissing}
+          <rect
+            x={-10}
+            y={samplingScale(columnMissing)}
+            width={10}
+            height={samplingScale.bandwidth()} />
+        {/each}
+      </g>
       <g
-        class="x-axis"
-        bind:this={xAxisDOM}
-        transform="translate(0,{innerHeight / 2})" />
-      <g class="y-axis" bind:this={yAxisDOM} />
+        class="ratio-axis"
+        bind:this={ratioAxisDOM}
+        transform="translate({innerWidth / 2},0)" />
+      <g
+        class="measurement-axis"
+        bind:this={measurementAxisDOM}
+        transform="translate({innerWidth},0)" />
+      <g>
+        {#each columns as column}
+          <rect
+            x={innerWidth}
+            y={measurementScale(column)}
+            width={10}
+            height={measurementScale.bandwidth()} />
+        {/each}
+      </g>
+      <g class="color-legend" transform="translate(0,{innerHeight})">
+        {#each range(1000) as i}
+          <rect
+            y={margin.bottom / 6}
+            x={i * (innerWidth / 1000)}
+            width={innerWidth / 1000 + 1}
+            height={margin.bottom / 5}
+            fill={interpolateRdYlBu(i / 1000)} />
+        {/each}
+        <g
+          class="color-axis"
+          bind:this={colorAxisDOM}
+          transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" />
+        <text
+          class="color-axis-label"
+          alignment-baseline="hanging"
+          x={innerWidth / 2}
+          y={margin.bottom / 6 + margin.bottom / 2}>
+          % of High Frequency Noise Behavior (Quantitative and Ordinal Only)
+        </text>
+      </g>
     </g>
     <g class="foreground">
-      {#each arcdata as vector, i}
-        {#each vector as value, j}
-          {#if i !== j && value !== null}
+      {#each columns as iName, i}
+        {#each columns as jName, j}
+          {#if i !== j && arcdata[i][j] !== null}
             <path
-              class="arcdata"
-              stroke="steelblue"
-              opacity={1 - value}
-              stroke-width={1 - value}
-              d={drawEdge(columns[i], columns[j], value)} />
+              class="data"
+              stroke={columnTypes[j] === 'Ordinal' || columnTypes[j] === 'Quantitative' ? interpolateRdYlBu(crossdata[i][j]) : 'dimgray'}
+              d={drawEdge(columns[i], columns[j], arcdata[i][j], samplingScale, measurementScale, ratioScale)} />
           {/if}
         {/each}
       {/each}
