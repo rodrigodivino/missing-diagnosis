@@ -1,5 +1,6 @@
 <script>
   import Matrix from "./visualizations/Matrix.svelte";
+  import Arc from "./visualizations/Arc.svelte";
   import Progress from "./visualizations/Progress.svelte";
   import { computeEstimativeMatrix } from "../utils/compute-probabilities";
   import { canvasWidth, canvasHeight } from "../stores";
@@ -26,13 +27,25 @@
   {#if progress < 1}
     <Progress x={0} y={0} width={1} height={0.05} {progress} />
   {/if}
-  <Matrix
+  <!-- <Matrix
     x={0}
     y={progress < 1 ? 0.05 : 0}
     width={1}
     height={progress < 1 ? 0.95 : 1}
     colordata={estimativeMatrix}
     glyphdata={binsMatrix}
+    columns={data.columns}
+    columnTypes={data.types}
+    {columnsWithMissingValues}
+    refine={refineEstimative}
+    bind:progress /> -->
+  <Arc
+    x={0}
+    y={progress < 1 ? 0.05 : 0}
+    width={1}
+    height={progress < 1 ? 0.95 : 1}
+    arcdata={estimativeMatrix}
+    colordata={binsMatrix}
     columns={data.columns}
     columnTypes={data.types}
     {columnsWithMissingValues}

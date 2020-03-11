@@ -232,17 +232,6 @@
 </script>
 
 <style>
-  path.glyph {
-    stroke: none;
-    stroke-width: 1px;
-    fill: white;
-    opacity: 0.8;
-  }
-
-  path.glyph {
-    pointer-events: none;
-  }
-
   rect.cell {
     stroke-width: 2px;
   }
@@ -314,4 +303,3 @@
   </g>
 
 </g>
-
