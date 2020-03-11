@@ -36,12 +36,12 @@
   $: samplingScale = scaleBand()
     .domain(columnsWithMissingValues)
     .range([innerHeight, 0])
-    .padding(0.1);
+    .padding(0.2);
 
   $: measurementScale = scaleBand()
     .domain(columns)
     .range([innerHeight, 0])
-    .padding(0.1);
+    .padding(0.2);
 
   $: colorScale = scaleLinear()
     .domain([0, 1])
@@ -82,11 +82,11 @@
 
     const p = path();
 
-    const sourceY = samplingScale(source) + samplingBand / 2;
+    const sourceY = samplingScale(source) + (1 - value) * samplingBand;
     const sourceX = 0;
     const valueY = ratioScale(value);
     const valueX = innerWidth / 2;
-    const targetY = measurementScale(target) + measurementBand / 2;
+    const targetY = measurementScale(target) + (1 - value) * measurementBand;
     const targetX = innerWidth;
 
     const xDisplacement = innerWidth / 4;
