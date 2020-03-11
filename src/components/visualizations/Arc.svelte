@@ -36,12 +36,12 @@
   $: samplingScale = scaleBand()
     .domain(columnsWithMissingValues)
     .range([innerHeight, 0])
-    .padding(0.2);
+    .paddingInner(0.2);
 
   $: measurementScale = scaleBand()
     .domain(columns)
     .range([innerHeight, 0])
-    .padding(0.2);
+    .paddingInner(0.2);
 
   $: colorScale = scaleLinear()
     .domain([0, 1])
@@ -53,21 +53,18 @@
 
   $: refineLevel = arcdata[1][1];
 
-  let ratioAxisDOM, colorAxisDOM;
-  const placeAxes = (ratioAxisDOM, colorAxisDOM, ratioAxis, colorAxis) => {
-    if (ratioAxisDOM && ratioAxis && colorAxisDOM && colorAxis) {
-      const rg = select(ratioAxisDOM);
+  let colorAxisDOM;
+  const placeAxes = (colorAxisDOM, colorAxis) => {
+    if (colorAxisDOM && colorAxis) {
       const cg = select(colorAxisDOM);
-      rg.selectAll().remove();
       cg.selectAll().remove();
-      rg.call(ratioAxis);
       cg.call(colorAxis)
         .selectAll("g.tick")
         .selectAll("text")
         .text(t => +t * 100 + "%");
     }
   };
-  $: placeAxes(ratioAxisDOM, colorAxisDOM, ratioAxis, colorAxis);
+  $: placeAxes(colorAxisDOM, colorAxis);
 
   const drawEdge = (
     source,
@@ -122,7 +119,7 @@
     else step = 100;
 
     if (refineLevel <= maxRefineLevel) {
-      const nextArc = await refine(arcdata, step);
+      const nextArc = await refine(arcdata, 1);
       progress = refineLevel / maxRefineLevel;
       setArcdata(nextArc);
     } else {
@@ -180,9 +177,14 @@
     font-size: 1em;
   }
 
-  rect.categorical-tick {
+  rect.axis-tick {
     fill: white;
     stroke: black;
+  }
+
+  text.axis-tick {
+    font-size: 0.7em;
+    font-weight: bold;
   }
 </style>
 
@@ -196,47 +198,7 @@
     stroke="dimgray" />
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
     <g class="background">
-      <g class="sampling-axis">
-        {#each columnsWithMissingValues as columnMissing}
-          <rect
-            class="categorical-tick"
-            x={-10}
-            y={samplingScale(columnMissing)}
-            width={10}
-            height={samplingScale.bandwidth()} />
-          <text
-            x={-12}
-            y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
-            text-anchor="end"
-            font-size=".7em"
-            alignment-baseline="middle">
-            {columnMissing}
-          </text>
-        {/each}
-      </g>
-      <g
-        class="ratio-axis"
-        bind:this={ratioAxisDOM}
-        transform="translate({innerWidth / 2},0)" />
 
-      <g class="measurement-axis" transform="translate({innerWidth},0)">
-        {#each columns as column}
-          <rect
-            class="categorical-tick"
-            x={0}
-            y={measurementScale(column)}
-            width={10}
-            height={measurementScale.bandwidth()} />
-          <text
-            x={12}
-            y={measurementScale(column) + measurementScale.bandwidth() / 2}
-            text-anchor="start"
-            font-size=".7em"
-            alignment-baseline="middle">
-            {column}
-          </text>
-        {/each}
-      </g>
       <g class="color-legend" transform="translate(0,{innerHeight})">
         {#each range(1000) as i}
           <rect
@@ -270,6 +232,57 @@
           {/if}
         {/each}
       {/each}
+    </g>
+
+    <g class="layer1">
+      <g class="sampling-axis">
+        {#each columnsWithMissingValues as columnMissing}
+          <rect
+            class="axis-tick"
+            x={-10}
+            y={samplingScale(columnMissing)}
+            width={10}
+            height={samplingScale.bandwidth()} />
+          <text
+            class="axis-tick"
+            x={-12}
+            y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
+            text-anchor="end"
+            alignment-baseline="middle">
+            {columnMissing}
+          </text>
+        {/each}
+      </g>
+      <g class="measurement-axis" transform="translate({innerWidth},0)">
+        {#each columns as column}
+          <rect
+            class="axis-tick"
+            x={0}
+            y={measurementScale(column)}
+            width={10}
+            height={measurementScale.bandwidth()} />
+          <text
+            class="axis-tick"
+            x={12}
+            y={measurementScale(column) + measurementScale.bandwidth() / 2}
+            text-anchor="start"
+            alignment-baseline="middle">
+            {column}
+          </text>
+        {/each}
+      </g>
+      <g transform="translate({innerWidth / 2},0)">
+        <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
+        {#each range(1, 10) as i}
+          <text
+            class="axis-tick"
+            text-anchor="middle"
+            alignment-baseline="middle"
+            y={ratioScale(i / 10)}>
+            {i * 10 + '%'}
+          </text>
+        {/each}
+      </g>
     </g>
   </g>
 </g>
