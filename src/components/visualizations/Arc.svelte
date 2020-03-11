@@ -26,7 +26,7 @@
   export let refine;
   export let progress;
 
-  const margin = { top: 50, bottom: 75, left: 75, right: 75 };
+  const margin = { top: 50, bottom: 75, left: 120, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
@@ -48,58 +48,26 @@
     .range([0, innerWidth]);
 
   $: ratioAxis = axisLeft(ratioScale);
-  $: samplingAxis = axisLeft(samplingScale);
-  $: measurementAxis = axisRight(measurementScale);
+
   $: colorAxis = axisBottom(colorScale);
 
   $: refineLevel = arcdata[1][1];
 
-  let ratioAxisDOM, samplingAxisDOM, measurementAxisDOM, colorAxisDOM;
-  const placeAxes = (
-    ratioAxisDOM,
-    samplingAxisDOM,
-    measurementAxisDOM,
-    colorAxisDOM,
-    ratioAxis,
-    samplingAxis,
-    measurementAxis,
-    colorAxis
-  ) => {
-    if (
-      ratioAxisDOM &&
-      samplingAxisDOM &&
-      measurementAxisDOM &&
-      ratioAxis &&
-      samplingAxis &&
-      measurementAxis
-    ) {
+  let ratioAxisDOM, colorAxisDOM;
+  const placeAxes = (ratioAxisDOM, colorAxisDOM, ratioAxis, colorAxis) => {
+    if (ratioAxisDOM && ratioAxis && colorAxisDOM && colorAxis) {
       const rg = select(ratioAxisDOM);
-      const sg = select(samplingAxisDOM);
-      const mg = select(measurementAxisDOM);
       const cg = select(colorAxisDOM);
       rg.selectAll().remove();
-      sg.selectAll().remove();
-      mg.selectAll().remove();
       cg.selectAll().remove();
       rg.call(ratioAxis);
-      sg.call(samplingAxis);
-      mg.call(measurementAxis);
       cg.call(colorAxis)
         .selectAll("g.tick")
         .selectAll("text")
         .text(t => +t * 100 + "%");
     }
   };
-  $: placeAxes(
-    ratioAxisDOM,
-    samplingAxisDOM,
-    measurementAxisDOM,
-    colorAxisDOM,
-    ratioAxis,
-    samplingAxis,
-    measurementAxis,
-    colorAxis
-  );
+  $: placeAxes(ratioAxisDOM, colorAxisDOM, ratioAxis, colorAxis);
 
   const drawEdge = (
     source,
@@ -211,6 +179,11 @@
     text-anchor: middle;
     font-size: 1em;
   }
+
+  rect.categorical-tick {
+    fill: white;
+    stroke: black;
+  }
 </style>
 
 <g
@@ -223,31 +196,45 @@
     stroke="dimgray" />
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
     <g class="background">
-      <g class="sampling-axis" bind:this={samplingAxisDOM} />
-      <g>
+      <g class="sampling-axis">
         {#each columnsWithMissingValues as columnMissing}
           <rect
+            class="categorical-tick"
             x={-10}
             y={samplingScale(columnMissing)}
             width={10}
             height={samplingScale.bandwidth()} />
+          <text
+            x={-12}
+            y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
+            text-anchor="end"
+            font-size=".7em"
+            alignment-baseline="middle">
+            {columnMissing}
+          </text>
         {/each}
       </g>
       <g
         class="ratio-axis"
         bind:this={ratioAxisDOM}
         transform="translate({innerWidth / 2},0)" />
-      <g
-        class="measurement-axis"
-        bind:this={measurementAxisDOM}
-        transform="translate({innerWidth},0)" />
-      <g>
+
+      <g class="measurement-axis" transform="translate({innerWidth},0)">
         {#each columns as column}
           <rect
-            x={innerWidth}
+            class="categorical-tick"
+            x={0}
             y={measurementScale(column)}
             width={10}
             height={measurementScale.bandwidth()} />
+          <text
+            x={12}
+            y={measurementScale(column) + measurementScale.bandwidth() / 2}
+            text-anchor="start"
+            font-size=".7em"
+            alignment-baseline="middle">
+            {column}
+          </text>
         {/each}
       </g>
       <g class="color-legend" transform="translate(0,{innerHeight})">
