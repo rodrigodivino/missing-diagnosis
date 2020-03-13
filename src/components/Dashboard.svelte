@@ -24,9 +24,7 @@
 </style>
 
 <svg width={$canvasWidth} height={$canvasHeight}>
-  {#if convergence > 0.5}
-    <Progress x={0} y={0} width={1} height={0.05} {convergence} />
-  {/if}
+  <Progress x={0} y={0} width={1} height={0.05} {convergence} />
   <!-- <Matrix
     x={0}
     y={progress < 1 ? 0.05 : 0}
@@ -41,9 +39,9 @@
     bind:progress /> -->
   <Arc
     x={0}
-    y={convergence > 0.5 ? 0.05 : 0}
+    y={0.05}
     width={1}
-    height={convergence > 0.5 ? 0.95 : 1}
+    height={0.95}
     arcdata={estimativeMatrix}
     colordata={binsMatrix}
     columns={data.columns}

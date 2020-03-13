@@ -1,11 +1,12 @@
 <script>
   import { canvasWidth, canvasHeight } from "../../stores.js";
-  import { select } from "d3-selection";
+  import { select, event } from "d3-selection";
   import { scaleLinear, scaleBand } from "d3-scale";
   import { axisLeft, axisRight, axisBottom } from "d3-axis";
   import { line } from "d3-shape";
   import { path } from "d3-path";
   import { range, mean } from "d3-array";
+  import { brushY } from "d3-brush";
   import { onMount } from "svelte";
   import { interpolateRdYlBu, interpolateYlOrRd } from "d3-scale-chromatic";
 
@@ -147,7 +148,7 @@
           prevSign = prevSign * -1;
         }
       }
-      return crossess / (filtered.length - 2);
+      return Math.max(crossess - 1, 0) / (filtered.length - 2);
     };
 
     for (let i = 0; i < columns.length; i++) {
@@ -167,13 +168,104 @@
     return crossdata;
   };
   $: crossdata = getCrossData(colordata);
+
+  let selectedRatioInterval = [1, 0];
+  let valueIsSelected = value =>
+    value <= selectedRatioInterval[0] && value >= selectedRatioInterval[1];
+  let ratioBrushDOM;
+  $: ratioBrush = brushY()
+    .extent([[innerWidth / 2 - 13, 0], [innerWidth / 2 + 14, innerHeight]])
+    .on("brush end", () => {
+      if (event.selection) {
+        selectedRatioInterval = event.selection.map(ratioScale.invert);
+      } else {
+        selectedRatioInterval = [1, 0];
+      }
+    });
+  const placeBrush = (ratioBrushDOM, ratioBrush) => {
+    if (ratioBrushDOM && ratioBrush) {
+      select(ratioBrushDOM).call(ratioBrush);
+    }
+  };
+  $: placeBrush(ratioBrushDOM, ratioBrush);
+
+  const handlePathColor = (i, j, value, selectedRatioInterval) => {
+    if (valueIsSelected(value)) {
+      if (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative") {
+        return interpolateRdYlBu(crossdata[i][j]);
+      } else {
+        return "darkseagreen";
+      }
+    } else {
+      return "lightgray";
+    }
+  };
+  const handlePathClass = (i, j, value, selectedRatioInterval) => {
+    if (valueIsSelected(value)) {
+      if (selectedRatioInterval[0] === 1 && selectedRatioInterval[1] === 0) {
+        return "data";
+      } else {
+        return "dataSelected";
+      }
+    } else {
+      return "dataNotSelected";
+    }
+  };
+
+  const getAmountOfSelectedInLine = (i, selectedRatioInterval) => {
+    return (
+      arcdata[i].filter(value => valueIsSelected(value)).length /
+      (arcdata[i].length - 1)
+    );
+  };
+
+  const getAmountOfSelectedInColumn = (j, selectedRatioInterval) => {
+    const column = [];
+    for (let i = 0; i < arcdata.length; i++) {
+      if (i !== j && arcdata[i][j] !== null) {
+        column.push(arcdata[i][j]);
+      }
+    }
+    return (
+      column.filter(value => valueIsSelected(value)).length / column.length
+    );
+  };
 </script>
 
 <style>
   path.data {
     fill: none;
+    stroke-width: 3px;
+    opacity: 0.4;
+  }
+
+  path.dataNotSelected {
+    fill: none;
     stroke-width: 1px;
-    opacity: 0.7;
+    opacity: 0.2;
+  }
+
+  path.dataSelected {
+    fill: none;
+    stroke-width: 3px;
+    opacity: 0.9;
+  }
+
+  path.data:hover {
+    stroke-width: 4px;
+    opacity: 1;
+    animation: blinker 1s linear infinite;
+  }
+
+  @keyframes blinker {
+    30% {
+      stroke: black;
+      stroke-width: 5px;
+    }
+    70% {
+      stroke: black;
+      stroke-width: 5px;
+    }
   }
 
   rect.axis-tick {
@@ -194,43 +286,16 @@
 <g
   class="outerRing"
   transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
-  <rect
-    width={width * $canvasWidth}
-    height={height * $canvasHeight}
-    fill="none"
-    stroke="dimgray" />
-  <g class="marginConvention" transform="translate({margin.left},{margin.top})">
-    <g class="background">
 
-      <g class="color-legend" transform="translate(0,{innerHeight})">
-        {#each range(1000) as i}
-          <rect
-            y={margin.bottom / 6}
-            x={i * (innerWidth / 1000)}
-            width={innerWidth / 1000 + 1}
-            height={margin.bottom / 5}
-            fill={interpolateRdYlBu(i / 1000)} />
-        {/each}
-        <g
-          class="color-axis"
-          bind:this={colorAxisDOM}
-          transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" />
-        <text
-          class="axis-name"
-          alignment-baseline="hanging"
-          x={innerWidth / 2}
-          y={margin.bottom / 6 + margin.bottom / 2}>
-          % of High Frequency Noise Behavior (Quantitative and Ordinal Only)
-        </text>
-      </g>
-    </g>
+  <g class="marginConvention" transform="translate({margin.left},{margin.top})">
+    <g class="background" />
     <g class="foreground">
       {#each columns as iName, i}
         {#each columns as jName, j}
           {#if i !== j && arcdata[i][j] !== null}
             <path
-              class="data"
-              stroke={columnTypes[j] === 'Ordinal' || columnTypes[j] === 'Quantitative' ? interpolateRdYlBu(crossdata[i][j]) : 'dimgray'}
+              class={handlePathClass(i, j, arcdata[i][j], selectedRatioInterval)}
+              stroke={handlePathColor(i, j, arcdata[i][j], selectedRatioInterval)}
               d={drawEdge(columns[i], columns[j], arcdata[i][j], samplingScale, measurementScale, ratioScale)} />
           {/if}
         {/each}
@@ -242,13 +307,21 @@
         <text class="axis-name" x={0} y={-10}>
           Variables With Missing Values
         </text>
-        {#each columnsWithMissingValues as columnMissing}
+        {#each columnsWithMissingValues as columnMissing, i}
           <rect
             class="axis-tick"
             x={-10}
             y={samplingScale(columnMissing)}
             width={10}
             height={samplingScale.bandwidth()} />
+          {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
+            <rect
+              fill="black"
+              x={-10}
+              y={samplingScale(columnMissing)}
+              width={10}
+              height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)} />
+          {/if}
           <text
             class="axis-tick"
             x={-12}
@@ -261,13 +334,21 @@
       </g>
       <g class="measurement-axis" transform="translate({innerWidth},0)">
         <text class="axis-name" x={+5} y={-10}>Variables</text>
-        {#each columns as column}
+        {#each columns as column, j}
           <rect
             class="axis-tick"
             x={0}
             y={measurementScale(column)}
             width={10}
             height={measurementScale.bandwidth()} />
+          {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
+            <rect
+              fill="black"
+              x={0}
+              y={measurementScale(column)}
+              width={10}
+              height={measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval)} />
+          {/if}
           <text
             class="axis-tick"
             x={12}
@@ -290,7 +371,32 @@
             {i * 10 + '%'}
           </text>
         {/each}
+
       </g>
+      <g class="color-legend" transform="translate(0,{innerHeight})">
+        {#each range(1000) as i}
+          <rect
+            y={margin.bottom / 6}
+            x={i * (innerWidth / 1000)}
+            width={innerWidth / 1000 + 1}
+            height={margin.bottom / 5}
+            fill={interpolateRdYlBu(i / 1000)} />
+        {/each}
+        <g
+          class="color-axis"
+          bind:this={colorAxisDOM}
+          transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" />
+        <text
+          class="axis-name"
+          alignment-baseline="hanging"
+          x={innerWidth / 2}
+          y={margin.bottom / 6 + margin.bottom / 2}>
+          % Distribution Inconsistence
+        </text>
+      </g>
+    </g>
+    <g class="brushLayer">
+      <g class="ratio-brush" bind:this={ratioBrushDOM} />
     </g>
   </g>
 </g>

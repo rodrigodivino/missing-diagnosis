@@ -13,16 +13,18 @@
 
 <style>
   rect.background {
-    fill: slategray;
+    opacity: 0.1;
   }
-  rect.foreground {
-    fill: mediumseagreen;
-  }
+
   text.label {
     stroke: black;
-    font-weight: bold;
-    text-anchor: start;
+    font-size: 0.8em;
+    text-anchor: middle;
     alignment-baseline: middle;
+  }
+
+  text.axis-name {
+    font-size: 1em;
   }
 </style>
 
@@ -30,16 +32,26 @@
   class="outerRing"
   transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
-    <rect class="background" width={innerWidth} height={innerHeight} />
+    <rect
+      class="background"
+      fill={convergence <= 0.5 ? 'mediumseagreen' : 'coral'}
+      width={innerWidth}
+      height={innerHeight} />
     <rect
       class="foreground"
+      fill={convergence <= 0.5 ? 'mediumseagreen' : 'coral'}
+      x={innerWidth / 2 - (innerWidth * (convergence / 100)) / 2}
       width={innerWidth * (convergence / 100)}
       height={innerHeight} />
-    <text
-      class="label"
-      x={innerWidth * (convergence / 100)}
-      y={innerHeight / 2}>
+    <text class="label" x={innerWidth / 2} y={innerHeight / 2}>
       {((convergence / 100) * 100).toFixed(2)}%
+    </text>
+    <text
+      class="axis-name"
+      x={10}
+      y={innerHeight / 2}
+      alignment-baseline="middle">
+      Convergence Progress
     </text>
   </g>
 </g>
