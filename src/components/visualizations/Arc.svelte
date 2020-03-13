@@ -93,14 +93,15 @@
     p.bezierCurveTo(
       sourceX + xDisplacement,
       sourceY,
-      valueX - xDisplacement,
+      valueX - 15 - xDisplacement,
       valueY,
-      valueX,
+      valueX - 15,
       valueY
     );
 
+    p.moveTo(valueX + 15, valueY);
     p.bezierCurveTo(
-      valueX + xDisplacement,
+      valueX + 15 + xDisplacement,
       valueY,
       targetX - xDisplacement,
       targetY,
@@ -111,7 +112,7 @@
     return p.toString();
   };
 
-  const errorThreshold = 0.1;
+  const errorThreshold = 0.5;
   const updateData = async arcdata => {
     const nextdata = await refine(arcdata, 1);
     let maxError = -Infinity;
@@ -125,9 +126,9 @@
     }
 
     if (maxError >= errorThreshold) {
-      convergence = maxError;
       setArcdata(nextdata);
     }
+    convergence = maxError;
   };
   $: updateData(arcdata);
 
@@ -175,11 +176,6 @@
     opacity: 0.7;
   }
 
-  text.color-axis-label {
-    text-anchor: middle;
-    font-size: 1em;
-  }
-
   rect.axis-tick {
     fill: white;
     stroke: black;
@@ -188,6 +184,10 @@
   text.axis-tick {
     font-size: 0.7em;
     font-weight: bold;
+  }
+  text.axis-name {
+    text-anchor: middle;
+    font-size: 1em;
   }
 </style>
 
@@ -216,7 +216,7 @@
           bind:this={colorAxisDOM}
           transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" />
         <text
-          class="color-axis-label"
+          class="axis-name"
           alignment-baseline="hanging"
           x={innerWidth / 2}
           y={margin.bottom / 6 + margin.bottom / 2}>
@@ -239,6 +239,9 @@
 
     <g class="layer1">
       <g class="sampling-axis">
+        <text class="axis-name" x={0} y={-10}>
+          Variables With Missing Values
+        </text>
         {#each columnsWithMissingValues as columnMissing}
           <rect
             class="axis-tick"
@@ -257,6 +260,7 @@
         {/each}
       </g>
       <g class="measurement-axis" transform="translate({innerWidth},0)">
+        <text class="axis-name" x={+5} y={-10}>Variables</text>
         {#each columns as column}
           <rect
             class="axis-tick"
@@ -274,7 +278,8 @@
           </text>
         {/each}
       </g>
-      <g transform="translate({innerWidth / 2},0)">
+      <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
+        <text class="axis-name" x={-5} y={-10}>Chance of MAR</text>
         <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
         {#each range(1, 10) as i}
           <text
