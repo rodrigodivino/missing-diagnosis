@@ -10,7 +10,7 @@
   import { afterUpdate, onMount, tick } from "svelte";
   import {
     quantization as vsupQuantization,
-    squareQuantization as vsupSquare,
+    // squareQuantization as vsupSquare,
     scale as vsupScale,
     legend as vsupLegend
   } from "vsup";

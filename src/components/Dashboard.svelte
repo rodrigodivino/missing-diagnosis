@@ -54,7 +54,6 @@
     width={0.7}
     height={0.95}
     bind:arcdata={estimativeMatrix}
-    colordata={binsMatrix}
     columns={data.columns}
     columnTypes={data.types}
     {columnsWithMissingValues}

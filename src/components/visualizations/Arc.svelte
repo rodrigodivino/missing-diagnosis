@@ -20,7 +20,6 @@
       arcdata = newArcdata;
     }, 1);
   };
-  export let colordata;
   export let crossdata;
 
   export let columns;
