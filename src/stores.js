@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
-export const canvasWidth = writable(800);
-export const canvasHeight = writable(800);
+export const canvasWidth = writable(1000);
+export const canvasHeight = writable(600);

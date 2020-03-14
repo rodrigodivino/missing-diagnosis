@@ -26,6 +26,7 @@
   export let columnsWithMissingValues;
   export let refine;
   export let convergence;
+  export let selectedRatioInterval;
 
   const margin = { top: 50, bottom: 75, left: 120, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -169,7 +170,6 @@
   };
   $: crossdata = getCrossData(colordata);
 
-  let selectedRatioInterval = [1, 0];
   let valueIsSelected = value =>
     value <= selectedRatioInterval[0] && value >= selectedRatioInterval[1];
   let ratioBrushDOM;
@@ -251,7 +251,8 @@
     opacity: 0.9;
   }
 
-  path.data:hover {
+  path.data:hover,
+  path.dataSelected:hover {
     stroke-width: 4px;
     opacity: 1;
     animation: blinker 1s linear infinite;
