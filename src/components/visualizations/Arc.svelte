@@ -46,7 +46,7 @@
 
   $: colorScale = scaleLinear()
     .domain([0, 1])
-    .range([0, innerWidth]);
+    .range([innerWidth * 0.2, innerWidth]);
 
   $: ratioAxis = axisLeft(ratioScale);
 
@@ -317,7 +317,6 @@
               width={10}
               height={samplingScale.bandwidth()} />
             {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
-              {console.log(`redrawing ${i}: ${columns[i]}, because the new amount is: ${getAmountOfSelectedInLine(i, selectedRatioInterval)} `)}
               <rect
                 fill="black"
                 x={-10}
@@ -381,11 +380,28 @@
         {#each range(1000) as i}
           <rect
             y={margin.bottom / 6}
-            x={i * (innerWidth / 1000)}
-            width={innerWidth / 1000 + 1}
+            x={innerWidth * 0.2 + i * ((innerWidth * 0.8) / 1000)}
+            width={(innerWidth * 0.8) / 1000 + 1}
             height={margin.bottom / 5}
-            fill={interpolateRdYlBu(i / 1000)} />
+            fill={interpolateRdYlBu(1 - i / 1000)} />
         {/each}
+        <rect
+          y={margin.bottom / 6 + margin.bottom / 8}
+          x={0}
+          stroke="black"
+          stroke-width="1"
+          width={innerWidth * 0.18}
+          height={margin.bottom / 5}
+          fill="mediumseagreen" />
+
+        <rect
+          y={margin.bottom / 6}
+          x={innerWidth * 0.2}
+          stroke="black"
+          stroke-width="1"
+          width={innerWidth * 0.8}
+          height={margin.bottom / 5}
+          fill="none" />
         <g
           class="color-axis"
           bind:this={colorAxisDOM}
@@ -393,9 +409,32 @@
         <text
           class="axis-name"
           alignment-baseline="hanging"
-          x={innerWidth / 2}
+          x={innerWidth * 0.09}
+          y={margin.bottom / 6 + margin.bottom / 2 - margin.bottom / 8}>
+          {'Categorical'}
+        </text>
+        <text
+          class="axis-name"
+          alignment-baseline="hanging"
+          x={innerWidth * 0.2 + (innerWidth * 0.8) / 2}
           y={margin.bottom / 6 + margin.bottom / 2}>
-          % Distribution Inconsistence
+          {'Distribution Consistence (Ordered Data Only)'}
+        </text>
+        <text
+          text-anchor="start"
+          alignment-baseline="hanging"
+          font-size="0.7em"
+          x={innerWidth * 0.2}
+          y={0}>
+          {'< MCAR'}
+        </text>
+        <text
+          text-anchor="end"
+          alignment-baseline="hanging"
+          font-size="0.7em"
+          x={innerWidth}
+          y={0}>
+          {'MAR >'}
         </text>
       </g>
     </g>
