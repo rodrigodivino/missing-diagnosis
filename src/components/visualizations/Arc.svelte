@@ -277,6 +277,7 @@
     font-size: 0.7em;
     font-weight: bold;
   }
+
   text.axis-name {
     text-anchor: middle;
     font-size: 1em;
@@ -307,29 +308,32 @@
         <text class="axis-name" x={0} y={-10}>
           Variables With Missing Values
         </text>
-        {#each columnsWithMissingValues as columnMissing, i}
-          <rect
-            class="axis-tick"
-            x={-10}
-            y={samplingScale(columnMissing)}
-            width={10}
-            height={samplingScale.bandwidth()} />
-          {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
+        {#each columns as columnMissing, i}
+          {#if columnsWithMissingValues.includes(columnMissing)}
             <rect
-              fill="black"
+              class="axis-tick"
               x={-10}
               y={samplingScale(columnMissing)}
               width={10}
-              height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)} />
+              height={samplingScale.bandwidth()} />
+            {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
+              {console.log(`redrawing ${i}: ${columns[i]}, because the new amount is: ${getAmountOfSelectedInLine(i, selectedRatioInterval)} `)}
+              <rect
+                fill="black"
+                x={-10}
+                y={samplingScale(columnMissing)}
+                width={10}
+                height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)} />
+            {/if}
+            <text
+              class="axis-tick"
+              x={-12}
+              y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
+              text-anchor="end"
+              alignment-baseline="middle">
+              {columnMissing}
+            </text>
           {/if}
-          <text
-            class="axis-tick"
-            x={-12}
-            y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
-            text-anchor="end"
-            alignment-baseline="middle">
-            {columnMissing}
-          </text>
         {/each}
       </g>
       <g class="measurement-axis" transform="translate({innerWidth},0)">
