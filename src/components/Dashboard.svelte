@@ -3,7 +3,7 @@
   import Arc from "./visualizations/Arc.svelte";
   import Progress from "./visualizations/Progress.svelte";
   import List from "./visualizations/List.svelte";
-  import { getRenderList } from "../methods/Dashboard.js";
+  import { getRenderList, getCrossData } from "../methods/Dashboard.js";
   import { computeEstimativeMatrix } from "../utils/compute-probabilities";
   import { canvasWidth, canvasHeight } from "../stores";
   import { mean } from "d3-array";
@@ -20,6 +20,12 @@
 
   let convergence = 100;
   let selectedRatioInterval = [1, 0];
+  $: crossdata = getCrossData(
+    binsMatrix,
+    data.validColumns,
+    data.columnsWithMissingValues,
+    data.types
+  );
 
   $: renderList = getRenderList(estimativeMatrix, selectedRatioInterval);
 </script>
@@ -54,6 +60,7 @@
     {columnsWithMissingValues}
     refine={refineEstimative}
     bind:convergence
+    {crossdata}
     bind:selectedRatioInterval />
 
   <List
@@ -64,5 +71,6 @@
     {binsMatrix}
     columns={data.columns}
     columnTypes={data.types}
+    {crossdata}
     {renderList} />
 </svg>

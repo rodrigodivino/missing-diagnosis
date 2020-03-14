@@ -21,6 +21,8 @@
     }, 1);
   };
   export let colordata;
+  export let crossdata;
+
   export let columns;
   export let columnTypes;
   export let columnsWithMissingValues;
@@ -133,42 +135,6 @@
     convergence = maxError;
   };
   $: updateData(arcdata);
-
-  const getCrossData = colordata => {
-    const crossdata = new Array(columns.length)
-      .fill(0)
-      .map(() => new Array(columns.length).fill(null));
-    const countCrosses = diffArray => {
-      const filtered = diffArray.filter(v => v !== 0);
-      if (filtered.length < 3) return 0;
-      let crossess = 0;
-      let prevSign = Math.sign(filtered[0]);
-      for (let i = 1; i < filtered.length - 1; i++) {
-        if (prevSign !== Math.sign(filtered[i])) {
-          crossess++;
-          prevSign = prevSign * -1;
-        }
-      }
-      return Math.max(crossess - 1, 0) / (filtered.length - 2);
-    };
-
-    for (let i = 0; i < columns.length; i++) {
-      for (let j = 0; j < columns.length; j++) {
-        if (
-          i !== j &&
-          columnsWithMissingValues.includes(columns[i]) &&
-          (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative")
-        ) {
-          const expectedCount = colordata[i][j][0].map(b => b.count);
-          const sampleCount = colordata[i][j][1].map(b => b.count);
-          const diffArray = expectedCount.map((c, i) => c - sampleCount[i]);
-          crossdata[i][j] = countCrosses(diffArray);
-        }
-      }
-    }
-    return crossdata;
-  };
-  $: crossdata = getCrossData(colordata);
 
   let valueIsSelected = value =>
     value <= selectedRatioInterval[0] && value >= selectedRatioInterval[1];

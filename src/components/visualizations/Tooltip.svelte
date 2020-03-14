@@ -9,6 +9,7 @@
   export let totalBins;
   export let expectedBins;
   export let sampleBins;
+  export let fill;
 
   const margin = { top: 35, left: 35, right: 35, bottom: 35 };
   $: sampleSize = sum(sampleBins.map(b => b.count));
@@ -43,18 +44,16 @@
 </script>
 
 <style>
-  rect.frame {
-    fill: white;
-    stroke: black;
-    stroke-width: 2px;
-  }
+
 </style>
 
 <g>
-  <rect class="frame" {width} {height} />
+  <rect {fill} {width} {height} />
+  <rect fill="white" x={5} y={5} width={width - 10} height={height - 10} />
   <g
     class="margin-convention"
     transform="translate({margin.left}, {margin.top})">
+    <rect fill="white" {innerWidth} {innerHeight} />
     <g class="background">
       <rect width={innerWidth} height={innerHeight} fill="white" />
       <g

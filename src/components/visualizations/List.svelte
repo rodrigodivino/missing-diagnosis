@@ -3,6 +3,7 @@
   import { canvasWidth, canvasHeight } from "../../stores.js";
   import { getSliderHeight, applyDrag } from "../../methods/List.js";
   import { select, event, mouse } from "d3-selection";
+  import { interpolateRdYlBu } from "d3-scale-chromatic";
   import { drag } from "d3-drag";
   import { onMount } from "svelte";
 
@@ -14,12 +15,13 @@
   export let columns;
   export let columnTypes;
   export let renderList;
+  export let crossdata;
 
   const margin = { top: 10, bottom: 10, left: 10, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
   const numberOfCells = 3;
-  $: cellHeight = innerHeight / numberOfCells;
+  $: cellHeight = innerHeight / numberOfCells - 5;
 
   $: sliderHeight = getSliderHeight(
     innerHeight,
@@ -63,6 +65,9 @@
   rect.slider {
     fill: slategray;
   }
+  rect.slider_bg {
+    fill: lightgray;
+  }
 </style>
 
 <g
@@ -70,6 +75,12 @@
   transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
     <g class="background">
+      <rect
+        class="slider_bg"
+        x={innerWidth + margin.right * 0.1}
+        width={margin.right * 0.9}
+        y={0}
+        height={innerHeight} />
       <rect
         class="slider"
         bind:this={sliderDOM}
@@ -81,11 +92,11 @@
 
     <g class="foreground">
       {#each visibleCells as [i, j], index}
-        {console.log(binsMatrix)}
-        <g transform="translate(0,{index * cellHeight})">
+        <g transform="translate(0,{index * (cellHeight + 5)})">
           <Tooltip
             width={innerWidth}
             height={cellHeight}
+            fill={crossdata[i][j] === null ? 'darkseagreen' : interpolateRdYlBu(crossdata[i][j])}
             totalBins={binsMatrix[j][j]}
             expectedBins={binsMatrix[i][j][0]}
             sampleBins={binsMatrix[i][j][1]} />
