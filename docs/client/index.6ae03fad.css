@@ -1,5 +1,0 @@
-text.title.svelte-1sltptc{text-anchor:middle;font-size:0.7em}rect.focus.svelte-1sltptc{animation:svelte-1sltptc-blinker 1s linear infinite}@keyframes svelte-1sltptc-blinker{50%{fill:black}}
-rect.cell.svelte-4fgo1d{stroke-width:2px}
-path.data.svelte-1jbexjw{fill:none;stroke-width:3px;opacity:0.4}path.dataNotSelected.svelte-1jbexjw{fill:none;stroke-width:1px;opacity:0.2}path.dataSelected.svelte-1jbexjw{fill:none;stroke-width:3px;opacity:0.9}path.data.svelte-1jbexjw:hover,path.focus.svelte-1jbexjw,path.dataSelected.svelte-1jbexjw:hover{stroke-width:6px;opacity:1;animation:svelte-1jbexjw-blinker 1s linear infinite}@keyframes svelte-1jbexjw-blinker{50%{stroke:black;stroke-width:8px}}rect.axis-tick.svelte-1jbexjw{fill:white;stroke:black}text.axis-tick.svelte-1jbexjw{font-size:0.7em;font-weight:bold}text.axis-name.svelte-1jbexjw{text-anchor:middle;font-size:1em}
-rect.background.svelte-1xmg28i{opacity:0.1}text.label.svelte-1xmg28i{stroke:black;font-size:0.8em;text-anchor:middle;alignment-baseline:middle}text.axis-name.svelte-1xmg28i{font-size:1em}
-rect.slider.svelte-vf9rly{fill:slategray}rect.slider_bg.svelte-vf9rly{fill:lightgray}
