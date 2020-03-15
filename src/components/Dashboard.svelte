@@ -85,5 +85,8 @@
     columns={data.columns}
     {crossdata}
     {renderList}
+    {selectedSamplingVariables}
+    {selectedMeasurementVariables}
+    {selectedRatioInterval}
     bind:hoveredPair />
 </svg>

@@ -47,3 +47,18 @@ export function getVisibleCells(
 
   return subset;
 }
+
+/**
+ * Resets the slider to the 0 position
+ * @param {HTMLElement} sliderDOM - The DOM Element to reset position
+ * @param {any[]} triggers - Dummy argument to listen for triggers
+ *
+ * @returns {0} - The new slider discrete position: since this is a reset, is always zero
+ */
+export function resetSliderDOM(sliderDOM, triggers) {
+  if (sliderDOM) {
+    sliderDOM.setAttribute("y", "0");
+  }
+
+  return 0;
+}

@@ -4,7 +4,8 @@
   import {
     getSliderHeight,
     applyDrag,
-    getVisibleCells
+    getVisibleCells,
+    resetSliderDOM
   } from "../../methods/List.js";
   import { select, event, mouse } from "d3-selection";
   import { interpolateRdYlBu } from "d3-scale-chromatic";
@@ -20,8 +21,11 @@
   export let crossdata;
   export let columns;
   export let hoveredPair;
+  export let selectedRatioInterval;
+  export let selectedSamplingVariables;
+  export let selectedMeasurementVariables;
 
-  const margin = { top: 10, bottom: 10, left: 10, right: 20 };
+  const margin = { top: 0, bottom: 0, left: 0, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
   const numberOfCells = 3;
@@ -32,8 +36,6 @@
     renderList.length,
     numberOfCells
   );
-
-  let sliderDiscretePosition = 0;
 
   $: visibleCells = getVisibleCells(
     renderList,
@@ -70,6 +72,12 @@
   const handleTooltipMouseOver = e => {
     hoveredPair = [+e.target.getAttribute("i"), +e.target.getAttribute("j")];
   };
+
+  $: sliderDiscretePosition = resetSliderDOM(sliderDOM, [
+    selectedMeasurementVariables,
+    selectedRatioInterval,
+    selectedSamplingVariables
+  ]);
 </script>
 
 <style>
