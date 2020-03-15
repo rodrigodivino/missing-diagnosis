@@ -29,6 +29,9 @@
   export let convergence;
   export let selectedRatioInterval;
 
+  let selectedSamplingVariables = [];
+  let selectedMeasurementVariables = [];
+
   const margin = { top: 50, bottom: 75, left: 120, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
@@ -48,7 +51,7 @@
 
   $: colorScale = scaleLinear()
     .domain([0, 1])
-    .range([innerWidth * 0.2, innerWidth]);
+    .range([0, innerWidth * 0.8]);
 
   $: ratioAxis = axisLeft(ratioScale);
 
@@ -195,6 +198,34 @@
       column.filter(value => valueIsSelected(value)).length / column.length
     );
   };
+
+  const handleSamplingVariableClick = e => {
+    if (e.target.tagName !== "text") return;
+    const samplingVariable = +e.target.getAttribute("column");
+    if (selectedSamplingVariables.includes(samplingVariable)) {
+      selectedSamplingVariables = selectedSamplingVariables.filter(
+        v => v !== samplingVariable
+      );
+    } else {
+      selectedSamplingVariables.push(samplingVariable);
+      selectedSamplingVariables = selectedSamplingVariables;
+    }
+  };
+
+  const handleMeasurementVariableClick = e => {
+    if (e.target.tagName !== "text") return;
+    const measurementVariable = +e.target.getAttribute("column");
+    if (selectedMeasurementVariables.includes(measurementVariable)) {
+      selectedMeasurementVariables = selectedMeasurementVariables.filter(
+        v => v !== measurementVariable
+      );
+    } else {
+      selectedMeasurementVariables.push(measurementVariable);
+      selectedMeasurementVariables = selectedMeasurementVariables;
+    }
+  };
+
+  $: console.log(selectedMeasurementVariables);
 </script>
 
 <style>
@@ -274,58 +305,77 @@
         <text class="axis-name" x={0} y={-10}>
           Variables With Missing Values
         </text>
-        {#each columns as columnMissing, i}
-          {#if columnsWithMissingValues.includes(columnMissing)}
-            <rect
-              class="axis-tick"
-              x={-10}
-              y={samplingScale(columnMissing)}
-              width={10}
-              height={samplingScale.bandwidth()} />
-            {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
-              <rect
-                fill="black"
-                x={-10}
-                y={samplingScale(columnMissing)}
-                width={10}
-                height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)} />
+        <g class="samplingAxis" on:click={handleSamplingVariableClick}>
+          {#each columns as columnMissing, i}
+            {#if columnsWithMissingValues.includes(columnMissing)}
+              <g
+                class="samplingAxisElements"
+                opacity={selectedSamplingVariables.includes(i) || selectedSamplingVariables.length === 0 ? 1 : 0.2}>
+                <rect
+                  class="axis-tick"
+                  x={-10}
+                  y={samplingScale(columnMissing)}
+                  width={10}
+                  height={samplingScale.bandwidth()} />
+                {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
+                  <rect
+                    fill="black"
+                    x={-10}
+                    y={samplingScale(columnMissing)}
+                    width={10}
+                    height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)} />
+                {/if}
+                <text
+                  class="axis-tick"
+                  cursor="pointer"
+                  column={i}
+                  column-name={columnMissing}
+                  x={-12}
+                  y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
+                  text-anchor="end"
+                  alignment-baseline="middle">
+                  {columnMissing}
+                </text>
+              </g>
             {/if}
-            <text
-              class="axis-tick"
-              x={-12}
-              y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
-              text-anchor="end"
-              alignment-baseline="middle">
-              {columnMissing}
-            </text>
-          {/if}
-        {/each}
+          {/each}
+        </g>
+
       </g>
-      <g class="measurement-axis" transform="translate({innerWidth},0)">
+      <g
+        class="measurement-axis"
+        on:click={handleMeasurementVariableClick}
+        transform="translate({innerWidth},0)">
         <text class="axis-name" x={+5} y={-10}>Variables</text>
         {#each columns as column, j}
-          <rect
-            class="axis-tick"
-            x={0}
-            y={measurementScale(column)}
-            width={10}
-            height={measurementScale.bandwidth()} />
-          {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
+          <g
+            class="samplingAxisElements"
+            opacity={selectedMeasurementVariables.includes(j) || selectedMeasurementVariables.length === 0 ? 1 : 0.2}>
             <rect
-              fill="black"
+              class="axis-tick"
               x={0}
               y={measurementScale(column)}
               width={10}
-              height={measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval)} />
-          {/if}
-          <text
-            class="axis-tick"
-            x={12}
-            y={measurementScale(column) + measurementScale.bandwidth() / 2}
-            text-anchor="start"
-            alignment-baseline="middle">
-            {column}
-          </text>
+              height={measurementScale.bandwidth()} />
+            {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
+              <rect
+                fill="black"
+                x={0}
+                y={measurementScale(column)}
+                width={10}
+                height={measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval)} />
+            {/if}
+            <text
+              class="axis-tick"
+              cursor="pointer"
+              column={j}
+              x={12}
+              y={measurementScale(column) + measurementScale.bandwidth() / 2}
+              text-anchor="start"
+              alignment-baseline="middle">
+              {column}
+            </text>
+          </g>
         {/each}
       </g>
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
@@ -346,23 +396,23 @@
         {#each range(1000) as i}
           <rect
             y={margin.bottom / 6}
-            x={innerWidth * 0.2 + i * ((innerWidth * 0.8) / 1000)}
+            x={0 + i * ((innerWidth * 0.8) / 1000)}
             width={(innerWidth * 0.8) / 1000 + 1}
             height={margin.bottom / 5}
             fill={interpolateRdYlBu(1 - i / 1000)} />
         {/each}
         <rect
           y={margin.bottom / 6 + margin.bottom / 8}
-          x={0}
+          x={innerWidth * 0.85}
           stroke="black"
           stroke-width="1"
-          width={innerWidth * 0.18}
+          width={innerWidth * 0.15}
           height={margin.bottom / 5}
           fill="mediumseagreen" />
 
         <rect
           y={margin.bottom / 6}
-          x={innerWidth * 0.2}
+          x={0}
           stroke="black"
           stroke-width="1"
           width={innerWidth * 0.8}
@@ -375,14 +425,14 @@
         <text
           class="axis-name"
           alignment-baseline="hanging"
-          x={innerWidth * 0.09}
+          x={innerWidth * 0.925}
           y={margin.bottom / 6 + margin.bottom / 2 - margin.bottom / 8}>
           {'Categorical'}
         </text>
         <text
           class="axis-name"
           alignment-baseline="hanging"
-          x={innerWidth * 0.2 + (innerWidth * 0.8) / 2}
+          x={innerWidth * 0.4}
           y={margin.bottom / 6 + margin.bottom / 2}>
           {'Distribution Consistence (Ordered Data Only)'}
         </text>
@@ -390,7 +440,7 @@
           text-anchor="start"
           alignment-baseline="hanging"
           font-size="0.7em"
-          x={innerWidth * 0.2}
+          x={0}
           y={0}>
           {'< MCAR'}
         </text>
@@ -398,7 +448,7 @@
           text-anchor="end"
           alignment-baseline="hanging"
           font-size="0.7em"
-          x={innerWidth}
+          x={innerWidth * 0.8}
           y={0}>
           {'MAR >'}
         </text>

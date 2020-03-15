@@ -69,7 +69,6 @@
     height={1}
     {binsMatrix}
     columns={data.columns}
-    columnTypes={data.types}
     {crossdata}
     {renderList} />
 </svg>

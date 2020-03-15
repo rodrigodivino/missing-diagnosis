@@ -12,10 +12,9 @@
   export let width = 1;
   export let height = 1;
   export let binsMatrix;
-  export let columns;
-  export let columnTypes;
   export let renderList;
   export let crossdata;
+  export let columns;
 
   const margin = { top: 10, bottom: 10, left: 10, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -97,6 +96,8 @@
             width={innerWidth}
             height={cellHeight}
             fill={crossdata[i][j] === null ? 'darkseagreen' : interpolateRdYlBu(crossdata[i][j])}
+            samplingVariable={columns[i]}
+            measurementVariable={columns[j]}
             totalBins={binsMatrix[j][j]}
             expectedBins={binsMatrix[i][j][0]}
             sampleBins={binsMatrix[i][j][1]} />

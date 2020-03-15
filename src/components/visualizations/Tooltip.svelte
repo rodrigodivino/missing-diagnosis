@@ -10,8 +10,10 @@
   export let expectedBins;
   export let sampleBins;
   export let fill;
+  export let samplingVariable;
+  export let measurementVariable;
 
-  const margin = { top: 35, left: 35, right: 35, bottom: 35 };
+  const margin = { top: 35, left: 35, right: 35, bottom: 50 };
   $: sampleSize = sum(sampleBins.map(b => b.count));
   $: innerWidth = width - margin.left - margin.right;
   $: innerHeight = height - margin.top - margin.bottom;
@@ -36,7 +38,17 @@
       const yg = select(yAxisDOM);
       xg.selectAll().remove();
       yg.selectAll().remove();
-      xg.call(xAxis);
+      xg.call(xAxis)
+        .selectAll("text")
+        .each(function(t) {
+          if (isNaN(t)) {
+            select(this)
+              .attr("y", 5)
+              .attr("x", 5)
+              .attr("transform", "rotate(45)")
+              .attr("text-anchor", "start");
+          }
+        });
       yg.call(yAxis);
     }
   };
@@ -44,7 +56,10 @@
 </script>
 
 <style>
-
+  text.title {
+    text-anchor: middle;
+    font-size: 0.7em;
+  }
 </style>
 
 <g>
@@ -61,6 +76,19 @@
         transform="translate(0,{innerHeight})"
         bind:this={xAxisDOM} />
       <g class="y-axis" bind:this={yAxisDOM} />
+      <text
+        class="title"
+        y={-margin.top / 2}
+        x={innerWidth / 2}
+        alignment-baseline="middle">
+        <tspan font-weight="bold" alignment-baseline="middle">
+          {measurementVariable}
+        </tspan>
+        when missing
+        <tspan font-weight="bold" alignment-baseline="middle">
+          {samplingVariable}
+        </tspan>
+      </text>
     </g>
     <g class="foreground">
       {#each totalBins as bin, i}
