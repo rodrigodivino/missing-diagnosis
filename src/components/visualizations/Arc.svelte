@@ -157,8 +157,21 @@
   };
   $: placeBrush(ratioBrushDOM, ratioBrush);
 
-  const handlePathColor = (i, j, value, selectedRatioInterval) => {
-    if (valueIsSelected(value)) {
+  const handlePathColor = (
+    i,
+    j,
+    value,
+    selectedRatioInterval,
+    selectedSamplingVariables,
+    selectedMeasurementVariables
+  ) => {
+    if (
+      valueIsSelected(value) &&
+      (selectedSamplingVariables.includes(i) ||
+        selectedSamplingVariables.length === 0) &&
+      (selectedMeasurementVariables.includes(j) ||
+        selectedMeasurementVariables.length === 0)
+    ) {
       if (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative") {
         return interpolateRdYlBu(crossdata[i][j]);
       } else {
@@ -168,16 +181,33 @@
       return "lightgray";
     }
   };
-  const handlePathClass = (i, j, value, selectedRatioInterval) => {
+  const handlePathClass = (
+    i,
+    j,
+    value,
+    selectedRatioInterval,
+    selectedSamplingVariables,
+    selectedMeasurementVariables
+  ) => {
     if (valueIsSelected(value)) {
-      if (selectedRatioInterval[0] === 1 && selectedRatioInterval[1] === 0) {
+      if (
+        selectedRatioInterval[0] === 1 &&
+        selectedRatioInterval[1] === 0 &&
+        selectedSamplingVariables.length === 0 &&
+        selectedMeasurementVariables.length === 0
+      ) {
         return "data";
-      } else {
+      } else if (
+        (selectedSamplingVariables.includes(i) ||
+          selectedSamplingVariables.length === 0) &&
+        (selectedMeasurementVariables.includes(j) ||
+          selectedMeasurementVariables.length === 0)
+      ) {
         return "dataSelected";
       }
-    } else {
-      return "dataNotSelected";
     }
+
+    return "dataNotSelected";
   };
 
   const getAmountOfSelectedInLine = (i, selectedRatioInterval) => {
@@ -292,8 +322,8 @@
         {#each columns as jName, j}
           {#if i !== j && arcdata[i][j] !== null}
             <path
-              class={handlePathClass(i, j, arcdata[i][j], selectedRatioInterval)}
-              stroke={handlePathColor(i, j, arcdata[i][j], selectedRatioInterval)}
+              class={handlePathClass(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
+              stroke={handlePathColor(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
               d={drawEdge(columns[i], columns[j], arcdata[i][j], samplingScale, measurementScale, ratioScale)} />
           {/if}
         {/each}
