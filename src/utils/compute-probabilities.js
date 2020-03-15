@@ -1,5 +1,10 @@
 import { ascending, quantile, extent, mean, sum } from "d3";
-
+/**
+ *
+ * @param {*} data
+ * @param {*} columns
+ * @param {*} columnTypes
+ */
 export function computeEstimativeMatrix(data, columns, columnTypes) {
   const errorMatrix = new Array(columns.length)
     .fill(0)

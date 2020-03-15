@@ -28,9 +28,8 @@
   export let refine;
   export let convergence;
   export let selectedRatioInterval;
-
-  let selectedSamplingVariables = [];
-  let selectedMeasurementVariables = [];
+  export let selectedSamplingVariables;
+  export let selectedMeasurementVariables;
 
   const margin = { top: 50, bottom: 75, left: 120, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -254,8 +253,6 @@
       selectedMeasurementVariables = selectedMeasurementVariables;
     }
   };
-
-  $: console.log(selectedMeasurementVariables);
 </script>
 
 <style>

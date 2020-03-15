@@ -20,6 +20,9 @@
 
   let convergence = 100;
   let selectedRatioInterval = [1, 0];
+  let selectedSamplingVariables = [];
+  let selectedMeasurementVariables = [];
+
   $: crossdata = getCrossData(
     binsMatrix,
     data.validColumns,
@@ -27,7 +30,12 @@
     data.types
   );
 
-  $: renderList = getRenderList(estimativeMatrix, selectedRatioInterval);
+  $: renderList = getRenderList(
+    estimativeMatrix,
+    selectedRatioInterval,
+    selectedSamplingVariables,
+    selectedMeasurementVariables
+  );
 </script>
 
 <style>
@@ -57,9 +65,11 @@
     columns={data.columns}
     columnTypes={data.types}
     {columnsWithMissingValues}
+    {crossdata}
     refine={refineEstimative}
     bind:convergence
-    {crossdata}
+    bind:selectedSamplingVariables
+    bind:selectedMeasurementVariables
     bind:selectedRatioInterval />
 
   <List

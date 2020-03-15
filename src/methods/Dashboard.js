@@ -1,11 +1,33 @@
-export function getRenderList(estimativeMatrix, selectedRangeInterval) {
+/**
+ * Compute the list of dimensions that are current selected
+ * @param {number[][]} estimativeMatrix - A matrix of dimensions with the estimated MAR chance
+ * @param {[number, number]} selectedRatioInterval - The selected ratio in range [1,0]
+ * @param {number[]} selectedSamplingVariables - The list of selected sampling variables
+ * @param {number[]} selectedMeasurementVariables - The list of selected measurement variables
+ *
+ * @returns {[number, number][]} A tuple array with the line i and column j that matches all conditions
+ */
+export function getRenderList(
+  estimativeMatrix,
+  selectedRatioInterval,
+  selectedSamplingVariables,
+  selectedMeasurementVariables
+) {
+  /**
+   * @type {[number, number][]}
+   */
   const renderList = [];
+
   for (let i = 0; i < estimativeMatrix.length; i++) {
     for (let j = 0; j < estimativeMatrix[0].length; j++) {
       if (
         i !== j &&
         estimativeMatrix[i][j] !== null &&
-        __valueIsSelected(estimativeMatrix[i][j], selectedRangeInterval)
+        __valueIsSelected(estimativeMatrix[i][j], selectedRatioInterval) &&
+        (selectedSamplingVariables.length === 0 ||
+          selectedSamplingVariables.includes(i)) &&
+        (selectedMeasurementVariables.length === 0 ||
+          selectedMeasurementVariables.includes(j))
       ) {
         renderList.push([i, j]);
       }
@@ -13,10 +35,13 @@ export function getRenderList(estimativeMatrix, selectedRangeInterval) {
   }
   return renderList;
 }
-
-const __valueIsSelected = (value, range) =>
-  value <= Math.max(...range) && value >= Math.min(...range);
-
+/**
+ * Compute the number of crossess in the actual minus expected histogram
+ * @param {(number | Histogram | [Histogram, Histogram])[][]} binsMatrix
+ * @param {string[]} columns
+ * @param {string[]} columnsWithMissingValues
+ * @param {string[]} columnTypes
+ */
 export function getCrossData(
   binsMatrix,
   columns,
@@ -56,3 +81,24 @@ export function getCrossData(
   }
   return crossdata;
 }
+/**
+ * Checks if value is between the given range
+ * @private
+ * @param {number} value
+ * @param {[number, number]} range
+ *
+ * @returns {boolean}
+ */
+const __valueIsSelected = (value, range) =>
+  value <= Math.max(...range) && value >= Math.min(...range);
+
+/**
+ * @typedef {Object} Bin - A bin of a Histogram
+ * @property {string} name - The name of the bin
+ * @property {number} [minNum] - The lower boundary of a Bin, if quantitative
+ * @property {number} [maxNum] - The upper boundary of a Bin, if quantitative
+ */
+
+/**
+ * @typedef {Bin[]} Histogram - A Histogram
+ */
