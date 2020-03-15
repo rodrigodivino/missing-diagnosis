@@ -1,7 +1,11 @@
 <script>
   import Tooltip from "./Tooltip.svelte";
   import { canvasWidth, canvasHeight } from "../../stores.js";
-  import { getSliderHeight, applyDrag } from "../../methods/List.js";
+  import {
+    getSliderHeight,
+    applyDrag,
+    getVisibleCells
+  } from "../../methods/List.js";
   import { select, event, mouse } from "d3-selection";
   import { interpolateRdYlBu } from "d3-scale-chromatic";
   import { drag } from "d3-drag";
@@ -15,6 +19,7 @@
   export let renderList;
   export let crossdata;
   export let columns;
+  export let hoveredPair;
 
   const margin = { top: 10, bottom: 10, left: 10, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -29,9 +34,12 @@
   );
 
   let sliderDiscretePosition = 0;
-  $: visibleCells = renderList.slice(
+
+  $: visibleCells = getVisibleCells(
+    renderList,
     sliderDiscretePosition,
-    sliderDiscretePosition + numberOfCells
+    numberOfCells,
+    hoveredPair
   );
 
   $: sliderDrag = drag()
@@ -58,6 +66,10 @@
 
   let sliderDOM;
   $: applyDrag(sliderDOM, sliderDrag);
+
+  const handleTooltipMouseOver = e => {
+    hoveredPair = [+e.target.getAttribute("i"), +e.target.getAttribute("j")];
+  };
 </script>
 
 <style>
@@ -89,10 +101,16 @@
         height={sliderHeight} />
     </g>
 
-    <g class="foreground">
+    <g
+      class="foreground"
+      on:mouseover={handleTooltipMouseOver}
+      on:mouseout={() => (hoveredPair = null)}>
       {#each visibleCells as [i, j], index}
         <g transform="translate(0,{index * (cellHeight + 5)})">
           <Tooltip
+            {i}
+            {j}
+            focus={hoveredPair && hoveredPair[0] === i && hoveredPair[1] === j}
             width={innerWidth}
             height={cellHeight}
             fill={crossdata[i][j] === null ? 'darkseagreen' : interpolateRdYlBu(crossdata[i][j])}

@@ -30,6 +30,7 @@
   export let selectedRatioInterval;
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
+  export let hoveredPair;
 
   const margin = { top: 50, bottom: 75, left: 120, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -253,6 +254,32 @@
       selectedMeasurementVariables = selectedMeasurementVariables;
     }
   };
+
+  const handlePathMouseOver = e => {
+    if (e.target.className.baseVal.includes("Not")) return;
+    hoveredPair = [+e.target.getAttribute("i"), +e.target.getAttribute("j")];
+  };
+
+  let foreground;
+
+  const toggleFocus = hoveredPair => {
+    select(foreground)
+      .selectAll("path")
+      .each(function() {
+        if (
+          hoveredPair &&
+          hoveredPair[0] === +select(this).attr("i") &&
+          hoveredPair[1] === +select(this).attr("j")
+        ) {
+          select(this)
+            .raise()
+            .classed("focus", true);
+        } else {
+          select(this).classed("focus", false);
+        }
+      });
+  };
+  $: toggleFocus(hoveredPair);
 </script>
 
 <style>
@@ -275,20 +302,17 @@
   }
 
   path.data:hover,
+  path.focus,
   path.dataSelected:hover {
-    stroke-width: 4px;
+    stroke-width: 6px;
     opacity: 1;
     animation: blinker 1s linear infinite;
   }
 
   @keyframes blinker {
-    30% {
+    50% {
       stroke: black;
-      stroke-width: 5px;
-    }
-    70% {
-      stroke: black;
-      stroke-width: 5px;
+      stroke-width: 8px;
     }
   }
 
@@ -314,11 +338,19 @@
 
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
     <g class="background" />
-    <g class="foreground">
+    <g
+      class="foreground"
+      bind:this={foreground}
+      on:mouseover={handlePathMouseOver}
+      on:mouseout={() => {
+        hoveredPair = null;
+      }}>
       {#each columns as iName, i}
         {#each columns as jName, j}
           {#if i !== j && arcdata[i][j] !== null}
             <path
+              {i}
+              {j}
               class={handlePathClass(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
               stroke={handlePathColor(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
               d={drawEdge(columns[i], columns[j], arcdata[i][j], samplingScale, measurementScale, ratioScale)} />

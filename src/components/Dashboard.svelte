@@ -22,6 +22,7 @@
   let selectedRatioInterval = [1, 0];
   let selectedSamplingVariables = [];
   let selectedMeasurementVariables = [];
+  let hoveredPair = null;
 
   $: crossdata = getCrossData(
     binsMatrix,
@@ -36,6 +37,8 @@
     selectedSamplingVariables,
     selectedMeasurementVariables
   );
+
+  $: console.log(hoveredPair);
 </script>
 
 <style>
@@ -70,7 +73,8 @@
     bind:convergence
     bind:selectedSamplingVariables
     bind:selectedMeasurementVariables
-    bind:selectedRatioInterval />
+    bind:selectedRatioInterval
+    bind:hoveredPair />
 
   <List
     x={0.7}
@@ -80,5 +84,6 @@
     {binsMatrix}
     columns={data.columns}
     {crossdata}
-    {renderList} />
+    {renderList}
+    bind:hoveredPair />
 </svg>

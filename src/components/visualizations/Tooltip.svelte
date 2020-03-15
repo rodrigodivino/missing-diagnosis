@@ -10,8 +10,9 @@
   export let expectedBins;
   export let sampleBins;
   export let fill;
-  export let samplingVariable;
-  export let measurementVariable;
+  export let samplingVariable, i;
+  export let measurementVariable, j;
+  export let focus;
 
   const margin = { top: 35, left: 35, right: 35, bottom: 50 };
   $: sampleSize = sum(sampleBins.map(b => b.count));
@@ -60,12 +61,29 @@
     text-anchor: middle;
     font-size: 0.7em;
   }
+
+  rect.focus {
+    animation: blinker 1s linear infinite;
+  }
+
+  @keyframes blinker {
+    50% {
+      fill: black;
+    }
+  }
 </style>
 
 <g>
-  <rect {fill} {width} {height} />
-  <rect fill="white" x={5} y={5} width={width - 10} height={height - 10} />
+  <rect class:focus {i} {j} {fill} {width} {height} />
+  <rect
+    pointer-events="none"
+    fill={'white'}
+    x={5}
+    y={5}
+    width={width - 10}
+    height={height - 10} />
   <g
+    pointer-events="none"
     class="margin-convention"
     transform="translate({margin.left}, {margin.top})">
     <rect fill="white" {innerWidth} {innerHeight} />
