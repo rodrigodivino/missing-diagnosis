@@ -120,7 +120,8 @@
 
   const errorThreshold = 0.5;
   const updateData = async arcdata => {
-    const nextdata = await refine(arcdata, 1);
+    let step = convergence < 5 ? 10 : 1;
+    const nextdata = await refine(arcdata, step);
     let maxError = -Infinity;
     for (let i = 0; i < columns.length; i++) {
       for (let j = 0; j < columns.length; j++) {
