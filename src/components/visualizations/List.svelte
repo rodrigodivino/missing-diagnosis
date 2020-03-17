@@ -124,6 +124,7 @@
             fill={crossdata[i][j] === null ? 'darkseagreen' : interpolateRdYlBu(crossdata[i][j])}
             samplingVariable={columns[i]}
             measurementVariable={columns[j]}
+            nOfMissingSamples={binsMatrix[i][i][binsMatrix[i][i].length - 1].count}
             totalBins={binsMatrix[j][j]}
             expectedBins={binsMatrix[i][j][0]}
             sampleBins={binsMatrix[i][j][1]} />

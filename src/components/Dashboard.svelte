@@ -69,6 +69,7 @@
     columnTypes={data.types}
     {columnsWithMissingValues}
     {crossdata}
+    {binsMatrix}
     refine={refineEstimative}
     bind:convergence
     bind:selectedSamplingVariables

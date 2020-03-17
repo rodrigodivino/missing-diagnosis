@@ -9,6 +9,7 @@
   export let totalBins;
   export let expectedBins;
   export let sampleBins;
+  export let nOfMissingSamples;
   export let fill;
   export let samplingVariable, i;
   export let measurementVariable, j;
@@ -106,6 +107,7 @@
         <tspan font-weight="bold" alignment-baseline="middle">
           {samplingVariable}
         </tspan>
+        <tspan alignment-baseline="middle">({nOfMissingSamples})</tspan>
       </text>
     </g>
     <g class="foreground">

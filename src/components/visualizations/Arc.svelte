@@ -21,7 +21,7 @@
     }, 1);
   };
   export let crossdata;
-
+  export let binsMatrix;
   export let columns;
   export let columnTypes;
   export let columnsWithMissingValues;
@@ -32,7 +32,7 @@
   export let selectedMeasurementVariables;
   export let hoveredPair;
 
-  const margin = { top: 50, bottom: 75, left: 120, right: 120 };
+  const margin = { top: 50, bottom: 75, left: 150, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
@@ -394,7 +394,7 @@
                   y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
                   text-anchor="end"
                   alignment-baseline="middle">
-                  {columnMissing}
+                  {columnMissing + ` (${binsMatrix[i][i][binsMatrix[i][i].length - 1].count})`}
                 </text>
               </g>
             {/if}

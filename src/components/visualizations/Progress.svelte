@@ -34,12 +34,12 @@
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
     <rect
       class="background"
-      fill={convergence <= 0.5 ? 'mediumseagreen' : 'coral'}
+      fill={convergence <= 0.5 ? 'mediumseagreen' : convergence <= 5 ? 'gold' : 'coral'}
       width={innerWidth}
       height={innerHeight} />
     <rect
       class="foreground"
-      fill={convergence <= 0.5 ? 'mediumseagreen' : 'coral'}
+      fill={convergence <= 0.5 ? 'mediumseagreen' : convergence <= 5 ? 'gold' : 'coral'}
       x={innerWidth / 2 - (innerWidth * (convergence / 100)) / 2}
       width={innerWidth * (convergence / 100)}
       height={innerHeight} />
