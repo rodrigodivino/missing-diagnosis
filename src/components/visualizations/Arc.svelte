@@ -448,7 +448,7 @@
             text-anchor="middle"
             alignment-baseline="middle"
             y={ratioScale(i / 10)}>
-            {i * 10 + '%'}
+            {100 - i * 10 + '%'}
           </text>
         {/each}
 

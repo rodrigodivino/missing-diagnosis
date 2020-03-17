@@ -29,7 +29,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
           : Histogram(population, binRules);
         const expectedBins = populationBins.map(b => ({
           ...b,
-          count: (sampleSize / data.length) * b.count
+          count: Math.round((sampleSize / data.length) * b.count)
         }));
         const subsampleBins = Histogram(subsample, binRules);
         errorMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
