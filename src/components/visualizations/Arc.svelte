@@ -38,7 +38,7 @@
 
   $: ratioScale = scaleLinear()
     .domain([0, 1])
-    .range([innerHeight, 0]);
+    .range([0, innerHeight]);
   $: samplingScale = scaleBand()
     .domain(columnsWithMissingValues)
     .range([innerHeight, 0])
@@ -85,11 +85,11 @@
 
     const p = path();
 
-    const sourceY = samplingScale(source) + (1 - value) * samplingBand;
+    const sourceY = samplingScale(source) + value * samplingBand;
     const sourceX = 0;
     const valueY = ratioScale(value);
     const valueX = innerWidth / 2;
-    const targetY = measurementScale(target) + (1 - value) * measurementBand;
+    const targetY = measurementScale(target) + value * measurementBand;
     const targetX = innerWidth;
 
     const xDisplacement = innerWidth / 4;
@@ -140,7 +140,8 @@
   $: updateData(arcdata);
 
   let valueIsSelected = value =>
-    value <= selectedRatioInterval[0] && value >= selectedRatioInterval[1];
+    value <= Math.max(...selectedRatioInterval) &&
+    value >= Math.min(...selectedRatioInterval);
   let ratioBrushDOM;
   $: ratioBrush = brushY()
     .extent([[innerWidth / 2 - 13, 0], [innerWidth / 2 + 14, innerHeight]])
@@ -439,7 +440,7 @@
         {/each}
       </g>
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
-        <text class="axis-name" x={-5} y={-10}>Chance of MAR</text>
+        <text class="axis-name" x={-5} y={-10}>Chance of MCAR</text>
         <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
         {#each range(1, 10) as i}
           <text
@@ -510,7 +511,7 @@
           font-size="0.7em"
           x={innerWidth * 0.8}
           y={0}>
-          {'MAR >'}
+          {'not MCAR >'}
         </text>
       </g>
     </g>
