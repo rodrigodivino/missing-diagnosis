@@ -166,7 +166,7 @@ function CompareBins(bins1, bins2) {
 function Histogram(array, rules) {
   let binName = 0;
   let bins = new Array(rules.numOfBins + 1);
-  for (let i = 0; i < rules.numOfBins; i++) {
+  for (let i = 0; i <= rules.numOfBins; i++) {
     bins[i] = {
       name: binName,
       minNum: rules.min + i * rules.binWidth,
@@ -199,9 +199,12 @@ function FreedmanDiaconis(population) {
     return 2 * (iqr(array) / Math.pow(array.length, 1 / 3));
   };
 
-  const binWidth = freedmanDiaconis(population.filter(d => d !== null));
+  // const binWidth = freedmanDiaconis(population.filter(d => d !== null));
   const [min, max] = extent(population);
-  const numOfBins = Math.ceil(Math.abs(min - max) / binWidth);
+  // const numOfBins = Math.ceil(Math.abs(min - max) / binWidth);
+  const numOfBins = 2* Math.ceil(Math.pow(population.length, 1/3));
+  const binWidth = Math.abs(min - max)/numOfBins;
+  console.log(numOfBins, binWidth);
   return { binWidth, min, numOfBins };
 }
 

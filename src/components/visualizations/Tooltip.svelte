@@ -24,7 +24,7 @@
     .domain(totalBins.filter(b => b.count > 0).map(b => b.name))
     .range([0, innerWidth]);
   $: yScale = scaleLinear()
-    .domain([-sampleSize, sampleSize])
+    .domain([-sampleSize/4, sampleSize/4])
     .range([innerHeight, 0]);
 
   $: xAxis = axisBottom(xScale);
