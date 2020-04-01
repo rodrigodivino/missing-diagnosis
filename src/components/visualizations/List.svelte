@@ -8,9 +8,10 @@
     resetSliderDOM
   } from "../../methods/List.js";
   import { select, event, mouse } from "d3-selection";
-  import { interpolateRdYlBu } from "d3-scale-chromatic";
+  import { interpolateRdYlBu, interpolateTurbo} from "d3-scale-chromatic";
   import { drag } from "d3-drag";
   import { onMount } from "svelte";
+  import {scaleLinear} from 'd3-scale';
 
   export let x = 0;
   export let y = 0;
@@ -24,6 +25,9 @@
   export let selectedRatioInterval;
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
+
+  const cmap = scaleLinear().domain([0,1]).range([.1,.9]);
+  const interpolate = i => interpolateTurbo(cmap(i));
 
   const margin = { top: 0, bottom: 0, left: 0, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -121,7 +125,7 @@
             focus={hoveredPair && hoveredPair[0] === i && hoveredPair[1] === j}
             width={innerWidth}
             height={cellHeight}
-            fill={crossdata[i][j] === null ? 'darkseagreen' : interpolateRdYlBu(crossdata[i][j])}
+            fill={crossdata[i][j] === null ? 'darkseagreen' : interpolate(crossdata[i][j])}
             samplingVariable={columns[i]}
             measurementVariable={columns[j]}
             nOfMissingSamples={binsMatrix[i][i][binsMatrix[i][i].length - 1].count}

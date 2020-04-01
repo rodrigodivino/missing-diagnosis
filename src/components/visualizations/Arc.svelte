@@ -8,7 +8,7 @@
   import { range, mean } from "d3-array";
   import { brushY } from "d3-brush";
   import { onMount } from "svelte";
-  import { interpolateRdYlBu, interpolateYlOrRd } from "d3-scale-chromatic";
+  import { interpolateRdYlBu, interpolateYlOrRd, interpolateCividis, interpolateTurbo } from "d3-scale-chromatic";
 
   export let x = 0;
   export let y = 0;
@@ -31,7 +31,8 @@
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
   export let hoveredPair;
-
+  const cmap = scaleLinear().domain([0,1]).range([.1,.9]);
+  const interpolate = i => interpolateTurbo(cmap(i));
   const margin = { top: 50, bottom: 75, left: 150, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
@@ -67,6 +68,8 @@
       cg.call(colorAxis)
         .selectAll("g.tick")
         .selectAll("text")
+        .attr('font-size', 7)
+        .attr('y', 15) // 15 is for print mode
         .text(t => +t * 100 + "%");
     }
   };
@@ -175,9 +178,9 @@
         selectedMeasurementVariables.length === 0)
     ) {
       if (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative") {
-        return interpolateRdYlBu(crossdata[i][j]);
+        return interpolate(crossdata[i][j]);
       } else {
-        return "darkseagreen";
+        return "slategray";
       }
     } else {
       return "lightgray";
@@ -460,7 +463,7 @@
             x={0 + i * ((innerWidth * 0.8) / 1000)}
             width={(innerWidth * 0.8) / 1000 + 1}
             height={margin.bottom / 5}
-            fill={interpolateRdYlBu(1 - i / 1000)} />
+            fill={interpolate(1 - i / 1000)} />
         {/each}
         <rect
           y={margin.bottom / 6 + margin.bottom / 8}
@@ -469,7 +472,7 @@
           stroke-width="1"
           width={innerWidth * 0.15}
           height={margin.bottom / 5}
-          fill="mediumseagreen" />
+          fill="slategray" />
 
         <rect
           y={margin.bottom / 6}
@@ -487,14 +490,16 @@
           class="axis-name"
           alignment-baseline="hanging"
           x={innerWidth * 0.925}
-          y={margin.bottom / 6 + margin.bottom / 2 - margin.bottom / 8}>
+          y={8 + margin.bottom / 6 + margin.bottom / 2 - margin.bottom / 8}>
+          <!-- 8 is for print mode -->
           {'Categorical'}
         </text>
         <text
           class="axis-name"
           alignment-baseline="hanging"
           x={innerWidth * 0.4}
-          y={margin.bottom / 6 + margin.bottom / 2}>
+          y={8 + margin.bottom / 6 + margin.bottom / 2}>
+          <!-- 8 is for print mode -->
           {'Distribution Consistence (Ordered Data Only)'}
         </text>
         <text
@@ -502,7 +507,8 @@
           alignment-baseline="hanging"
           font-size="0.7em"
           x={0}
-          y={0}>
+          y={8}> 
+          <!-- 8 is for print mode -->
           {'< MCAR'}
         </text>
         <text
@@ -510,7 +516,8 @@
           alignment-baseline="hanging"
           font-size="0.7em"
           x={innerWidth * 0.8}
-          y={0}>
+          y={8}>
+          <!-- 8 is for print mode -->
           {'not MCAR >'}
         </text>
       </g>

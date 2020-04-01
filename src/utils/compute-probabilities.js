@@ -204,7 +204,6 @@ function FreedmanDiaconis(population) {
   // const numOfBins = Math.ceil(Math.abs(min - max) / binWidth);
   const numOfBins = 2* Math.ceil(Math.pow(population.length, 1/3));
   const binWidth = Math.abs(min - max)/numOfBins;
-  console.log(numOfBins, binWidth);
   return { binWidth, min, numOfBins };
 }
 
