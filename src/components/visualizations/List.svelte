@@ -125,7 +125,7 @@
             focus={hoveredPair && hoveredPair[0] === i && hoveredPair[1] === j}
             width={innerWidth}
             height={cellHeight}
-            fill={crossdata[i][j] === null ? 'darkseagreen' : interpolate(crossdata[i][j])}
+            fill={crossdata[i][j] === null ? 'dimgray' : interpolate(crossdata[i][j])}
             samplingVariable={columns[i]}
             measurementVariable={columns[j]}
             nOfMissingSamples={binsMatrix[i][i][binsMatrix[i][i].length - 1].count}

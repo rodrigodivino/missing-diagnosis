@@ -180,7 +180,7 @@
       if (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative") {
         return interpolate(crossdata[i][j]);
       } else {
-        return "slategray";
+        return "dimgray";
       }
     } else {
       return "lightgray";
@@ -333,7 +333,7 @@
 
   text.axis-name {
     text-anchor: middle;
-    font-size: 1em;
+    font-size: 10;
   }
 </style>
 
@@ -472,7 +472,7 @@
           stroke-width="1"
           width={innerWidth * 0.15}
           height={margin.bottom / 5}
-          fill="slategray" />
+          fill="dimgray" />
 
         <rect
           y={margin.bottom / 6}
@@ -490,16 +490,16 @@
           class="axis-name"
           alignment-baseline="hanging"
           x={innerWidth * 0.925}
-          y={8 + margin.bottom / 6 + margin.bottom / 2 - margin.bottom / 8}>
-          <!-- 8 is for print mode -->
+          y={10 + margin.bottom / 6 + margin.bottom / 2 - margin.bottom / 8}>
+          <!-- 10 is for print mode -->
           {'Categorical'}
         </text>
         <text
           class="axis-name"
           alignment-baseline="hanging"
           x={innerWidth * 0.4}
-          y={8 + margin.bottom / 6 + margin.bottom / 2}>
-          <!-- 8 is for print mode -->
+          y={10 + margin.bottom / 6 + margin.bottom / 2}>
+          <!-- 10 is for print mode -->
           {'Distribution Consistence (Ordered Data Only)'}
         </text>
         <text
