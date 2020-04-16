@@ -68,7 +68,7 @@
       cg.call(colorAxis)
         .selectAll("g.tick")
         .selectAll("text")
-        .attr('font-size', 7)
+        .attr('font-size', 10)
         .attr('y', 15) // 15 is for print mode
         .text(t => +t * 100 + "%");
     }
@@ -443,7 +443,7 @@
         {/each}
       </g>
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
-        <text class="axis-name" x={-5} y={-10}>Chance of MCAR</text>
+        <text class="axis-name" x={-5} y={-10}>MCAR Similarity</text>
         <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
         {#each range(1, 10) as i}
           <text
@@ -500,7 +500,7 @@
           x={innerWidth * 0.4}
           y={10 + margin.bottom / 6 + margin.bottom / 2}>
           <!-- 10 is for print mode -->
-          {'Distribution Consistence (Ordered Data Only)'}
+          {'MCAR Plausibility (Ordered Data Only)'}
         </text>
         <text
           text-anchor="start"
