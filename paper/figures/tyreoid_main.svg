@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -43,9 +43,9 @@
      inkscape:window-height="755"
      id="namedview3552"
      showgrid="false"
-     inkscape:zoom="0.78666667"
-     inkscape:cx="478.72589"
-     inkscape:cy="290.65694"
+     inkscape:zoom="0.32"
+     inkscape:cx="357.4353"
+     inkscape:cy="256.61892"
      inkscape:window-x="52"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
@@ -76,17 +76,17 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
          id="g10">
         <rect
            class="background svelte-1xmg28i"
-           fill="mediumseagreen"
            width="700"
            height="26"
-           id="rect12" />
+           id="rect12"
+           fill="mediumseagreen" />
         <rect
            class="foreground"
-           fill="mediumseagreen"
            x="348.3921875"
            width="3.2156250000000055"
            height="26"
-           id="rect14" />
+           id="rect14"
+           fill="mediumseagreen" />
         <text
            class="label svelte-1xmg28i"
            x="350"
@@ -11087,6 +11087,7 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
    alignment-baseline="middle"
    id="tspan3256">T3</tspan>
 
+
  when missing <tspan
    style="font-weight:bold"
    font-weight="bold"
@@ -11908,6 +11909,7 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
    font-weight="bold"
    style="font-weight:bold">TT4</tspan>
 
+
  when missing <tspan
    id="tspan3504"
    alignment-baseline="middle"
@@ -12473,6 +12475,7 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
    alignment-baseline="middle"
    font-weight="bold"
    style="font-weight:bold">age</tspan>
+
 
  when missing <tspan
    id="tspan3034"

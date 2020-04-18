@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.28"
-     inkscape:cx="117.69677"
+     inkscape:cx="-5.350105"
      inkscape:cy="185.7351"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -138,12 +138,12 @@
     <text
        sodipodi:linespacing="125%"
        id="text12283"
-       y="465.41541"
+       y="477.41541"
        x="133.5"
        style="font-style:normal;font-weight:normal;font-size:31.25px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          style="font-size:12.5px"
-         y="465.41541"
+         y="477.41541"
          x="133.5"
          id="tspan12285"
          sodipodi:role="line">Less values than uniform</tspan></text>
@@ -151,17 +151,17 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="133.5"
-       y="486.82678"
+       y="454.82678"
        id="text12287"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan12289"
          x="133.5"
-         y="486.82678"
+         y="454.82678"
          style="font-size:12.5px">More values than uniform</tspan></text>
     <g
        id="g12299"
-       transform="translate(18.750005,-32.869846)">
+       transform="translate(18.750005,-64.86985)">
       <rect
          style="opacity:1;fill:#87cdde;fill-opacity:1;stroke:#000000;stroke-width:1.00000012;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect12281"
@@ -184,7 +184,7 @@
     </g>
     <g
        id="g12304"
-       transform="translate(18.749997,-33.187503)">
+       transform="translate(18.749997,-21.187503)">
       <rect
          y="486.2616"
          x="93.383995"
