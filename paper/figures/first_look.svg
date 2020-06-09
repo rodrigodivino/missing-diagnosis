@@ -15,7 +15,10 @@
    mask="none"
    clip-path="none"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="first_look.svg">
+   sodipodi:docname="first_look.svg"
+   inkscape:export-filename="/Users/rodrigo/GitHub/missing-diagnosis/qualificacao/first_look.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
   <metadata
      id="metadata3156">
     <rdf:RDF>
@@ -24,7 +27,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -39,14 +42,14 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1228"
+     inkscape:window-width="1199"
      inkscape:window-height="755"
      id="namedview3152"
      showgrid="false"
-     inkscape:zoom="1.1125147"
-     inkscape:cx="419.89231"
-     inkscape:cy="137.55925"
-     inkscape:window-x="52"
+     inkscape:zoom="0.55625735"
+     inkscape:cx="482.14697"
+     inkscape:cy="235.75484"
+     inkscape:window-x="81"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
      inkscape:current-layer="g378" />
@@ -2076,7 +2079,7 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
                x="-5"
                y="-10"
                id="text590"
-               style="text-anchor:middle">Randomness Similarity</text>
+               style="text-anchor:middle">MCAR Similarity</text>
             <rect
                class="axis-tick svelte-15jqfw"
                x="-15"
@@ -9354,7 +9357,7 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
                x="172"
                y="60"
                id="text2690"
-               style="text-anchor:middle">Randomness Plausibility (Ordered Data Only)</text>
+               style="text-anchor:middle">MCAR Plausibility (Ordered Data Only)</text>
             <text
                alignment-baseline="hanging"
                font-size="0.7em"
@@ -9696,6 +9699,8 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
    font-weight="bold"
    alignment-baseline="middle"
    id="tspan2812">symboling</tspan>
+
+
 
         when missing
         <tspan
@@ -10341,6 +10346,8 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
    alignment-baseline="middle"
    id="tspan3020">make</tspan>
 
+
+
         when missing
         <tspan
    font-weight="bold"
@@ -10732,6 +10739,8 @@ rect.slider_bg.svelte-vf9rly { fill: lightgray; }</style>
    font-weight="bold"
    alignment-baseline="middle"
    id="tspan3140">fuel-type</tspan>
+
+
 
         when missing
         <tspan
