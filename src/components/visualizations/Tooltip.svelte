@@ -24,7 +24,7 @@
     .domain(totalBins.filter(b => b.count > 0).map(b => b.name))
     .range([0, innerWidth]);
   $: yScale = scaleLinear()
-    .domain([-sampleSize/4, sampleSize/4])
+    .domain([-sampleSize * 0.8, sampleSize * 0.8])
     .range([innerHeight, 0]);
 
   $: xAxis = axisBottom(xScale);
@@ -42,29 +42,27 @@
       yg.selectAll().remove();
       xg.call(xAxis)
         .selectAll("text")
-        .attr('font-size', 7)
-        .attr("y", 15) // 15 is for print Mode 
+        .attr("font-size", 7)
+        .attr("y", 15) // 15 is for print Mode
         .each(function(t) {
           if (isNaN(t)) {
             select(this)
-              .attr("y", 5 +5) //+5 is for print Mode
+              .attr("y", 5 + 5) //+5 is for print Mode
               .attr("x", 5)
               .attr("transform", "rotate(45)")
-              .attr("text-anchor", "start")
+              .attr("text-anchor", "start");
           }
         });
-      yg.call(yAxis).selectAll("text")
-        .attr('font-size', 7)
-        .attr("y", 4) // +4 is for print Mode 
-        
-        
+      yg.call(yAxis)
+        .selectAll("text")
+        .attr("font-size", 7)
+        .attr("y", 4); // +4 is for print Mode
     }
   };
   $: placeLegends(xAxisDOM, yAxisDOM, xAxis, yAxis);
 </script>
 
 <style>
-  
   text.title {
     text-anchor: middle;
     font-size: 0.7em;
