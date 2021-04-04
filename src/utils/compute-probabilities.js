@@ -1,4 +1,4 @@
-import { ascending, quantile, extent, mean, sum } from "d3";
+import { ascending, quantile, extent, mean, sum, shuffle} from "d3";
 /**
  *
  * @param {*} data
@@ -6,7 +6,7 @@ import { ascending, quantile, extent, mean, sum } from "d3";
  * @param {*} columnTypes
  */
 export function computeEstimativeMatrix(data, columns, columnTypes) {
-  const errorMatrix = new Array(columns.length)
+  const observedBootstrapMetricMatrix = new Array(columns.length)
     .fill(0)
     .map(() => new Array(columns.length).fill(null));
   const binsMatrix = new Array(columns.length)
@@ -15,14 +15,18 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
   for (let i = 0; i < columns.length; i++) {
     const iDim = columns[i];
     const sampleSize = sum(data.map(d => d[iDim] === null));
-    errorMatrix[i][i] = sampleSize;
+    observedBootstrapMetricMatrix[i][i] = sampleSize;
     if (sampleSize === 0) continue;
     for (let j = 0; j < columns.length; j++) {
       if (i === j) continue;
+      const [mask, values] = MaskAndValues(data, columns, i, j);
+
+      const sortedZip = ZipAndSort(mask, values)
+
       const jDim = columns[j];
       let population = data.map(d => d[jDim]);
       let subsample = data.filter(d => d[iDim] === null).map(d => d[jDim]);
-      if (columnTypes[j] === "Quantitative") {
+      if (columnTypes[j] === "Quantitative" || columnTypes[j] === "Ordinal") {
         const binRules = FreedmanDiaconis(population);
         const populationBins = binsMatrix[j][j]
           ? binsMatrix[j][j]
@@ -32,7 +36,12 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
           count: Math.round((sampleSize / data.length) * b.count)
         }));
         const subsampleBins = Histogram(subsample, binRules);
-        errorMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
+        // observedBootstrapMetricMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
+
+        // New Quantitative Metric
+        observedBootstrapMetricMatrix[i][j] = QuantitativeBootstrapMetric(sortedZip);
+
+
         if (binsMatrix[j][j] === null) binsMatrix[j][j] = populationBins;
         binsMatrix[i][j] = [expectedBins, subsampleBins];
       } else {
@@ -45,37 +54,87 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
           count: (sampleSize / data.length) * b.count
         }));
         const subsampleBins = Count(subsample, levels);
-        errorMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
+        // observedBootstrapMetricMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
+
+        // New Categorical Metric
+        const [mask, values] = MaskAndValues(data, columns, i, j);
+        observedBootstrapMetricMatrix[i][j] = CategoricalBootstrapMetric(mask, values);
+
         if (binsMatrix[j][j] === null) binsMatrix[j][j] = populationBins;
         binsMatrix[i][j] = [expectedBins, subsampleBins];
       }
     }
+
   }
   const estimativeMatrix = RefineEstimative(
     data,
     data.columns,
     columnTypes,
-    errorMatrix,
+    observedBootstrapMetricMatrix,
     binsMatrix
   );
+
   const refineEstimative = (currentEstimative, R) =>
     RefineEstimative(
       data,
       data.columns,
       columnTypes,
-      errorMatrix,
+      observedBootstrapMetricMatrix,
       binsMatrix,
       currentEstimative,
       R
     );
+  console.log(observedBootstrapMetricMatrix);
+  debugger;
   return [estimativeMatrix, binsMatrix, refineEstimative];
+}
+function ZipAndSort(mask, values) {
+  const zip = values.map((value, i)=>({value, mask: mask[i]}))
+  const sortedZip = zip.sort((a,b) => ascending(a.value, b.value))
+  return sortedZip
+}
+
+function MaskAndValues(data, columns, i, j) {
+  return [data.map(d=>d[columns[i]] === null), data.map(d=>d[columns[j]])]
+}
+
+function QuantitativeBootstrapMetric(zip) {
+  const validZip = zip.filter(z => z.value !== null)
+  const mask = validZip.map(d => d.mask)
+  const step = validZip.length / mask.filter(d=>d).length;
+  let sum = 0;
+  let maxSumValue = -Infinity;
+  let minSumValue = Infinity;
+  for(let i=0;i<mask.length;i++){
+    sum = sum - 1;
+    if(mask[i]) {
+      sum = sum + step;
+    }
+    if(sum > maxSumValue){
+      maxSumValue = sum
+    }
+    if(sum < minSumValue){
+      minSumValue = sum
+    }
+  }
+
+  let diff = maxSumValue - minSumValue
+  diff = isNaN(diff) ? 0 : diff;
+  return diff;
+}
+// TODO: Implement Categorical Metric
+// TODO: Change Color Metric
+// TODO: Rescale and hide non-significants
+// TODO: Replace List with Matrix
+function CategoricalBootstrapMetric(zip) {
+  return  10;
 }
 
 function RefineEstimative(
   data,
   columns,
   columnTypes,
-  errorMatrix,
+  observedBootstrapMetricMatrix,
   binsMatrix,
   previousEstimative = null,
   R = 100
@@ -83,27 +142,27 @@ function RefineEstimative(
   const estimativeMatrix = new Array(columns.length)
     .fill(0)
     .map(() => new Array(columns.length).fill(null));
+
   for (let i = 0; i < columns.length; i++) {
-    const sampleSize = errorMatrix[i][i];
+    const sampleSize = observedBootstrapMetricMatrix[i][i];
     if (sampleSize === 0) continue;
     for (let j = 0; j < columns.length; j++) {
       if (i === j) continue;
+      const [mask, values] = MaskAndValues(data, columns, i, j);
+      const sortedZip = ZipAndSort(mask, values);
+
       const jDim = columns[j];
-      let population = data.map(d => d[jDim]);
-      const expectedBins = binsMatrix[i][j][0];
       estimativeMatrix[i][j] = 0;
       for (let n = 0; n < R; n++) {
-        let subsample = Resample(population, sampleSize);
-        let subsampleBins;
-        if (columnTypes[j] === "Quantitative") {
-          const binRules = FreedmanDiaconis(population);
-          subsampleBins = Histogram(subsample, binRules);
+        let randomizedZip = RandomizeZipMask(sortedZip);
+        if (columnTypes[j] === "Quantitative" || columnTypes[j] === "Ordinal") {
+          estimativeMatrix[i][j] +=
+              QuantitativeBootstrapMetric(randomizedZip) > observedBootstrapMetricMatrix[i][j] ? 1 : 0;
         } else {
-          const levels = Levels(population);
-          subsampleBins = Count(subsample, levels);
+          estimativeMatrix[i][j] +=
+              CategoricalBootstrapMetric(randomizedZip) > observedBootstrapMetricMatrix[i][j] ? 1 : 0;
         }
-        estimativeMatrix[i][j] +=
-          CompareBins(subsampleBins, expectedBins) < errorMatrix[i][j] ? 1 : 0;
+
       }
       estimativeMatrix[i][j] = estimativeMatrix[i][j] / R;
       if (previousEstimative) {
@@ -207,22 +266,11 @@ function FreedmanDiaconis(population) {
   return { binWidth, min, numOfBins };
 }
 
-function Resample(array, sampleSize) {
-  const bucket = [];
-
-  for (let i = 0; i < array.length; i++) {
-    bucket.push(i);
-  }
-
-  const getRandomFromBucket = () => {
-    const randomIndex = Math.floor(Math.random() * bucket.length);
-    return bucket.splice(randomIndex, 1)[0];
-  };
-
-  const resample = [];
-  for (let i = 0; i < sampleSize; i++) {
-    resample.push(array[getRandomFromBucket()]);
-  }
-
-  return resample;
+function RandomizeZipMask(zip) {
+  const newZip = zip.map(zip => ({ ... zip}))
+  const mask = zip.map(z => z.mask);
+  shuffle(mask).forEach((m, i) => {
+    newZip[i].mask = m
+  })
+  return newZip
 }
