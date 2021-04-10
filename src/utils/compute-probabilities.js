@@ -39,7 +39,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
         // observedBootstrapMetricMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
 
         // New Quantitative Metric
-        observedBootstrapMetricMatrix[i][j] = QuantitativeBootstrapMetric(sortedZip);
+        observedBootstrapMetricMatrix[i][j] = QuantitativeBootstrapMetric(sortedZip)
 
 
         if (binsMatrix[j][j] === null) binsMatrix[j][j] = populationBins;
@@ -57,7 +57,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
         // observedBootstrapMetricMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
 
         // New Categorical Metric
-        observedBootstrapMetricMatrix[i][j] = CategoricalBootstrapMetric(sortedZip);
+        observedBootstrapMetricMatrix[i][j] = CategoricalBootstrapMetric(sortedZip)
 
         if (binsMatrix[j][j] === null) binsMatrix[j][j] = populationBins;
         binsMatrix[i][j] = [expectedBins, subsampleBins];
@@ -83,7 +83,6 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
       currentEstimative,
       R
     );
-  console.log(observedBootstrapMetricMatrix);
   debugger;
   return [estimativeMatrix, binsMatrix, refineEstimative];
 }
@@ -126,11 +125,10 @@ function QuantitativeBootstrapMetric(zip) {
 // TODO: Rescale and hide non-significants
 // TODO: Replace List with Matrix
 function CategoricalBootstrapMetric(zip) {
-  const percentageMissingInZip = zipData => zipData.filter(z => z.mask).length / zipData.length
-  const percentageMissing = percentageMissingInZip(zip)
-  console.log(zip, percentageMissing)
-  const categories = [... new Set(zip.map(z=>z.value))];
-  const categoryData = categories.map(c => zip.filter(z => z.value === c))
+  const validZip = zip.filter(z => z.value !== null)
+  const percentageMissing = validZip.filter(z => z.mask).length / validZip.length
+  const categories = [... new Set(validZip.map(z=>z.value))];
+  const categoryData = categories.map(c => validZip.filter(z => z.value === c))
   const squareErrorArray = categoryData.map(categoryDatum => {
     const expectedMissing = Math.floor(categoryDatum.length * percentageMissing);
     const actualMissing = categoryDatum.filter(z => z.mask).length;
