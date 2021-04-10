@@ -83,7 +83,6 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
       currentEstimative,
       R
     );
-  debugger;
   return [estimativeMatrix, binsMatrix, refineEstimative];
 }
 function ZipAndSort(mask, values) {
@@ -121,8 +120,9 @@ function QuantitativeBootstrapMetric(zip) {
   return diff;
 }
 
-// TODO: Rescale and hide non-significants
+// TODO: Adapt brush to log
 // TODO: Replace List with Matrix
+// TODO: Experiment painting ratio axis
 function CategoricalBootstrapMetric(zip) {
   const validZip = zip.filter(z => z.value !== null)
   const percentageMissing = validZip.filter(z => z.mask).length / validZip.length
@@ -165,10 +165,10 @@ function RefineEstimative(
         let randomizedZip = RandomizeZipMask(sortedZip);
         if (columnTypes[j] === "Quantitative" || columnTypes[j] === "Ordinal") {
           estimativeMatrix[i][j] +=
-              QuantitativeBootstrapMetric(randomizedZip) >= observedBootstrapMetricMatrix[i][j] ? 1 : 0;
+              QuantitativeBootstrapMetric(randomizedZip) >= observedBootstrapMetricMatrix[i][j] ? 0 : 1;
         } else {
           estimativeMatrix[i][j] +=
-              CategoricalBootstrapMetric(randomizedZip) >= observedBootstrapMetricMatrix[i][j] ? 1 : 0;
+              CategoricalBootstrapMetric(randomizedZip) >= observedBootstrapMetricMatrix[i][j] ? 0 : 1;
         }
 
       }

@@ -7,6 +7,7 @@
   import { path } from "d3-path";
   import { range, mean } from "d3-array";
   import { brushY } from "d3-brush";
+  import {easeLinear, easeExpIn, easeExpOut} from 'd3-ease'
   import { onMount } from "svelte";
   import {
     interpolateRdYlBu,
@@ -46,7 +47,10 @@
 
   $: ratioScale = scaleLinear()
     .domain([0, 1])
-    .range([0, innerHeight]);
+    .range([innerHeight, 0]);
+
+  $: easeRatio = n =>  easeExpIn(n)
+
   $: samplingScale = scaleBand()
     .domain(columnsWithMissingValues)
     .range([innerHeight, 0])
@@ -97,7 +101,7 @@
 
     const sourceY = samplingScale(source) + value * samplingBand;
     const sourceX = 0;
-    const valueY = ratioScale(value);
+    const valueY = ratioScale(easeRatio(value));
     const valueX = innerWidth / 2;
     const targetY = measurementScale(target) + value * measurementBand;
     const targetX = innerWidth;
@@ -448,13 +452,13 @@
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
         <text class="axis-name" x={-5} y={-10}>MAR Likelyhood</text>
         <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
-        {#each range(1, 10) as i}
+        {#each [5,6,7,8,9,9.5,9.6,9.7,9.8,9.9] as i}
           <text
             class="axis-tick"
             text-anchor="middle"
             alignment-baseline="middle"
-            y={ratioScale(i / 10)}>
-            {100 - i * 10 + '%'}
+            y={ratioScale(easeRatio(i / 10))}>
+            {(100*(i / 10)).toFixed(0) + '%'}
           </text>
         {/each}
 
