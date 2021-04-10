@@ -39,7 +39,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
         // observedBootstrapMetricMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
 
         // New Quantitative Metric
-        observedBootstrapMetricMatrix[i][j] = QuantitativeBootstrapMetric(sortedZip)
+        observedBootstrapMetricMatrix[i][j] =  QuantitativeBootstrapMetric(sortedZip)
 
 
         if (binsMatrix[j][j] === null) binsMatrix[j][j] = populationBins;
@@ -120,8 +120,7 @@ function QuantitativeBootstrapMetric(zip) {
   diff = isNaN(diff) ? 0 : diff;
   return diff;
 }
-// TODO: Implement Categorical Metric
-// TODO: Change Color Metric
+
 // TODO: Rescale and hide non-significants
 // TODO: Replace List with Matrix
 function CategoricalBootstrapMetric(zip) {

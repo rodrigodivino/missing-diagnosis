@@ -59,7 +59,7 @@
 
   $: colorScale = scaleLinear()
     .domain([0, 1])
-    .range([0, innerWidth * 0.8]);
+    .range([0, innerWidth]);
 
   $: ratioAxis = axisLeft(ratioScale);
 
@@ -77,7 +77,7 @@
         .selectAll("text")
         .attr("font-size", 10)
         .attr("y", 8) // 15 is for print mode
-        .text(t => +(100 - t * 100) + "%");
+        .text(t => +(t * 100) + "%");
     }
   };
   $: placeAxes(colorAxisDOM, colorAxis);
@@ -184,11 +184,7 @@
       (selectedMeasurementVariables.includes(j) ||
         selectedMeasurementVariables.length === 0)
     ) {
-      if (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative") {
-        return interpolate(crossdata[i][j]);
-      } else {
-        return "dimgray";
-      }
+      return interpolate(crossdata[i][j]);
     } else {
       return "lightgray";
     }
@@ -340,7 +336,7 @@
 
   text.axis-name {
     text-anchor: middle;
-    font-size: 10;
+    font-size: 14px;
   }
 </style>
 
@@ -450,7 +446,7 @@
         {/each}
       </g>
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
-        <text class="axis-name" x={-5} y={-10}>MCAR Similarity</text>
+        <text class="axis-name" x={-5} y={-10}>MAR Likelyhood</text>
         <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
         {#each range(1, 10) as i}
           <text
@@ -467,47 +463,32 @@
         {#each range(1000) as i}
           <rect
             y={margin.bottom / 6}
-            x={0 + i * ((innerWidth * 0.8) / 1000)}
-            width={(innerWidth * 0.8) / 1000 + 1}
+            x={i * ((innerWidth) / 1000)}
+            width={(innerWidth) / 1000 + 1}
             height={margin.bottom / 5}
-            fill={interpolate(1 - i / 1000)} />
+            fill={interpolate(i / 1000)} ></rect>
         {/each}
-        <rect
-          y={margin.bottom / 6 + margin.bottom / 8}
-          x={innerWidth * 0.85}
-          stroke="black"
-          stroke-width="1"
-          width={innerWidth * 0.15}
-          height={margin.bottom / 5}
-          fill="dimgray" />
+
 
         <rect
           y={margin.bottom / 6}
           x={0}
           stroke="black"
           stroke-width="1"
-          width={innerWidth * 0.8}
+          width={innerWidth}
           height={margin.bottom / 5}
-          fill="none" />
+          fill="none"></rect>
         <g
           class="color-axis"
           bind:this={colorAxisDOM}
-          transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" />
+          transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" ></g>
         <text
           class="axis-name"
           alignment-baseline="hanging"
-          x={innerWidth * 0.925}
-          y={margin.bottom / 6 + margin.bottom / 2 - margin.bottom / 8}>
-          <!-- 10 is for print mode -->
-          {'Categorical'}
-        </text>
-        <text
-          class="axis-name"
-          alignment-baseline="hanging"
-          x={innerWidth * 0.4}
+          x={innerWidth * 0.5}
           y={margin.bottom / 6 + margin.bottom / 2}>
           <!-- 10 is for print mode -->
-          {'MCAR Plausibility (Ordered Data Only)'}
+          {'Co-Missing Rate'}
         </text>
         <text
           text-anchor="start"
@@ -516,16 +497,16 @@
           x={0}
           y={0}>
           <!-- 8 is for print mode -->
-          {'< MCAR'}
+          {'< Likely Independent'}
         </text>
         <text
           text-anchor="end"
           alignment-baseline="hanging"
           font-size="0.7em"
-          x={innerWidth * 0.8}
+          x={innerWidth}
           y={0}>
           <!-- 8 is for print mode -->
-          {'not MCAR >'}
+          {'Likely Correlated >'}
         </text>
       </g>
     </g>

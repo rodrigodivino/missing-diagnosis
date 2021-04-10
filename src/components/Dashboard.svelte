@@ -11,6 +11,7 @@
 
   export let data;
 
+  // Estimative matrix is the position, the bootstrapped metric
   let [
     estimativeMatrix,
     binsMatrix,
@@ -24,11 +25,10 @@
   let selectedMeasurementVariables = [];
   let hoveredPair = null;
 
+
   $: crossdata = getCrossData(
-    binsMatrix,
+    data,
     data.validColumns,
-    data.columnsWithMissingValues,
-    data.types
   );
 
   $: renderList = getRenderList(

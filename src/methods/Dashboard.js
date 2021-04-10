@@ -43,43 +43,39 @@ export function getRenderList(
  * @param {string[]} columnTypes
  */
 export function getCrossData(
-  binsMatrix,
-  columns,
-  columnsWithMissingValues,
-  columnTypes
+  data,
+  columns
 ) {
-  const crossdata = new Array(columns.length)
+  const crossData = new Array(columns.length)
     .fill(0)
     .map(() => new Array(columns.length).fill(null));
-  const countCrosses = diffArray => {
-    const filtered = diffArray.filter(v => v !== 0);
-    if (filtered.length < 3) return 0;
-    let crossess = 0;
-    let prevSign = Math.sign(filtered[0]);
-    for (let i = 1; i < filtered.length - 1; i++) {
-      if (prevSign !== Math.sign(filtered[i])) {
-        crossess++;
-        prevSign = prevSign * -1;
-      }
-    }
-    return Math.max(crossess - 1, 0) / (filtered.length - 2);
-  };
 
   for (let i = 0; i < columns.length; i++) {
     for (let j = 0; j < columns.length; j++) {
       if (
-        i !== j &&
-        columnsWithMissingValues.includes(columns[i]) &&
-        (columnTypes[j] === "Ordinal" || columnTypes[j] === "Quantitative")
+        i !== j
       ) {
-        const expectedCount = binsMatrix[i][j][0].map(b => b.count);
-        const sampleCount = binsMatrix[i][j][1].map(b => b.count);
-        const diffArray = expectedCount.map((c, i) => c - sampleCount[i]);
-        crossdata[i][j] = countCrosses(diffArray);
+        let countOfMissingI = 0;
+        let countOfMissingJ = 0;
+        let countOfDoubleMissing = 0;
+        for(let datum of data){
+          const nullI = datum[columns[i]] === null;
+          const nullJ = datum[columns[j]] === null;
+          if(nullI) countOfMissingI++;
+          if(nullJ) countOfMissingJ++;
+          if(nullI && nullJ) countOfDoubleMissing++;
+        }
+        if(countOfMissingJ === 0 || countOfMissingI === 0){
+          crossData[i][j] = 0;
+        } else {
+          crossData[i][j] = ((countOfDoubleMissing / countOfMissingI) + (countOfDoubleMissing / countOfMissingJ)) / 2;
+        }
+        console.log(columns[i], columns[j], crossData[i][j])
+
       }
     }
   }
-  return crossdata;
+  return crossData;
 }
 /**
  * Checks if value is between the given range
