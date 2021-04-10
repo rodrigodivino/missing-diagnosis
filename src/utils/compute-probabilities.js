@@ -57,8 +57,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
         // observedBootstrapMetricMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
 
         // New Categorical Metric
-        const [mask, values] = MaskAndValues(data, columns, i, j);
-        observedBootstrapMetricMatrix[i][j] = CategoricalBootstrapMetric(mask, values);
+        observedBootstrapMetricMatrix[i][j] = CategoricalBootstrapMetric(sortedZip);
 
         if (binsMatrix[j][j] === null) binsMatrix[j][j] = populationBins;
         binsMatrix[i][j] = [expectedBins, subsampleBins];
@@ -127,7 +126,19 @@ function QuantitativeBootstrapMetric(zip) {
 // TODO: Rescale and hide non-significants
 // TODO: Replace List with Matrix
 function CategoricalBootstrapMetric(zip) {
-  return  10;
+  const percentageMissingInZip = zipData => zipData.filter(z => z.mask).length / zipData.length
+  const percentageMissing = percentageMissingInZip(zip)
+  console.log(zip, percentageMissing)
+  const categories = [... new Set(zip.map(z=>z.value))];
+  const categoryData = categories.map(c => zip.filter(z => z.value === c))
+  const squareErrorArray = categoryData.map(categoryDatum => {
+    const expectedMissing = Math.floor(categoryDatum.length * percentageMissing);
+    const actualMissing = categoryDatum.filter(z => z.mask).length;
+    return Math.pow(expectedMissing - actualMissing, 2)
+  })
+  const meanSquareError = mean(squareErrorArray);
+
+  return Math.sqrt(meanSquareError);
 }
 
 function RefineEstimative(
@@ -157,10 +168,10 @@ function RefineEstimative(
         let randomizedZip = RandomizeZipMask(sortedZip);
         if (columnTypes[j] === "Quantitative" || columnTypes[j] === "Ordinal") {
           estimativeMatrix[i][j] +=
-              QuantitativeBootstrapMetric(randomizedZip) > observedBootstrapMetricMatrix[i][j] ? 1 : 0;
+              QuantitativeBootstrapMetric(randomizedZip) >= observedBootstrapMetricMatrix[i][j] ? 1 : 0;
         } else {
           estimativeMatrix[i][j] +=
-              CategoricalBootstrapMetric(randomizedZip) > observedBootstrapMetricMatrix[i][j] ? 1 : 0;
+              CategoricalBootstrapMetric(randomizedZip) >= observedBootstrapMetricMatrix[i][j] ? 1 : 0;
         }
 
       }
