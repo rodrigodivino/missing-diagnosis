@@ -258,7 +258,6 @@
 
     </g>
     <g bind:this={foreground} class="foreground">
-      {console.log(glyphdata)}
       {#each columns as iName, i}
         {#each columns as jName, j}
           {#if i !== j && colordata[i][j] !== null}

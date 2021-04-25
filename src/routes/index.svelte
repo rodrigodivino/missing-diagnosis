@@ -53,7 +53,6 @@
       return data.map(e => e[c]).some(v => v === null);
     });
 
-    console.log(data.types);
     return data;
   };
 

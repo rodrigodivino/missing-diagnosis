@@ -132,9 +132,9 @@
     return p.toString();
   };
 
-  const errorThreshold = 0.5;
+  const errorThreshold = 0.1;
   const updateData = async arcdata => {
-    let step = convergence < 5 ? 10 : 1;
+    let step = 5;
     const nextdata = await refine(arcdata, step);
     let maxError = -Infinity;
     for (let i = 0; i < columns.length; i++) {

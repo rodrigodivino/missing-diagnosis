@@ -38,7 +38,6 @@
     selectedMeasurementVariables
   );
 
-  $: console.log(hoveredPair);
 </script>
 
 <style>

@@ -70,7 +70,6 @@ export function getCrossData(
         } else {
           crossData[i][j] = ((countOfDoubleMissing / countOfMissingI) + (countOfDoubleMissing / countOfMissingJ)) / 2;
         }
-        console.log(columns[i], columns[j], crossData[i][j])
 
       }
     }

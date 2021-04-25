@@ -159,7 +159,6 @@ function RefineEstimative(
       const [mask, values] = MaskAndValues(data, columns, i, j);
       const sortedZip = ZipAndSort(mask, values);
 
-      const jDim = columns[j];
       estimativeMatrix[i][j] = 0;
       for (let n = 0; n < R; n++) {
         let randomizedZip = RandomizeZipMask(sortedZip);
@@ -279,6 +278,6 @@ function RandomizeZipMask(zip) {
   const mask = zip.map(z => z.mask);
   shuffle(mask).forEach((m, i) => {
     newZip[i].mask = m
-  })
+  });
   return newZip
 }
