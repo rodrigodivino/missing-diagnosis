@@ -65,7 +65,7 @@
 
   $: fakeColorScale = scaleLinear()
     .domain([0, 1])
-    .range([0, innerWidth]);
+    .range([0, innerWidth - 100]);
 
   $: colorScale = scaleLinear()
           .domain([1, 100])
@@ -143,13 +143,13 @@
   };
 
   let lastArcData00;
-  const errorThreshold = 0.1;
+  const errorThreshold = 0.5;
   const updateData = async arcdata => {
     if(arcdata[0][0] === lastArcData00) {
       console.warn('repeated call detected and ended');
       return;
     }
-    let step = 5;
+    let step = 10;
     const {estimativeMatrix, coMissingEstimativeMatrix} = await refine(arcdata, colordata, step);
     lastArcData00 = arcdata[0][0];
     let maxError = -Infinity;
@@ -318,20 +318,20 @@
 <style>
   path.data {
     fill: none;
-    stroke-width: 3px;
+    stroke-width: 1px;
     opacity: 0.4;
   }
 
   path.dataNotSelected {
     fill: none;
-    stroke-width: 1px;
-    opacity: 0.2;
+    stroke-width: 0;
+    opacity: 0;
   }
 
   path.dataSelected {
     fill: none;
-    stroke-width: 3px;
-    opacity: 0.9;
+    stroke-width: 2px;
+    opacity: 0.5;
   }
 
   path.data:hover,
@@ -484,23 +484,32 @@
         {/each}
 
       </g>
-      <g class="color-legend" transform="translate(0,{innerHeight})">
+      <g class="color-legend" transform="translate(0,{innerHeight + 5})">
         {#each range(1000) as i}
           <rect
             y={margin.bottom / 6}
-            x={i * ((innerWidth) / 1000)}
-            width={(innerWidth) / 1000 + 1}
+            x={i * ((innerWidth - 100) / 1000)}
+            width={(innerWidth - 100) / 1000 + 1}
             height={margin.bottom / 5}
             fill={interpolate(i / 1000)} ></rect>
         {/each}
 
 
         <rect
+                y={margin.bottom / 6}
+                x={(innerWidth - 75)}
+                width={75}
+                height={margin.bottom / 5}
+                stroke="#71706F"
+                fill="darkseagreen">
+        </rect>
+
+        <rect
           y={margin.bottom / 6}
           x={0}
           stroke="black"
           stroke-width="1"
-          width={innerWidth}
+          width={innerWidth - 100}
           height={margin.bottom / 5}
           fill="none"></rect>
         <g
@@ -510,11 +519,12 @@
         <text
           class="axis-name"
           alignment-baseline="hanging"
-          x={innerWidth * 0.5}
+          x={(innerWidth - 100) * 0.5}
           y={margin.bottom / 6 + margin.bottom / 2}>
           <!-- 10 is for print mode -->
-          {'Co-Missing Rate'}
+          {'Co-Missing Occurrence Rate'}
         </text>
+
         <text
           text-anchor="start"
           alignment-baseline="hanging"
@@ -522,16 +532,34 @@
           x={0}
           y={0}>
           <!-- 8 is for print mode -->
-          {'< Likely Independent'}
+          {'< Too little'}
+        </text>
+        <text
+                text-anchor="middle"
+                alignment-baseline="hanging"
+                font-size="0.7em"
+                x={innerWidth - 75 / 2}
+                y={0}>
+          <!-- 8 is for print mode -->
+          {'Not Applicable'}
+        </text>
+        <text
+                text-anchor="middle"
+                alignment-baseline="hanging"
+                font-size="0.7em"
+                x={(innerWidth - 100)/2}
+                y={0}>
+          <!-- 8 is for print mode -->
+          {'Natural occurrence'}
         </text>
         <text
           text-anchor="end"
           alignment-baseline="hanging"
           font-size="0.7em"
-          x={innerWidth}
+          x={innerWidth - 100}
           y={0}>
           <!-- 8 is for print mode -->
-          {'Likely Correlated >'}
+          {'Too Much >'}
         </text>
       </g>
     </g>
