@@ -318,7 +318,7 @@
 <style>
   path.data {
     fill: none;
-    stroke-width: 1px;
+    stroke-width: 2px;
     opacity: 0.4;
   }
 
