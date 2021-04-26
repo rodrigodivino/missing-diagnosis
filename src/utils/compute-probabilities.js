@@ -1,4 +1,9 @@
 import { ascending, quantile, extent, mean, sum, shuffle} from "d3";
+
+function ComissingMetric(sortedZip) {
+  return Math.random();
+}
+
 /**
  *
  * @param {*} data
@@ -9,6 +14,11 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
   const observedBootstrapMetricMatrix = new Array(columns.length)
     .fill(0)
     .map(() => new Array(columns.length).fill(null));
+
+  const observedCoMissingMetricMatrix = new Array(columns.length)
+      .fill(0)
+      .map(() => new Array(columns.length).fill(null));
+
   const binsMatrix = new Array(columns.length)
     .fill(0)
     .map(() => new Array(columns.length).fill(null));
@@ -36,9 +46,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
           count: Math.round((sampleSize / data.length) * b.count)
         }));
         const subsampleBins = Histogram(subsample, binRules);
-        // observedBootstrapMetricMatrix[i][j] = CompareBins(expectedBins, subsampleBins);
 
-        // New Quantitative Metric
         observedBootstrapMetricMatrix[i][j] =  QuantitativeBootstrapMetric(sortedZip)
 
 
@@ -62,28 +70,32 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
         if (binsMatrix[j][j] === null) binsMatrix[j][j] = populationBins;
         binsMatrix[i][j] = [expectedBins, subsampleBins];
       }
+      observedCoMissingMetricMatrix[i][j] = ComissingMetric(sortedZip);
     }
 
   }
-  const estimativeMatrix = RefineEstimative(
+  const {estimativeMatrix, coMissingEstimativeMatrix} = RefineEstimative(
     data,
     data.columns,
     columnTypes,
     observedBootstrapMetricMatrix,
-    binsMatrix
+      observedCoMissingMetricMatrix,
+    binsMatrix,
   );
 
-  const refineEstimative = (currentEstimative, R) =>
+  const refineEstimative = (currentMetricEstimative, currentCoMissingEstimative, R) =>
     RefineEstimative(
       data,
       data.columns,
       columnTypes,
       observedBootstrapMetricMatrix,
+        observedCoMissingMetricMatrix,
       binsMatrix,
-      currentEstimative,
+        currentMetricEstimative,
+        currentCoMissingEstimative,
       R
     );
-  return [estimativeMatrix, binsMatrix, refineEstimative];
+  return [estimativeMatrix,coMissingEstimativeMatrix, binsMatrix, refineEstimative];
 }
 function ZipAndSort(mask, values) {
   const zip = values.map((value, i)=>({value, mask: mask[i]}))
@@ -120,9 +132,7 @@ function QuantitativeBootstrapMetric(zip) {
   return diff;
 }
 
-// TODO: Adapt brush to log
-// TODO: Replace List with Matrix
-// TODO: Experiment painting ratio axis
+
 function CategoricalBootstrapMetric(zip) {
   const validZip = zip.filter(z => z.value !== null)
   const percentageMissing = validZip.filter(z => z.mask).length / validZip.length
@@ -143,13 +153,19 @@ function RefineEstimative(
   columns,
   columnTypes,
   observedBootstrapMetricMatrix,
+  observedCoMissingMetricMatrix,
   binsMatrix,
   previousEstimative = null,
+  previousComissingEstimative = null,
   R = 100
 ) {
   const estimativeMatrix = new Array(columns.length)
     .fill(0)
     .map(() => new Array(columns.length).fill(null));
+
+  const coMissingEstimativeMatrix = new Array(columns.length)
+      .fill(0)
+      .map(() => new Array(columns.length).fill(null));
 
   for (let i = 0; i < columns.length; i++) {
     const sampleSize = observedBootstrapMetricMatrix[i][i];
@@ -159,9 +175,14 @@ function RefineEstimative(
       const [mask, values] = MaskAndValues(data, columns, i, j);
       const sortedZip = ZipAndSort(mask, values);
 
+      coMissingEstimativeMatrix[i][j] = 0;
       estimativeMatrix[i][j] = 0;
       for (let n = 0; n < R; n++) {
         let randomizedZip = RandomizeZipMask(sortedZip);
+
+
+        coMissingEstimativeMatrix[i][j] += ComissingMetric(randomizedZip)>= observedCoMissingMetricMatrix[i][j] ? 0 : 1;
+
         if (columnTypes[j] === "Quantitative" || columnTypes[j] === "Ordinal") {
           estimativeMatrix[i][j] +=
               QuantitativeBootstrapMetric(randomizedZip) >= observedBootstrapMetricMatrix[i][j] ? 0 : 1;
@@ -172,7 +193,7 @@ function RefineEstimative(
 
       }
       estimativeMatrix[i][j] = estimativeMatrix[i][j] / R;
-
+      coMissingEstimativeMatrix[i][j] = coMissingEstimativeMatrix[i][j] / R;
       if (previousEstimative) {
         const count = previousEstimative[0][0] + 1;
 
@@ -182,13 +203,24 @@ function RefineEstimative(
         estimativeMatrix[i][j] = mergedAverages;
         estimativeMatrix[0][0] = previousEstimative[0][0];
         estimativeMatrix[1][1] = previousEstimative[1][1];
+
+        const previousComissingAverage = previousComissingEstimative[i][j];
+        const newComissingAverage = coMissingEstimativeMatrix[i][j];
+        const mergedComissingAverages = previousComissingAverage * ((count-1)/count) + newComissingAverage / count;
+        coMissingEstimativeMatrix[i][j] = mergedComissingAverages;
+        coMissingEstimativeMatrix[0][0] = previousComissingEstimative[0][0];
+        coMissingEstimativeMatrix[1][1] = previousComissingEstimative[1][1];
       }
     }
   }
 
   estimativeMatrix[0][0]++;
   estimativeMatrix[1][1] += R;
-  return estimativeMatrix;
+
+  coMissingEstimativeMatrix[0][0]++;
+  coMissingEstimativeMatrix[1][1] += R;
+
+  return {estimativeMatrix, coMissingEstimativeMatrix};
 }
 
 function Count(array, levels) {

@@ -14,10 +14,12 @@
   // Estimative matrix is the position, the bootstrapped metric
   let [
     estimativeMatrix,
+    coMissingEstimativeMatrix,
     binsMatrix,
     refineEstimative
   ] = computeEstimativeMatrix(data, data.validColumns, data.types);
   const columnsWithMissingValues = data.columnsWithMissingValues;
+
 
   let convergence = 100;
   let selectedRatioInterval = [1, 0];
@@ -63,6 +65,7 @@
     width={0.7}
     height={0.95}
     bind:arcdata={estimativeMatrix}
+    bind:colordata={coMissingEstimativeMatrix}
     columns={data.columns}
     columnTypes={data.types}
     {columnsWithMissingValues}

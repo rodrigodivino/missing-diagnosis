@@ -21,9 +21,11 @@
   export let width = 1;
   export let height = 1;
   export let arcdata;
-  const setArcdata = newArcdata => {
+  export let colordata;
+  const setArcdata = (newArcdata, newColorData) => {
     setTimeout(() => {
       arcdata = newArcdata;
+      colordata = newColorData;
     }, 1);
   };
   export let crossdata;
@@ -139,20 +141,20 @@
       return;
     }
     let step = 5;
-    const nextdata = await refine(arcdata, step);
+    const {estimativeMatrix, coMissingEstimativeMatrix} = await refine(arcdata, colordata, step);
     lastArcData00 = arcdata[0][0];
     let maxError = -Infinity;
     for (let i = 0; i < columns.length; i++) {
       for (let j = 0; j < columns.length; j++) {
         if (i !== j && arcdata[i][j] !== null) {
-          const diff = Math.abs(arcdata[i][j] - nextdata[i][j]) * 100;
+          const diff = Math.abs(arcdata[i][j] - estimativeMatrix[i][j]) * 100;
           maxError = diff > maxError ? diff : maxError;
         }
       }
     }
 
     if (maxError >= errorThreshold) {
-      setArcdata(nextdata);
+      setArcdata(estimativeMatrix, coMissingEstimativeMatrix);
     }
     convergence = maxError;
   };
