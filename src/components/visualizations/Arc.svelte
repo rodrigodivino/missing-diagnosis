@@ -163,7 +163,7 @@
     value >= Math.min(...selectedRatioInterval);
   let ratioBrushDOM;
   $: ratioBrush = brushY()
-    .extent([[innerWidth / 2 - 13, 0], [innerWidth / 2 + 14, innerHeight]])
+    .extent([[innerWidth / 2 - 13, -2], [innerWidth / 2 + 14, innerHeight+2]])
     .on("brush end", () => {
       if (event.selection) {
         selectedRatioInterval = event.selection.map(ratioScale.invert).map(d => d/100);
