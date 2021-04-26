@@ -4,6 +4,7 @@
     import {canvasHeight, canvasWidth} from "../stores";
     import {scaleBand, scaleLinear} from 'd3-scale';
     import {descending, range} from 'd3-array'
+    import {schemeSet1, schemeSet2, schemeSet3} from 'd3-scale-chromatic'
     import NullityColumn from "./NullityColumn.svelte";
 
     export let data;
@@ -14,7 +15,11 @@
         clickedLabel = label;
     }
 
+    const categoricalLegendsFor = data.columns[data.types.indexOf('Categorical')];
     $: sortedData = data.slice().sort((a, b) => descending(a[clickedLabel], b[clickedLabel]))
+    $: categoricalLegendLabel = [...new Set(data.slice().sort((a, b) => descending(a[categoricalLegendsFor], b[categoricalLegendsFor])).map(d => d[categoricalLegendsFor]))]
+
+    const legendCategoricalColors = [...schemeSet3, ...schemeSet2, ...schemeSet1]
     const margin = {top: 100, left: 10, right: 10, bottom: 100}
     $: innerWidth = $canvasWidth - margin.left - margin.right;
     $: innerHeight = $canvasHeight - margin.top - margin.bottom;
@@ -31,11 +36,12 @@
 
 <svg height={$canvasHeight} width={$canvasWidth}>
     <g transform='translate({margin.left},{margin.top})'>
-        {#each xScale.domain() as label}
+        {#each data.columns as label, i}
             <text on:click={handleLabelClick(label)} cursor="pointer"
                   transform="translate({xScale(label) + xScale.bandwidth() / 2}, -5)rotate(-45)"> {label} </text>
             <g transform="translate({xScale(label)},0)">
-                <NullityColumn data={sortedData} column={label} width={xScale.bandwidth()} height={innerHeight}/>
+                <NullityColumn categorical={data.types[i] === 'Categorical'} data={sortedData} column={label}
+                               width={xScale.bandwidth()} height={innerHeight}/>
             </g>
         {/each}
         <!--        <rect height={innerHeight} width={innerWidth}></rect>-->
@@ -59,6 +65,16 @@
                     y={margin.bottom / 6}>
             </rect>
 
+            <text
+                    alignment-baseline="hanging"
+                    font-size="0.7em"
+                    text-anchor="middle"
+                    x={innerWidth - 75 / 2}
+                    y={0}>
+                <!-- 8 is for print mode -->
+                {'Missing Data'}
+            </text>
+
             <rect
                     fill="none"
                     height={margin.bottom / 5}
@@ -78,15 +94,7 @@
                 <!-- 8 is for print mode -->
                 {'< Low value'}
             </text>
-            <text
-                    alignment-baseline="hanging"
-                    font-size="0.7em"
-                    text-anchor="middle"
-                    x={innerWidth - 75 / 2}
-                    y={0}>
-                <!-- 8 is for print mode -->
-                {'Missing Data'}
-            </text>
+
             <text
                     alignment-baseline="hanging"
                     font-size="0.7em"
@@ -106,9 +114,42 @@
                 {'High Value >'}
             </text>
         </g>
+        {#if categoricalLegendsFor}
+            <g class="categorical-legend" transform="translate(0,{innerHeight + 50})">
+                <text
+                        alignment-baseline="hanging"
+                        font-size="0.7em"
+                        text-anchor="start"
+                        x={0}
+                        y={15}>
+                    <!-- 8 is for print mode -->
+                    {categoricalLegendsFor + ' Categories: '}
+                </text>
+                {#each categoricalLegendLabel as label, i}
+                    <text
+                            alignment-baseline="hanging"
+                            font-size="0.7em"
+                            text-anchor="middle"
+                            x={(i+1)*100 + 75 / 2}
+                            y={0}>
+                        <!-- 8 is for print mode -->
+                        {label}
+                    </text>
+
+                    <rect
+                            fill={legendCategoricalColors[i]}
+                            height={margin.bottom / 5}
+                            width={75}
+                            stroke="#050505"
+                            stroke-width="1"
+                            shape-rendering="crispEdges"
+                            x={(i+1)*100}
+                            y={15}>
+                    </rect>
+                {/each}
+            </g>
+        {/if}
     </g>
-
-
 
 
 </svg>
