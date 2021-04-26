@@ -92,5 +92,6 @@
     {selectedSamplingVariables}
     {selectedMeasurementVariables}
     {selectedRatioInterval}
+    columnTypes={data.types}
     bind:hoveredPair />
 </svg>

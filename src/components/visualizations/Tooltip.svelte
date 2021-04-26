@@ -14,14 +14,17 @@
     export let samplingVariable, i;
     export let measurementVariable, j;
     export let focus;
+    export let continuous;
 
     const margin = {top: 35, left: 35, right: 35, bottom: 50};
     $: sampleSize = sum(sampleBins.map(b => b.count));
     $: innerWidth = width - margin.left - margin.right;
     $: innerHeight = height - margin.top - margin.bottom;
 
+    $:filteredBins = totalBins.filter(b => b.count > 0);
+
     $: xScale = scaleBand()
-        .domain(totalBins.filter(b => b.count > 0).map(b => b.name))
+        .domain(filteredBins.map(b => b.name))
         .range([0, innerWidth]);
 
     $: yScale = scaleLinear()
@@ -43,21 +46,31 @@
             yg.selectAll().remove();
             xg.call(xAxis)
                 .selectAll("text")
-                .attr("font-size", 7)
+                .attr("font-size", 9)
+                .style('shape-rendering', 'crispEdges')
                 .attr("y", 15) // 15 is for print Mode
-                .each(function (t) {
+                .each(function (t, i) {
                     if (isNaN(t)) {
                         select(this)
-                            .attr("y", 5 + 5) //+5 is for print Mode
+                            .attr("y", 0) //+5 is for print Mode
                             .attr("x", 5)
-                            .attr("transform", "rotate(45)")
-                            .attr("text-anchor", "start");
+                            .attr("transform", "rotate(55)")
+                            .attr("text-anchor", "start")
+                            .text(t);
+                    }
+                    else if (continuous) {
+                        select(this)
+                            .attr("y", 2) //+5 is for print Mode
+                            .attr("x", 5)
+                            .attr("transform", "rotate(55)")
+                            .attr("text-anchor", "start")
+                            .text( '≤' + filteredBins[i].maxNum.toFixed(1));
                     }
                 });
             yg.call(yAxis)
                 .selectAll("text")
-                .attr("font-size", 7)
-                .attr("y", 4); // +4 is for print Mode
+                .attr("font-size", 9)
+                .attr("y", 0); // +4 is for print Mode
         }
     };
     $: placeLegends(xAxisDOM, yAxisDOM, xAxis, yAxis);

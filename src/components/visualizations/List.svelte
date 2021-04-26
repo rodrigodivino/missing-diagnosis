@@ -27,6 +27,7 @@
   export let selectedRatioInterval;
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
+  export let columnTypes
 
   const cmap = scaleLinear()
           .domain([0, 1])
@@ -118,14 +119,14 @@
         x={innerWidth + margin.right * 0.1}
         width={margin.right * 0.9}
         y={0}
-        height={innerHeight} />
+        height={innerHeight}></rect>
       <rect
         class="slider"
         bind:this={sliderDOM}
         x={innerWidth + margin.right * 0.1}
         width={margin.right * 0.9}
         y={0}
-        height={sliderHeight} />
+        height={sliderHeight}></rect>
     </g>
 
     <g
@@ -139,6 +140,7 @@
             {j}
             focus={hoveredPair && hoveredPair[0] === i && hoveredPair[1] === j}
             width={innerWidth}
+            continuous={columnTypes[j] === 'Quantitative'}
             height={cellHeight}
             fill={getFill(i,j)}
             samplingVariable={columns[i]}
