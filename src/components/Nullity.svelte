@@ -2,8 +2,8 @@
 
 
     import {canvasHeight, canvasWidth} from "../stores";
-    import {scaleBand} from 'd3-scale';
-    import {ascending, descending} from 'd3-array'
+    import {scaleBand, scaleLinear} from 'd3-scale';
+    import {descending, range} from 'd3-array'
     import NullityColumn from "./NullityColumn.svelte";
 
     export let data;
@@ -14,17 +14,15 @@
         clickedLabel = label;
     }
 
-    $: console.log(data);
-
-    $: sortedData = data.slice().sort((a,b) => descending(a[clickedLabel],b[clickedLabel]))
-    const margin = {top: 100, left: 10, right: 10, bottom: 10}
+    $: sortedData = data.slice().sort((a, b) => descending(a[clickedLabel], b[clickedLabel]))
+    const margin = {top: 100, left: 10, right: 10, bottom: 100}
     $: innerWidth = $canvasWidth - margin.left - margin.right;
     $: innerHeight = $canvasHeight - margin.top - margin.bottom;
 
     $: xScale = scaleBand().domain(data.columns).range([0, innerWidth])
     $: rectHeight = innerHeight / data.length;
 
-    $: console.log(rectHeight)
+    $: legendColorScale = scaleLinear().domain([0, 1]).range(['white', 'steelblue'])
 </script>
 
 <style>
@@ -41,6 +39,76 @@
             </g>
         {/each}
         <!--        <rect height={innerHeight} width={innerWidth}></rect>-->
+        <g class="color-legend" transform="translate(0,{innerHeight + 5})">
+            {#each range(1000) as i}
+                <rect
+                        y={margin.bottom / 6}
+                        x={i * ((innerWidth - 100) / 1000)}
+                        width={(innerWidth - 100) / 1000 + 1}
+                        height={margin.bottom / 5}
+                        fill={legendColorScale(i / 1000)}></rect>
+            {/each}
+
+
+            <rect
+                    fill="#71706F"
+                    height={margin.bottom / 5}
+                    stroke="#71706F"
+                    width={75}
+                    x={(innerWidth - 75)}
+                    y={margin.bottom / 6}>
+            </rect>
+
+            <rect
+                    fill="none"
+                    height={margin.bottom / 5}
+                    stroke="black"
+                    stroke-width="1"
+                    width={innerWidth - 100}
+                    x={0}
+                    y={margin.bottom / 6}></rect>
+
+
+            <text
+                    alignment-baseline="hanging"
+                    font-size="0.7em"
+                    text-anchor="start"
+                    x={0}
+                    y={0}>
+                <!-- 8 is for print mode -->
+                {'< Low value'}
+            </text>
+            <text
+                    alignment-baseline="hanging"
+                    font-size="0.7em"
+                    text-anchor="middle"
+                    x={innerWidth - 75 / 2}
+                    y={0}>
+                <!-- 8 is for print mode -->
+                {'Missing Data'}
+            </text>
+            <text
+                    alignment-baseline="hanging"
+                    font-size="0.7em"
+                    text-anchor="middle"
+                    x={(innerWidth - 100)/2}
+                    y={0}>
+                <!-- 8 is for print mode -->
+                {'Medium Value'}
+            </text>
+            <text
+                    alignment-baseline="hanging"
+                    font-size="0.7em"
+                    text-anchor="end"
+                    x={innerWidth - 100}
+                    y={0}>
+                <!-- 8 is for print mode -->
+                {'High Value >'}
+            </text>
+        </g>
     </g>
+
+
+
 
 </svg>
