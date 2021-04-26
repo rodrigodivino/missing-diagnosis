@@ -25,7 +25,6 @@
   let selectedMeasurementVariables = [];
   let hoveredPair = null;
 
-
   $: crossdata = getCrossData(
     data,
     data.validColumns,

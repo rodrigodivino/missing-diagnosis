@@ -131,10 +131,16 @@
     return p.toString();
   };
 
+  let lastArcData00;
   const errorThreshold = 0.1;
   const updateData = async arcdata => {
+    if(arcdata[0][0] === lastArcData00) {
+      console.warn('repeated call detected and ended');
+      return;
+    }
     let step = 5;
     const nextdata = await refine(arcdata, step);
+    lastArcData00 = arcdata[0][0];
     let maxError = -Infinity;
     for (let i = 0; i < columns.length; i++) {
       for (let j = 0; j < columns.length; j++) {

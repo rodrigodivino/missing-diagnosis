@@ -14,7 +14,7 @@ export function computeEstimativeMatrix(data, columns, columnTypes) {
     .map(() => new Array(columns.length).fill(null));
   for (let i = 0; i < columns.length; i++) {
     const iDim = columns[i];
-    const sampleSize = sum(data.map(d => d[iDim] === null));
+    const sampleSize = data.filter(d => d[iDim] === null).length;
     observedBootstrapMetricMatrix[i][i] = sampleSize;
     if (sampleSize === 0) continue;
     for (let j = 0; j < columns.length; j++) {
@@ -172,11 +172,18 @@ function RefineEstimative(
 
       }
       estimativeMatrix[i][j] = estimativeMatrix[i][j] / R;
+
       if (previousEstimative) {
-        const weight = previousEstimative[0][0];
-        estimativeMatrix[i][j] =
-          (estimativeMatrix[i][j] + weight * previousEstimative[i][j]) /
-          (weight + 1);
+        const count = previousEstimative[0][0] + 1;
+
+        const previousAverage = previousEstimative[i][j];
+        const newAverage = estimativeMatrix[i][j];
+        const mergedAverages = previousAverage * ((count-1)/count) + newAverage / count;
+        if(i===1 && j === 2) {
+          console.log(previousAverage, newAverage, count, mergedAverages);
+          // debugger;
+        }
+        estimativeMatrix[i][j] = mergedAverages;
         estimativeMatrix[0][0] = previousEstimative[0][0];
         estimativeMatrix[1][1] = previousEstimative[1][1];
       }
