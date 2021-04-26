@@ -298,20 +298,8 @@ function Histogram(array, rules) {
   return bins;
 }
 function FreedmanDiaconis(population) {
-  const iqr = array => {
-    array.sort(ascending);
-    const q1 = quantile(array, 0.25);
-    const q3 = quantile(array, 0.75);
-    return q3 - q1;
-  };
-  const freedmanDiaconis = array => {
-    return 2 * (iqr(array) / Math.pow(array.length, 1 / 3));
-  };
-
-  // const binWidth = freedmanDiaconis(population.filter(d => d !== null));
   const [min, max] = extent(population);
-  // const numOfBins = Math.ceil(Math.abs(min - max) / binWidth);
-  const numOfBins = 2* Math.ceil(Math.pow(population.length, 1/3));
+  const numOfBins = Math.min(10, 2* Math.ceil(Math.pow(population.length, 1/3)));
   const binWidth = Math.abs(min - max)/numOfBins;
   return { binWidth, min, numOfBins };
 }
