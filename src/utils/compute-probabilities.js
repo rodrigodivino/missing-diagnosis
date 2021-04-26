@@ -1,7 +1,13 @@
 import { ascending, quantile, extent, mean, sum, shuffle} from "d3";
 
 function ComissingMetric(sortedZip) {
-  return Math.random();
+  const mask = sortedZip.map(z => z.mask);
+  const values = sortedZip.map(z => z.value);
+  const maskedValues = values.filter((d,i) => mask[i]);
+  if(maskedValues.length === 0) {
+    return 0;
+  }
+  return maskedValues.filter(d=>d===null).length / maskedValues.length;
 }
 
 /**

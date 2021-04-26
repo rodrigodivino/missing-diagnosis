@@ -1,7 +1,7 @@
 <script>
   import { canvasWidth, canvasHeight } from "../../stores.js";
   import { select, event } from "d3-selection";
-  import { scaleLinear, scaleBand, scaleLog, scalePow } from "d3-scale";
+  import { scaleLinear, scaleBand, scaleLog, scalePow, scaleSequentialPow, scaleSequential } from "d3-scale";
   import { axisLeft, axisRight, axisBottom } from "d3-axis";
   import { line } from "d3-shape";
   import { path } from "d3-path";
@@ -40,8 +40,10 @@
   export let selectedMeasurementVariables;
   export let hoveredPair;
   const cmap = scaleLinear()
-    .domain([0, 1])
-    .range([0.1, 0.9]);
+    .domain([0.5, 1])
+    .range([0.1, 1])
+    .clamp(true)
+
   const interpolate = i => interpolateTurbo(cmap(i));
   const margin = { top: 50, bottom: 75, left: 150, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -62,13 +64,21 @@
     .range([innerHeight, 0])
     .paddingInner(0.2);
 
-  $: colorScale = scaleLinear()
+  $: fakeColorScale = scaleLinear()
     .domain([0, 1])
     .range([0, innerWidth]);
 
+  $: colorScale = scaleLinear()
+          .domain([1, 100])
+          .range(['blue', 'red'])
+          .clamp(true);
+
+  $: console.log(colorScale(10), colorScale(90))
+
   $: ratioAxis = axisLeft(ratioScale);
 
-  $: colorAxis = axisBottom(colorScale);
+  $: colorAxis = axisBottom(fakeColorScale);
+
 
   $: refineLevel = arcdata[1][1];
 
@@ -152,7 +162,6 @@
         }
       }
     }
-
     if (maxError >= errorThreshold) {
       setArcdata(estimativeMatrix, coMissingEstimativeMatrix);
     }
@@ -195,7 +204,7 @@
       (selectedMeasurementVariables.includes(j) ||
         selectedMeasurementVariables.length === 0)
     ) {
-      return interpolate(crossdata[i][j]);
+      return interpolate(colordata[i][j]);
     } else {
       return "lightgray";
     }
