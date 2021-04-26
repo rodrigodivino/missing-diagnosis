@@ -1,7 +1,7 @@
 <script>
   import { canvasWidth, canvasHeight } from "../../stores.js";
   import { select, event } from "d3-selection";
-  import { scaleLinear, scaleBand } from "d3-scale";
+  import { scaleLinear, scaleBand, scaleLog, scalePow } from "d3-scale";
   import { axisLeft, axisRight, axisBottom } from "d3-axis";
   import { line } from "d3-shape";
   import { path } from "d3-path";
@@ -45,11 +45,10 @@
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
-  $: ratioScale = scaleLinear()
-    .domain([0, 1])
-    .range([innerHeight, 0]);
-
-  $: easeRatio = n =>  easeExpIn(n)
+  $: ratioScale = scalePow().exponent(6.7)
+    .domain([1, 100])
+    .range([innerHeight, 0])
+    .clamp(true);
 
   $: samplingScale = scaleBand()
     .domain(columnsWithMissingValues)
@@ -101,7 +100,7 @@
 
     const sourceY = samplingScale(source) + value * samplingBand;
     const sourceX = 0;
-    const valueY = ratioScale(easeRatio(value));
+    const valueY = ratioScale(value * 100);
     const valueX = innerWidth / 2;
     const targetY = measurementScale(target) + value * measurementBand;
     const targetX = innerWidth;
@@ -452,13 +451,13 @@
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
         <text class="axis-name" x={-5} y={-10}>MAR Likelyhood</text>
         <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
-        {#each [5,6,7,8,9,9.5,9.6,9.7,9.8,9.9] as i}
+        {#each [5, 6,7, 7.5,8,8.5,9,9.2,9.3,9.4,9.5,9.6,9.7,9.8,9.9] as i}
           <text
             class="axis-tick"
             text-anchor="middle"
             alignment-baseline="middle"
-            y={ratioScale(easeRatio(i / 10))}>
-            {(100*(i / 10)).toFixed(0) + '%'}
+            y={ratioScale(i * 10)}>
+            {(i * 10).toFixed(0) + '%'}
           </text>
         {/each}
 
