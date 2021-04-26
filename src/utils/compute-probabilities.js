@@ -179,10 +179,6 @@ function RefineEstimative(
         const previousAverage = previousEstimative[i][j];
         const newAverage = estimativeMatrix[i][j];
         const mergedAverages = previousAverage * ((count-1)/count) + newAverage / count;
-        if(i===1 && j === 2) {
-          console.log(previousAverage, newAverage, count, mergedAverages);
-          // debugger;
-        }
         estimativeMatrix[i][j] = mergedAverages;
         estimativeMatrix[0][0] = previousEstimative[0][0];
         estimativeMatrix[1][1] = previousEstimative[1][1];
