@@ -40,11 +40,10 @@
   export let selectedMeasurementVariables;
   export let hoveredPair;
   const cmap = scaleLinear()
-    .domain([0.5, 1])
+    .domain([0, 1])
     .range([0.1, 1])
-    .clamp(true)
 
-  const interpolate = i => interpolateTurbo(cmap(i));
+  const interpolate = i => interpolateRdYlBu(1 - cmap(i));
   const margin = { top: 50, bottom: 75, left: 150, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
@@ -204,7 +203,13 @@
       (selectedMeasurementVariables.includes(j) ||
         selectedMeasurementVariables.length === 0)
     ) {
-      return interpolate(colordata[i][j]);
+      const iHasMissing = columnsWithMissingValues.includes(columns[i]);
+      const jHasMissing = columnsWithMissingValues.includes(columns[j]);
+      if(iHasMissing && jHasMissing) {
+        return interpolate(colordata[i][j]);
+      } else {
+        return 'darkseagreen';
+      }
     } else {
       return "lightgray";
     }
