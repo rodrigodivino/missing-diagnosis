@@ -160,7 +160,7 @@
     .extent([[innerWidth / 2 - 13, 0], [innerWidth / 2 + 14, innerHeight]])
     .on("brush end", () => {
       if (event.selection) {
-        selectedRatioInterval = event.selection.map(ratioScale.invert);
+        selectedRatioInterval = event.selection.map(ratioScale.invert).map(d => d/100);
       } else {
         selectedRatioInterval = [1, 0];
       }
