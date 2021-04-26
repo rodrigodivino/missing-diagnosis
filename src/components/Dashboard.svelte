@@ -85,6 +85,8 @@
     height={1}
     {binsMatrix}
     columns={data.columns}
+    {columnsWithMissingValues}
+    colordata={coMissingEstimativeMatrix}
     {crossdata}
     {renderList}
     {selectedSamplingVariables}

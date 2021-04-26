@@ -19,15 +19,20 @@
   export let height = 1;
   export let binsMatrix;
   export let renderList;
+  export let colordata;
   export let crossdata;
   export let columns;
+  export let columnsWithMissingValues;
   export let hoveredPair;
   export let selectedRatioInterval;
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
 
-  const cmap = scaleLinear().domain([0,1]).range([.1,.9]);
-  const interpolate = i => interpolateTurbo(cmap(i));
+  const cmap = scaleLinear()
+          .domain([0, 1])
+          .range([0.1, 1])
+
+  const interpolate = i => interpolateRdYlBu(1 - cmap(i));
 
   const margin = { top: 0, bottom: 0, left: 0, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
@@ -82,6 +87,16 @@
     selectedRatioInterval,
     selectedSamplingVariables
   ]);
+
+  function getFill(i, j) {
+    const iHasMissing = columnsWithMissingValues.includes(columns[i]);
+    const jHasMissing = columnsWithMissingValues.includes(columns[j]);
+    if(iHasMissing && jHasMissing) {
+      return interpolate(colordata[i][j]);
+    } else {
+      return 'darkseagreen';
+    }
+  }
 </script>
 
 <style>
@@ -125,7 +140,7 @@
             focus={hoveredPair && hoveredPair[0] === i && hoveredPair[1] === j}
             width={innerWidth}
             height={cellHeight}
-            fill={crossdata[i][j] === null ? 'dimgray' : interpolate(crossdata[i][j])}
+            fill={getFill(i,j)}
             samplingVariable={columns[i]}
             measurementVariable={columns[j]}
             nOfMissingSamples={binsMatrix[i][i][binsMatrix[i][i].length - 1].count}
