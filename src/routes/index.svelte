@@ -1,8 +1,9 @@
 <script>
   import Dashboard from "../components/Dashboard.svelte";
-  import { canvasWidth, canvasHeight } from "../stores";
-  import { csvParse, autoType } from "d3-dsv";
-  import { Levels } from "../utils/compute-probabilities";
+  import {canvasWidth, canvasHeight} from "../stores";
+  import {csvParse, autoType} from "d3-dsv";
+  import {Levels} from "../utils/compute-probabilities";
+  import Nullity from "../components/Nullity.svelte";
 
   let files;
   $: loadedFile = files && files[0];
@@ -10,7 +11,7 @@
   let click;
 
   let ok = false;
-
+  let nullityMatrix = false;
   const parseFile = async (file, encoding) => {
     const text = await new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -67,6 +68,18 @@
       alert("Please specify data and missing encoding");
     }
   };
+  const handleStartNullity = () => {
+    nullityMatrix = true;
+    if (text && loadedFile) {
+      ok = true;
+    } else if (text) {
+      alert("Please specify data");
+    } else if (loadedFile) {
+      alert("Please specify missing encoding");
+    } else {
+      alert("Please specify data and missing encoding");
+    }
+  };
 </script>
 
 <style>
@@ -81,7 +94,11 @@
   {#await parseFile(loadedFile, text)}
     <p>...parsing data</p>
   {:then data}
-    <Dashboard {data} />
+    {#if nullityMatrix}
+      <Nullity {data}/>
+    {:else}
+      <Dashboard {data} />
+    {/if}
   {:catch error}
     <p style="color: red">{error.message}</p>
   {/await}
@@ -103,6 +120,8 @@
 
     <div>
       <button type="button" on:click={handleStart}>Start</button>
+      <button type="button" on:click={handleStartNullity}>Nullity Matrix</button>
+
     </div>
 
   </form>
