@@ -33,7 +33,7 @@
 
 
   const interpolate = i => {
-    return scaleLinear().domain([0,0.5,1]).range([interpolateRdYlBu(0.8), '#9C9C9C' ,interpolateRdYlBu(0.2)])(i)
+    return scaleLinear().domain([0,0.05,0.4,0.6,0.95,1]).range([interpolateRdYlBu(1), interpolateRdYlBu(0.8), '#9C9C9C','#9C9C9C' ,interpolateRdYlBu(0.2), interpolateRdYlBu(0.0)])(i)
   };
   const margin = { top: 0, bottom: 0, left: 0, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
