@@ -144,7 +144,7 @@
                             x={xScale(bin.name) + barPadding / 2}
                             y={yScale(Math.max(expectedBins[i].count, sampleBins[i].count))}
                             height={Math.abs(yScale(expectedBins[i].count) - yScale(sampleBins[i].count))}
-                            fill={(sampleBins[i].count > expectedBins[i].count) ? 'steelblue' : 'firebrick' }
+                            fill={(sampleBins[i].count > expectedBins[i].count) ? 'mediumseagreen' : 'tomato' }
                             width={barWidth - barPadding}></rect>
                 {/if}
             {/each}
