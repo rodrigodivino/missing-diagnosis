@@ -2,7 +2,7 @@
 
 
     import {canvasHeight, canvasWidth} from "../stores";
-    import {scaleBand, scaleLinear} from 'd3-scale';
+    import {scaleBand, scaleLinear, scaleOrdinal} from 'd3-scale';
     import {descending, range} from 'd3-array'
     import {schemeSet1, schemeSet2, schemeSet3} from 'd3-scale-chromatic'
     import NullityColumn from "./NullityColumn.svelte";
@@ -16,10 +16,35 @@
     }
 
     const categoricalLegendsFor = data.columns[data.types.indexOf('Categorical')];
-    $: sortedData = data.slice().sort((a, b) => descending(a[clickedLabel], b[clickedLabel]))
+    $: sortedData = data.slice().sort((a, b) => {
+        if (data.types[data.columns.indexOf(clickedLabel)] === 'Categorical') {
+            const nameA = a[clickedLabel] ? a[clickedLabel].toUpperCase() : 'zzzzzzzz';
+            const nameB = b[clickedLabel] ? b[clickedLabel].toUpperCase() : 'zzzzzzzz';
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        } else {
+            return descending(a[clickedLabel], b[clickedLabel]);
+        }
+    })
+    $: categoricalSortedData = data.slice().sort((a, b) => {
+        const nameA = a[categoricalLegendsFor] ? a[categoricalLegendsFor].toUpperCase() : 'zzzzzzzz';
+        const nameB = b[categoricalLegendsFor] ? b[categoricalLegendsFor].toUpperCase() : 'zzzzzzzz';
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    });
+
     $: categoricalLegendLabel = [...new Set(data.slice().sort((a, b) => descending(a[categoricalLegendsFor], b[categoricalLegendsFor])).map(d => d[categoricalLegendsFor]))]
 
-    const legendCategoricalColors = [...schemeSet3, ...schemeSet2, ...schemeSet1]
     const margin = {top: 100, left: 10, right: 10, bottom: 100}
     $: innerWidth = $canvasWidth - margin.left - margin.right;
     $: innerHeight = $canvasHeight - margin.top - margin.bottom;
@@ -27,6 +52,7 @@
     $: xScale = scaleBand().domain(data.columns).range([0, innerWidth])
     $: rectHeight = innerHeight / data.length;
 
+    $: categoricalColorScale = scaleOrdinal().domain([...new Set(categoricalSortedData.map(d => d[categoricalLegendsFor]))]).range([...schemeSet3, ...schemeSet2, ...schemeSet1])
     $: legendColorScale = scaleLinear().domain([0, 1]).range(['white', 'steelblue'])
 </script>
 
@@ -40,7 +66,8 @@
             <text on:click={handleLabelClick(label)} cursor="pointer"
                   transform="translate({xScale(label) + xScale.bandwidth() / 2}, -5)rotate(-45)"> {label} </text>
             <g transform="translate({xScale(label)},0)">
-                <NullityColumn categorical={data.types[i] === 'Categorical'} data={sortedData} column={label}
+                <NullityColumn {categoricalColorScale} categorical={data.types[i] === 'Categorical'} data={sortedData}
+                               column={label}
                                width={xScale.bandwidth()} height={innerHeight}/>
             </g>
         {/each}
@@ -125,25 +152,25 @@
                     <!-- 8 is for print mode -->
                     {categoricalLegendsFor + ' Categories: '}
                 </text>
-                {#each categoricalLegendLabel as label, i}
+                {#each categoricalColorScale.domain() as label, i}
                     <text
                             alignment-baseline="hanging"
                             font-size="0.7em"
                             text-anchor="middle"
-                            x={(i+1)*100 + 75 / 2}
+                            x={(i+1)*200 + 75 / 2}
                             y={0}>
                         <!-- 8 is for print mode -->
                         {label}
                     </text>
 
                     <rect
-                            fill={legendCategoricalColors[i]}
+                            fill={categoricalColorScale(label)}
                             height={margin.bottom / 5}
                             width={75}
                             stroke="#050505"
                             stroke-width="1"
                             shape-rendering="crispEdges"
-                            x={(i+1)*100}
+                            x={(i+1)*200}
                             y={15}>
                     </rect>
                 {/each}

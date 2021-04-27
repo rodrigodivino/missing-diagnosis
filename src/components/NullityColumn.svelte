@@ -8,10 +8,11 @@
     export let data;
     export let column;
     export let categorical;
-
+    export let categoricalColorScale;
     $: cellHeight = height / data.length;
 
-    $: colorScale = categorical ? scaleOrdinal().domain([...new Set(data.map(d => d[column]))]).range([...schemeSet3, ...schemeSet2, ...schemeSet1]) : scaleLinear().domain(extent(data, d => d[column])).range(['white', 'steelblue']);
+
+    $: colorScale = categorical ? categoricalColorScale : scaleLinear().domain(extent(data, d => d[column])).range(['white', 'steelblue']);
 
     function getColor(datum) {
         if (datum[column] === null) {
