@@ -8,10 +8,11 @@
     resetSliderDOM
   } from "../../methods/List.js";
   import { select, event, mouse } from "d3-selection";
-  import { interpolateRdYlBu, interpolateTurbo} from "d3-scale-chromatic";
+  import { interpolatePuOr, interpolateTurbo, interpolateRdYlBu} from "d3-scale-chromatic";
   import { drag } from "d3-drag";
   import { onMount } from "svelte";
   import {scaleLinear} from 'd3-scale';
+  import {color} from 'd3-color'
 
   export let x = 0;
   export let y = 0;
@@ -29,16 +30,15 @@
   export let selectedMeasurementVariables;
   export let columnTypes
 
-  const cmap = scaleLinear()
-          .domain([0, 1])
-          .range([0.1, 1])
 
-  const interpolate = i => interpolateRdYlBu(1 - cmap(i));
 
+  const interpolate = i => {
+    return scaleLinear().domain([0,0.5,1]).range([interpolateRdYlBu(0.2), '#9C9C9C' ,interpolateRdYlBu(0.8)])(i)
+  };
   const margin = { top: 0, bottom: 0, left: 0, right: 20 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
-  const numberOfCells = 3;
+  const numberOfCells = 4;
   $: cellHeight = innerHeight / numberOfCells - 5;
 
   $: sliderHeight = getSliderHeight(
@@ -95,7 +95,7 @@
     if(iHasMissing && jHasMissing) {
       return interpolate(colordata[i][j]);
     } else {
-      return 'darkseagreen';
+      return color('darkseagreen').darker();
     }
   }
 </script>

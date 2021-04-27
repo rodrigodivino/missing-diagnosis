@@ -7,13 +7,15 @@
   import { path } from "d3-path";
   import { range, mean } from "d3-array";
   import { brushY } from "d3-brush";
+  import {color} from 'd3-color';
   import {easeLinear, easeExpIn, easeExpOut} from 'd3-ease'
   import { onMount } from "svelte";
   import {
-    interpolateRdYlBu,
+    interpolatePuOr,
     interpolateYlOrRd,
     interpolateCividis,
-    interpolateTurbo
+    interpolateTurbo,
+    interpolateRdYlBu
   } from "d3-scale-chromatic";
 
   export let x = 0;
@@ -39,11 +41,11 @@
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
   export let hoveredPair;
-  const cmap = scaleLinear()
-    .domain([0, 1])
-    .range([0.1, 1])
 
-  const interpolate = i => interpolateRdYlBu(1 - cmap(i));
+
+  const interpolate = i => {
+    return scaleLinear().domain([0,0.5,1]).range([interpolateRdYlBu(0.2), '#9C9C9C' ,interpolateRdYlBu(0.8)])(i)
+  };
   const margin = { top: 50, bottom: 75, left: 150, right: 120 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
@@ -208,7 +210,7 @@
       if(iHasMissing && jHasMissing) {
         return interpolate(colordata[i][j]);
       } else {
-        return 'darkseagreen';
+        return color('darkseagreen').darker();
       }
     } else {
       return "lightgray";
@@ -501,7 +503,7 @@
                 width={75}
                 height={margin.bottom / 5}
                 stroke="#71706F"
-                fill="darkseagreen">
+                fill={color("darkseagreen").darker()}>
         </rect>
 
         <rect
