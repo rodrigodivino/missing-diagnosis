@@ -181,6 +181,10 @@
         min-width: 30px;
         min-height: 30px;
     }
+
+    h2.mobile-warn {
+        color: firebrick;
+    }
 </style>
 
 <svelte:head>
@@ -191,6 +195,7 @@
     {#if instructionsMode}
         {#if !group}
             <h1>Teste de Usabilidade de Visualizações de Dados Faltantes</h1>
+            <h2 class="mobile-warn"> Importante: Este teste de usabilidade não é compatível com dispositivos móveis. Certifique-se de estar em um computador ou notebook.</h2>
             <p>Este teste de usabilidade é composto por 14 questões de múltipla escolha. Em cada questão,
                 será pedido que você analise uma visualização ou conjunto de visualizações, e selecione a alternative
                 que
