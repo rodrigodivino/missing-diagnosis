@@ -1,43 +1,40 @@
 <script>
-  import Matrix from "./visualizations/Matrix.svelte";
-  import Arc from "./visualizations/Arc.svelte";
-  import Progress from "./visualizations/Progress.svelte";
-  import List from "./visualizations/List.svelte";
-  import { getRenderList, getCrossData } from "../methods/Dashboard.js";
-  import { computeEstimativeMatrix } from "../utils/compute-probabilities";
-  import { canvasWidth, canvasHeight } from "../stores";
-  import { mean } from "d3-array";
-  import { onMount, tick } from "svelte";
+    import Arc from "./visualizations/Arc.svelte";
+    import Progress from "./visualizations/Progress.svelte";
+    import List from "./visualizations/List.svelte";
+    import {getCrossData, getRenderList} from "../methods/Dashboard.js";
+    import {computeEstimativeMatrix} from "../utils/compute-probabilities";
+    import {canvasHeight, canvasWidth} from "../stores";
 
-  export let data;
+    export let data;
 
-  // Estimative matrix is the position, the bootstrapped metric
-  let [
-    estimativeMatrix,
-    coMissingEstimativeMatrix,
-    binsMatrix,
-    refineEstimative
-  ] = computeEstimativeMatrix(data, data.validColumns, data.types);
-  const columnsWithMissingValues = data.columnsWithMissingValues;
+    // Estimative matrix is the position, the bootstrapped metric
+    let [
+        estimativeMatrix,
+        coMissingEstimativeMatrix,
+        binsMatrix,
+        refineEstimative
+    ] = computeEstimativeMatrix(data, data.validColumns, data.types);
+    const columnsWithMissingValues = data.columnsWithMissingValues;
 
 
-  let convergence = 100;
-  let selectedRatioInterval = [1, 0];
-  let selectedSamplingVariables = [];
-  let selectedMeasurementVariables = [];
-  let hoveredPair = null;
+    let convergence = 100;
+    let selectedRatioInterval = [1, 0];
+    let selectedSamplingVariables = [];
+    let selectedMeasurementVariables = [];
+    let hoveredPair = null;
 
-  $: crossdata = getCrossData(
-    data,
-    data.validColumns,
-  );
+    $: crossdata = getCrossData(
+        data,
+        data.validColumns,
+    );
 
-  $: renderList = getRenderList(
-    estimativeMatrix,
-    selectedRatioInterval,
-    selectedSamplingVariables,
-    selectedMeasurementVariables
-  );
+    $: renderList = getRenderList(
+        estimativeMatrix,
+        selectedRatioInterval,
+        selectedSamplingVariables,
+        selectedMeasurementVariables
+    );
 
 </script>
 
@@ -45,53 +42,70 @@
 
 </style>
 
-<svg width={$canvasWidth} height={$canvasHeight}>
-  <Progress x={0} y={0} width={0.7} height={0.05} {convergence} />
-  <!-- <Matrix
-    x={0}
-    y={progress < 1 ? 0.05 : 0}
-    width={1}
-    height={progress < 1 ? 0.95 : 1}
-    colordata={estimativeMatrix}
-    glyphdata={binsMatrix}
-    columns={data.columns}
-    columnTypes={data.types}
-    {columnsWithMissingValues}
-    refine={refineEstimative}
-    bind:progress /> -->
-  <Arc
-    x={0}
-    y={0.05}
-    width={0.7}
-    height={0.95}
-    bind:arcdata={estimativeMatrix}
-    bind:colordata={coMissingEstimativeMatrix}
-    columns={data.columns}
-    columnTypes={data.types}
-    {columnsWithMissingValues}
-    {crossdata}
-    {binsMatrix}
-    refine={refineEstimative}
-    bind:convergence
-    bind:selectedSamplingVariables
-    bind:selectedMeasurementVariables
-    bind:selectedRatioInterval
-    bind:hoveredPair />
+<svg height={$canvasHeight} width={$canvasWidth}>
+    <Progress {convergence} height={0.05} width={0.7} x={0} y={0}/>
+    <g class="list-legend" transform='translate({$canvasWidth * 0.7},0)'>
+        <g transform="translate(10, {$canvasHeight * 0.0125})">
+            <rect fill="mediumseagreen" height={$canvasHeight * 0.025} width={$canvasHeight * 0.025}></rect>
+            <text alignment-baseline="middle" font-size="11px" x={$canvasHeight * 0.025 + 5}
+                  y={$canvasHeight * 0.0125 + 1.5}> More than expected
+            </text>
+        </g>
+        <g transform="translate({10 + $canvasWidth * 0.15}, {$canvasHeight * 0.0125})">
+            <rect fill="tomato" height={$canvasHeight * 0.025} width={$canvasHeight * 0.025}></rect>
+            <text alignment-baseline="middle" font-size="11px" x={$canvasHeight * 0.025 + 5}
+                  y={$canvasHeight * 0.0125 + 1.5}> Less than expected
+            </text>
+        </g>
 
-  <List
-    x={0.7}
-    y={0}
-    width={0.3}
-    height={1}
-    {binsMatrix}
-    columns={data.columns}
-    {columnsWithMissingValues}
-    colordata={coMissingEstimativeMatrix}
-    {crossdata}
-    {renderList}
-    {selectedSamplingVariables}
-    {selectedMeasurementVariables}
-    {selectedRatioInterval}
-    columnTypes={data.types}
-    bind:hoveredPair />
+
+        <!--    <rect x={innerWidth * 0.15} width={innerWidth * 0.05} height={innerHeight * 0.05} ></rect>-->
+    </g>
+    <!-- <Matrix
+      x={0}
+      y={progress < 1 ? 0.05 : 0}
+      width={1}
+      height={progress < 1 ? 0.95 : 1}
+      colordata={estimativeMatrix}
+      glyphdata={binsMatrix}
+      columns={data.columns}
+      columnTypes={data.types}
+      {columnsWithMissingValues}
+      refine={refineEstimative}
+      bind:progress /> -->
+    <Arc
+            bind:arcdata={estimativeMatrix}
+            bind:colordata={coMissingEstimativeMatrix}
+            bind:convergence
+            bind:hoveredPair
+            bind:selectedMeasurementVariables
+            bind:selectedRatioInterval
+            bind:selectedSamplingVariables
+            {binsMatrix}
+            columnTypes={data.types}
+            columns={data.columns}
+            {columnsWithMissingValues}
+            {crossdata}
+            height={0.95}
+            refine={refineEstimative}
+            width={0.7}
+            x={0}
+            y={0.05}/>
+
+    <List
+            bind:hoveredPair
+            {binsMatrix}
+            colordata={coMissingEstimativeMatrix}
+            columnTypes={data.types}
+            columns={data.columns}
+            {columnsWithMissingValues}
+            {crossdata}
+            height={0.95}
+            {renderList}
+            {selectedMeasurementVariables}
+            {selectedRatioInterval}
+            {selectedSamplingVariables}
+            width={0.3}
+            x={0.7}
+            y={0.05}/>
 </svg>

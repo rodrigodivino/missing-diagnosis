@@ -32,7 +32,7 @@
         .range([innerHeight, 0]);
 
     $: xAxis = axisBottom(xScale);
-    $: yAxis = axisLeft(yScale).ticks(6);
+    $: yAxis = axisLeft(yScale).ticks(4);
 
     $: barWidth = xScale.bandwidth();
     const barPadding = 2;
