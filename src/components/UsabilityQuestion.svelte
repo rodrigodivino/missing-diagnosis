@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+
     const dispatch = createEventDispatcher();
 
     export let id;
@@ -13,6 +14,7 @@
 
     let answer = null;
     let active = false;
+
 
     let startTime = null;
     let elapsedTime = null;

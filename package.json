@@ -14,6 +14,7 @@
   "dependencies": {
     "compression": "^1.7.1",
     "d3": "^5.15.0",
+    "json-url": "^3.0.0",
     "polka": "next",
     "sirv": "^0.4.0",
     "vsup": "^1.1.0"
