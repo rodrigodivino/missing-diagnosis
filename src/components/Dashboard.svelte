@@ -8,6 +8,7 @@
 
     export let data;
 
+    let lang = 'en'; // 'en'
     // Estimative matrix is the position, the bootstrapped metric
     let [
         estimativeMatrix,
@@ -43,18 +44,18 @@
 </style>
 
 <svg height={$canvasHeight} width={$canvasWidth}>
-    <Progress {convergence} height={0.05} width={0.7} x={0} y={0}/>
+    <Progress {lang} {convergence} height={0.05} width={0.7} x={0} y={0}/>
     <g class="list-legend" transform='translate({$canvasWidth * 0.7},0)'>
         <g transform="translate(10, {$canvasHeight * 0.0125})">
             <rect fill="mediumseagreen" height={$canvasHeight * 0.025} width={$canvasHeight * 0.025}></rect>
             <text alignment-baseline="middle" font-size="11px" x={$canvasHeight * 0.025 + 5}
-                  y={$canvasHeight * 0.0125 + 1.5}> More than expected
+                  y={$canvasHeight * 0.0125 + 1.5}> {lang === 'pt' ? 'Mais que o esperado':'More than expected'}
             </text>
         </g>
         <g transform="translate({10 + $canvasWidth * 0.15}, {$canvasHeight * 0.0125})">
             <rect fill="tomato" height={$canvasHeight * 0.025} width={$canvasHeight * 0.025}></rect>
             <text alignment-baseline="middle" font-size="11px" x={$canvasHeight * 0.025 + 5}
-                  y={$canvasHeight * 0.0125 + 1.5}> Less than expected
+                  y={$canvasHeight * 0.0125 + 1.5}> {lang === 'pt' ? 'Menos que o esperado':'Less than expected'}
             </text>
         </g>
 
@@ -74,6 +75,7 @@
       refine={refineEstimative}
       bind:progress /> -->
     <Arc
+            {lang}
             bind:arcdata={estimativeMatrix}
             bind:colordata={coMissingEstimativeMatrix}
             bind:convergence
@@ -93,6 +95,7 @@
             y={0.05}/>
 
     <List
+            {lang}
             bind:hoveredPair
             {binsMatrix}
             colordata={coMissingEstimativeMatrix}

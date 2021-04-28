@@ -28,8 +28,8 @@
   export let selectedRatioInterval;
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
-  export let columnTypes
-
+  export let columnTypes;
+  export let lang;
 
 
   const interpolate = i => {
@@ -135,7 +135,7 @@
       on:mouseout={() => (hoveredPair = null)}>
       {#each visibleCells as [i, j], index}
         <g transform="translate(0,{index * (cellHeight + 5)})">
-          <Tooltip
+          <Tooltip {lang}
             {i}
             {j}
             focus={hoveredPair && hoveredPair[0] === i && hoveredPair[1] === j}

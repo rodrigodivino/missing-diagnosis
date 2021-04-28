@@ -41,6 +41,7 @@
   export let selectedSamplingVariables;
   export let selectedMeasurementVariables;
   export let hoveredPair;
+  export let lang;
 
 
   const interpolate = i => {
@@ -397,7 +398,7 @@
     <g class="layer1">
       <g class="sampling-axis">
         <text class="axis-name" x={0} y={-10}>
-          Variables With Missing Values
+          {lang === 'pt' ? 'Variávies com Dados Perdidos':'Variables With Missing Values'}
         </text>
         <g class="samplingAxis" on:click={handleSamplingVariableClick}>
           {#each columns as columnMissing, i}
@@ -410,14 +411,14 @@
                   x={-10}
                   y={samplingScale(columnMissing)}
                   width={10}
-                  height={samplingScale.bandwidth()} />
+                  height={samplingScale.bandwidth()}></rect>
                 {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
                   <rect
                     fill="black"
                     x={-10}
                     y={samplingScale(columnMissing)}
                     width={10}
-                    height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)} />
+                    height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)}></rect>
                 {/if}
                 <text
                   class="axis-tick"
@@ -440,7 +441,7 @@
         class="measurement-axis"
         on:click={handleMeasurementVariableClick}
         transform="translate({innerWidth},0)">
-        <text class="axis-name" x={+5} y={-10}>Variables</text>
+        <text class="axis-name" x={+5} y={-10}>{lang === 'pt' ? 'Todas as Variáveis':'All Variables'}</text>
         {#each columns as column, j}
           <g
             class="samplingAxisElements"
@@ -473,7 +474,7 @@
         {/each}
       </g>
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
-        <text class="axis-name" x={-5} y={-10}>MAR Likelyhood</text>
+        <text class="axis-name" x={-5} y={-10}>{lang === 'pt' ? 'Probabilidade de MAR':'MAR Likelyhood'}</text>
         <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
         {#each [5, 6,7, 7.5,8,8.5,9,9.2,9.3,9.4,9.5,9.6,9.7,9.8,9.9] as i}
           <text
@@ -524,7 +525,7 @@
           x={(innerWidth - 100) * 0.5}
           y={margin.bottom / 6 + margin.bottom / 2}>
           <!-- 10 is for print mode -->
-          {'Co-Missing Occurrence Rate'}
+          {lang === 'pt' ? 'Co-ocorrência de Dados Perdidos':'Co-Missing Occurrence Rate'}
         </text>
 
         <text
@@ -534,7 +535,7 @@
           x={0}
           y={0}>
           <!-- 8 is for print mode -->
-          {'< Too little'}
+          {lang === 'pt' ? '< Pouco':'< Too little'}
         </text>
         <text
                 text-anchor="middle"
@@ -543,7 +544,7 @@
                 x={innerWidth - 75 / 2}
                 y={0}>
           <!-- 8 is for print mode -->
-          {'Not Applicable'}
+          {lang === 'pt' ? 'Não Aplicável':'Not Applicable'}
         </text>
         <text
                 text-anchor="middle"
@@ -552,7 +553,7 @@
                 x={(innerWidth - 100)/2}
                 y={0}>
           <!-- 8 is for print mode -->
-          {'Natural occurrence'}
+          {lang === 'pt' ? 'Ocorrência Natural':'Natural occurrence'}
         </text>
         <text
           text-anchor="end"
@@ -561,7 +562,7 @@
           x={innerWidth - 100}
           y={0}>
           <!-- 8 is for print mode -->
-          {'Too Much >'}
+          {lang === 'pt' ? 'Muito >':'Too Much >'}
         </text>
       </g>
     </g>

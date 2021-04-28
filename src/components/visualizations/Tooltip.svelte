@@ -15,6 +15,7 @@
     export let measurementVariable, j;
     export let focus;
     export let continuous;
+    export let lang;
 
     const margin = {top: 35, left: 35, right: 35, bottom: 50};
     $: sampleSize = sum(sampleBins.map(b => b.count));
@@ -51,12 +52,13 @@
                 .attr("y", 15) // 15 is for print Mode
                 .each(function (t, i) {
                     if (isNaN(t)) {
+                        const tmiss = t === 'miss';
                         select(this)
                             .attr("y", 0) //+5 is for print Mode
                             .attr("x", 5)
                             .attr("transform", "rotate(55)")
                             .attr("text-anchor", "start")
-                            .text(t);
+                            .text((tmiss)?(lang==='pt'?'não há':'miss'):t);
                     }
                     else if (continuous) {
                         select(this)
@@ -122,7 +124,7 @@
                 <tspan alignment-baseline="middle" font-weight="bold">
                     {measurementVariable}
                 </tspan>
-                when missing
+                {lang==='pt' ? 'quando não há ':'when missing '}
                 <tspan alignment-baseline="middle" font-weight="bold">
                     {samplingVariable}
                 </tspan>
