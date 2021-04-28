@@ -81,7 +81,7 @@
 <style>
     text.title {
         text-anchor: middle;
-        font-size: 0.7em;
+        font-size: 0.8em;
     }
 
     rect.focus {

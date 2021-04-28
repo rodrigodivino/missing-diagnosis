@@ -3,14 +3,14 @@ export let questions = [
         id: 'Q1-i',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
-          nullity: ['logo-512.png'],
-          proposed: ['logo-512.png'],
+          nullity: ['./tests/q1/Q1-i.nullity.PNG'],
+          proposed: ['./tests/q1/Q1-i.proposed.svg'],
         },
         options: [
-            {id: 'a', optionText: 'Lorem Ipsum'},
-            {id: 'b', optionText: 'Lorem Ipsum'},
-            {id: 'c', optionText: 'Lorem Ipsum'},
-            {id: 'd', optionText: 'Lorem Ipsum'}
+            {id: 'a', optionText: 'Quando os valores da Dimensão 6 estão perdidos, os valores da Dimensão 3 costumam ser baixos.'},
+            {id: 'b', optionText: 'Quando os valores da Dimensão 6 estão perdidos, os valores da Dimensão 3 costumam ser medianos.'},
+            {id: 'c', optionText: 'Quando os valores da Dimensão 6 estão perdidos, os valores da Dimensão 3 costumam ser altos.'},
+            {id: 'd', optionText: 'Não há relação entre os valores perdidos da Dimensão 6 e os valores da Dimensão 3.'}
         ],
     },
     {

@@ -126,15 +126,15 @@
     p.bezierCurveTo(
       sourceX + xDisplacement,
       sourceY,
-      valueX - 15 - xDisplacement,
+      valueX - 20 - xDisplacement,
       valueY,
-      valueX - 15,
+      valueX - 20,
       valueY
     );
 
-    p.moveTo(valueX + 15, valueY);
+    p.moveTo(valueX + 20, valueY);
     p.bezierCurveTo(
-      valueX + 15 + xDisplacement,
+      valueX + 20 + xDisplacement,
       valueY,
       targetX - xDisplacement,
       targetY,
@@ -176,7 +176,7 @@
     value >= Math.min(...selectedRatioInterval);
   let ratioBrushDOM;
   $: ratioBrush = brushY()
-    .extent([[innerWidth / 2 - 13, -2], [innerWidth / 2 + 14, innerHeight+2]])
+    .extent([[innerWidth / 2 - 18, -2], [innerWidth / 2 + 18, innerHeight+2]])
     .on("brush end", () => {
       if (event.selection) {
         selectedRatioInterval = event.selection.map(ratioScale.invert).map(d => d/100);
@@ -358,13 +358,13 @@
   }
 
   text.axis-tick {
-    font-size: 0.7em;
+    font-size: 0.8em;
     font-weight: bold;
   }
 
   text.axis-name {
     text-anchor: middle;
-    font-size: 14px;
+    font-size: 16px;
   }
 </style>
 
@@ -475,7 +475,7 @@
       </g>
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
         <text class="axis-name" x={-5} y={-10}>{lang === 'pt' ? 'Probabilidade de MAR':'MAR Likelyhood'}</text>
-        <rect class="axis-tick" x={-15} width={30} y={0} height={innerHeight} />
+        <rect class="axis-tick" x={-20} width={40} y={0} height={innerHeight} />
         {#each [5, 6,7, 7.5,8,8.5,9,9.2,9.3,9.4,9.5,9.6,9.7,9.8,9.9] as i}
           <text
             class="axis-tick"
@@ -487,7 +487,10 @@
         {/each}
 
       </g>
-      <g class="color-legend" transform="translate(0,{innerHeight + 5})">
+      <g class="color-legend" transform="translate(0,{innerHeight + 10})">
+        <g>
+
+        </g>
         {#each range(1000) as i}
           <rect
             y={margin.bottom / 6}
@@ -531,36 +534,36 @@
         <text
           text-anchor="start"
           alignment-baseline="hanging"
-          font-size="0.7em"
+          font-size="14px"
           x={0}
-          y={0}>
+          y={-5}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? '< Pouco':'< Too little'}
         </text>
         <text
                 text-anchor="middle"
                 alignment-baseline="hanging"
-                font-size="0.7em"
+                font-size="14px"
                 x={innerWidth - 75 / 2}
-                y={0}>
+                y={-5}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? 'Não Aplicável':'Not Applicable'}
         </text>
         <text
                 text-anchor="middle"
                 alignment-baseline="hanging"
-                font-size="0.7em"
+                font-size="14px"
                 x={(innerWidth - 100)/2}
-                y={0}>
+                y={-5}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? 'Ocorrência Natural':'Natural occurrence'}
         </text>
         <text
           text-anchor="end"
           alignment-baseline="hanging"
-          font-size="0.7em"
+          font-size="14px"
           x={innerWidth - 100}
-          y={0}>
+          y={-5}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? 'Muito >':'Too Much >'}
         </text>

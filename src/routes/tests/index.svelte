@@ -6,7 +6,7 @@
 
     const codec = JsonUrl('lzw');
 
-    let group = 'nullity'; // proposed
+    let group = 'proposed'; // proposed
     let userID = Math.random().toString();
     let quantitativeData = [];
     let index = 0;
@@ -84,7 +84,7 @@
 
     form .statement {
         display:block;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
         padding: 30px 0 0 4.25%;
         margin-bottom:10px;

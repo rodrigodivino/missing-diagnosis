@@ -55,6 +55,10 @@
         margin-top: 2px;
     }
 
+    form.options {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
 
 </style>
 
@@ -64,7 +68,7 @@
         {#if active}
             <div class="image-wrapper">
             {#each questionImages as questionImage}
-                <img src="./logo-512.png"/>
+                <img src={questionImage} width="1600"/>
             {/each}
             </div>
         {:else}
@@ -75,7 +79,7 @@
             </div>
         {/if}
 
-    <form>
+    <form class="options">
         {#each options as option}
             <input bind:group={answer} type="radio" id={option.id} name="answer" value={option.id}>
             <label for={option.id}> {option.optionText} </label><br>

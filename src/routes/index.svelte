@@ -80,6 +80,8 @@
       alert("Please specify data and missing encoding");
     }
   };
+
+  let lang = 'pt';
 </script>
 
 <style>
@@ -95,9 +97,9 @@
     <p>...parsing data</p>
   {:then data}
     {#if nullityMatrix}
-      <Nullity {data}/>
+      <Nullity {lang} {data}/>
     {:else}
-      <Dashboard {data} />
+      <Dashboard {lang} {data} />
     {/if}
   {:catch error}
     <p style="color: red">{error.message}</p>
@@ -113,9 +115,9 @@
     <div>
       <label for="example">Missing Encoding</label>
       <input
-        type="text"
-        bind:value={text}
-        placeholder="ex.: | ,, | null | miss | ?" />
+              type="text"
+              bind:value={text}
+              placeholder="ex.: | ,, | null | miss | ?" />
     </div>
 
     <div>

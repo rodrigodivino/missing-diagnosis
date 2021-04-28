@@ -8,11 +8,22 @@
     import NullityColumn from "./NullityColumn.svelte";
 
     export let data;
+    export let lang;
 
     let clickedLabel = null;
+    let highlightedLabels = [];
+    function handleLabelClick(event, label) {
+        if(event.ctrlKey){
+            if(highlightedLabels.includes(label)) {
+                highlightedLabels = highlightedLabels.filter(d=>d!==label)
+            } else {
+                highlightedLabels.push(label);
+                highlightedLabels = highlightedLabels.slice();
+            }
+        } else {
+            clickedLabel = label;
+        }
 
-    function handleLabelClick(label) {
-        clickedLabel = label;
     }
 
     const categoricalLegendsFor = data.columns[data.types.indexOf('Categorical')];
@@ -49,7 +60,7 @@
     $: innerWidth = $canvasWidth - margin.left - margin.right;
     $: innerHeight = $canvasHeight - margin.top - margin.bottom;
 
-    $: xScale = scaleBand().domain(data.columns).range([0, innerWidth])
+    $: xScale = scaleBand().domain(data.columns).range([0, innerWidth]).padding(0.05)
     $: rectHeight = innerHeight / data.length;
 
     $: categoricalColorScale = scaleOrdinal().domain([...new Set(categoricalSortedData.map(d => d[categoricalLegendsFor]))]).range([...schemeSet3, ...schemeSet2, ...schemeSet1])
@@ -63,12 +74,14 @@
 <svg height={$canvasHeight} width={$canvasWidth}>
     <g transform='translate({margin.left},{margin.top})'>
         {#each data.columns as label, i}
-            <text on:click={handleLabelClick(label)} cursor="pointer"
-                  transform="translate({xScale(label) + xScale.bandwidth() / 2}, -5)rotate(-45)"> {label} </text>
-            <g transform="translate({xScale(label)},0)">
-                <NullityColumn {categoricalColorScale} categorical={data.types[i] === 'Categorical'} data={sortedData}
-                               column={label}
-                               width={xScale.bandwidth()} height={innerHeight}/>
+            <g opacity={(highlightedLabels.length === 0 || highlightedLabels.includes(label)) ? 1:0.2}>
+                <text on:click={handleLabelClick(event, label)} cursor="pointer"
+                      transform="translate({xScale(label) + xScale.bandwidth() / 2}, -5)rotate(-45)"> {label} </text>
+                <g transform="translate({xScale(label)},0)">
+                    <NullityColumn {categoricalColorScale} categorical={data.types[i] === 'Categorical'} data={sortedData}
+                                   column={label}
+                                   width={xScale.bandwidth()} height={innerHeight}/>
+                </g>
             </g>
         {/each}
         <!--        <rect height={innerHeight} width={innerWidth}></rect>-->
@@ -94,12 +107,12 @@
 
             <text
                     alignment-baseline="hanging"
-                    font-size="0.7em"
+                    font-size="0.8em"
                     text-anchor="middle"
                     x={innerWidth - 75 / 2}
                     y={0}>
                 <!-- 8 is for print mode -->
-                {'Missing Data'}
+                {lang==='pt'? 'Dado faltante':'Missing Data'}
             </text>
 
             <rect
@@ -114,48 +127,48 @@
 
             <text
                     alignment-baseline="hanging"
-                    font-size="0.7em"
+                    font-size="0.8em"
                     text-anchor="start"
                     x={0}
                     y={0}>
                 <!-- 8 is for print mode -->
-                {'< Low value'}
+                {lang==='pt'? '< Valor baixo':'< Low value'}
             </text>
 
             <text
                     alignment-baseline="hanging"
-                    font-size="0.7em"
+                    font-size="0.8em"
                     text-anchor="middle"
                     x={(innerWidth - 100)/2}
                     y={0}>
                 <!-- 8 is for print mode -->
-                {'Medium Value'}
+                {lang==='pt'? '< Valor mediano':'Medium Value'}
             </text>
             <text
                     alignment-baseline="hanging"
-                    font-size="0.7em"
+                    font-size="0.8em"
                     text-anchor="end"
                     x={innerWidth - 100}
                     y={0}>
                 <!-- 8 is for print mode -->
-                {'High Value >'}
+                {lang==='pt'? '< Valor alto':'High Value >'}
             </text>
         </g>
         {#if categoricalLegendsFor}
             <g class="categorical-legend" transform="translate(0,{innerHeight + 50})">
                 <text
                         alignment-baseline="hanging"
-                        font-size="0.7em"
+                        font-size="0.8em"
                         text-anchor="start"
                         x={0}
                         y={15}>
                     <!-- 8 is for print mode -->
-                    {categoricalLegendsFor + ' Categories: '}
+                    {categoricalLegendsFor + ': '}
                 </text>
                 {#each categoricalColorScale.domain() as label, i}
                     <text
                             alignment-baseline="hanging"
-                            font-size="0.7em"
+                            font-size="0.8em"
                             text-anchor="middle"
                             x={(i+1)*200 + 75 / 2}
                             y={0}>
