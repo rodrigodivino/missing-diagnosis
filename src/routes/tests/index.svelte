@@ -3,12 +3,21 @@
     import {questions} from "./questions"
 
     let group = 'nullity'; // proposed
+    let userID = Math.random().toString();
     let data = [];
     let index = 0;
 
+    $: testComplete = index >= questions.length;
+
     function handleQuestionComplete(event) {
-        console.log('complete', event.detail);
+        data.push(event.detail);
+        index += 1;
     }
+
+    $: if(testComplete) {
+        console.log(data)
+    }
+
 </script>
 
 <style>
@@ -24,7 +33,13 @@
 </svelte:head>
 
 <div class="container">
-    <UsabilityQuestion on:complete={handleQuestionComplete} id={questions[index].id} options={questions[index].options}
-                       questionImages={questions[index].questionImages[group]} questionText={questions[index].questionText}/>
+    {#if testComplete}
+        <h1> Obrigado pela sua participação!</h1>
+    {:else}
+        <UsabilityQuestion userID={userID} group={group} index={index+1} maxIndex={questions.length} id={questions[index].id} on:complete={handleQuestionComplete} options={questions[index].options}
+                           questionImages={questions[index].questionImages[group]}
+                           questionText={questions[index].questionText}/>
+    {/if}
+
 </div>
 

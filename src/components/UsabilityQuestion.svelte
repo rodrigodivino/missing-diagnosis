@@ -6,12 +6,17 @@
     export let questionText;
     export let questionImages;
     export let options;
+    export let index;
+    export let maxIndex;
+    export let group;
+    export let userID;
 
     let answer = null;
     let active = false;
 
     let startTime = null;
     let elapsedTime = null;
+
     function handleActiveClick() {
         startTime = new Date().getTime();
         active = true;
@@ -21,7 +26,7 @@
         const endTime = new Date().getTime();
         elapsedTime = (endTime - startTime) / 1000;
         dispatch('complete', {
-            answer, elapsedTime, id
+            answer, elapsedTime, id, group, userID
         });
     }
 
@@ -42,6 +47,10 @@
         justify-content: center;
     }
 
+    button.active-button {
+        margin-bottom: 2px;
+    }
+
     button.finish-button {
         margin-top: 2px;
     }
@@ -50,7 +59,7 @@
 </style>
 
 <header>
-    <h1>{questionText}</h1>
+    <h2>{`${index}/${maxIndex} - ${questionText}`}</h2>
 
         {#if active}
             <div class="image-wrapper">
@@ -60,7 +69,8 @@
             </div>
         {:else}
             <div class="button-wrapper">
-                <p>Leia o enunciado e as alternativas. Quando estiver pronto, clique em "começar" para mostrar a visualização.</p>
+                <p>Leia o enunciado e as alternativas para ter uma idéia da questão.</p>
+                <p>Quando estiver pronto, clique em "começar" para mostrar a visualização.</p>
                 <button type="button" class="active-button" on:click={handleActiveClick}>Começar</button>
             </div>
         {/if}
