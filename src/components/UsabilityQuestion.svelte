@@ -9,8 +9,6 @@
     export let options;
     export let index;
     export let maxIndex;
-    export let group;
-    export let userID;
 
     let answer = null;
     let active = false;
@@ -28,7 +26,7 @@
         const endTime = new Date().getTime();
         elapsedTime = (endTime - startTime) / 1000;
         dispatch('complete', {
-            answer, elapsedTime, id, group, userID
+            answer, elapsedTime, id
         });
     }
 

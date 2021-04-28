@@ -21,13 +21,13 @@
         index += 1;
     }
 
-    // const decompress = 'woPCsHF1YW50aXRhxIZ2ZUTEiWHCksKFwqbEhHN3ZXLCoWHCq2VsYXBzZWRUaW1lw4s_w7vCvnbDiMK0OVjComlkwqRRMS1pwqVncm91cMKnbnVsbMSHecKmdcSfcklEwrIwLjY4MzAxOTIyMzM2NTQwNTPEkcSTxJXEl2TEmsScxJ7EoMSixKTEpsOzGsKfxKnEq8SvZMKlxLPEtcS2xLjEusS8xL7FgMWCxYTFhsWIxYrFjMWOxZDFksWUxZbFmMWaM8KvxIJhxYHEiMSKxIzEjsKawoLFrsKkc8WFMcSSbsSUxJbCr3N0xLluZ19kaXNhxLhlZcaQxLDGksWFMsaWxphyxprGnG_GnsagxqLGpHLGpsaoxLHGk3Mzxq3Fn8awxp3Gn8ahxqPGpcanxpHGuzTGvsaZxpvHgca0x4TGt8eGxqnGuzXHisavx4zGsseCxrXHhca5xqpzNseVx4DHmMeOxrbGuMeHxYU3x6DHl8azx4PHpMeRxrrFhTjHqcaxx6vHmseQx5zGuznHsseNx6zHm8WuwqXGuzEwx7rHose8x5DCrWTEiWVDb21wbGV0xKDCszI4LzA0LzIwMjEgMTI6yJs6NTU-x7_FsMiBx4PHpMiFx6bGpceJx4vIjMarP8O0w7XDgsKPXCjDtse2yJfGuMe5x5vGvMe9x5_InseCx6PIhMeGx6fGpsimxqrHjsOxxrHDt8OOw5kXx5Y1yJjHusecxr3Hvsaax6HIgseEx6XIh8eoyIrFk8inx47JhcWaxZwCx7bJisizx5rGu8e8x57Gv8i5x6LIg8eFyIbHh8eoxqfJmMmBx67HsMeyx7THljbJi8i1yaTInMmQyJ_Iu8mqyKPIiMmXxqnHjcaEw7XHkceTx5XEocWiybbJociZyY3It8mmx4HJqMmTyKLJlci_yIvJsMSXw7QxJsSaw5TDvseWN8m3yaPIm8mPyIDIusmpyZTJrMWQyoHHrMiow7JeNT_IkMKRx7bKocqMyYzItsmlyJ3KkcmSyKHFiw-dsOJxpBRNMaTxanHvMa-x6HIgMWzyILHhceoyIbHiciJx4zFlsiMxq4_w7V4w5TDvcOzwrZGx5nImMe6yJrGvcegx7_Hgcifx4THp8iFx4jHq8iJx67Hjciox5DDuiTDnciQyJLIljXImca8x5_HvseAx6PIusemyITHh8eqyIjFksaByYLGrceQw7ZNw5LDscKpw7vDp8eZyYvItMmNx73Gv8eixp3HpciDx4bHqciHxqjGgMiLyZvGh8O2FHrDoUfCrhTIljbJjMeeyajInci5x4PJk8muyKPIv8apybPHj8aHw7PGtMaxxrPHmcm-yabKgMicyLjJkcqEya3Iosi-yZfEiMaqyKfJtMSXw6Z2xorGjBDIljfJv8ibyLfJkMmryKDIvMmVybDHrMqexqzKi8SXw63CocOKw4DCgxJvx5nKqMqTyqrJj8mqyIHIu8mUya8'
-    // codec.decompress(decompress).then(result => {
-    //     console.log('resultado: ', result)
-    // })
+    const decompress = 'woXCsHF1YW50aXRhxIZ2ZUTEiWHCksKDwqbEhHN3ZXLCoWHCq2VsYXBzZWRUaW1lw4s_w7fCrhR6w6FHwq7ComlkwqRRMS1pxJHEk8SVxJdkxJrEnMSexKDEosSkxKbDtFHDq8KFHsK4UsSvZMKlxLPEtWnCr8SCYWzEh8SJacSLxI3EiMKawoLFisKkc3VzMcSSbsSUxJbCr3N0cm9uZ19kaXNhZ3JlZcWbxLDFncWfMsWixaRyxabFqMWqxazFrsWwxbLFtMW2xLHFnnMzxbvEucW-xanFq8Wtxa_FscWzxbXFnMaINMaLxaXFp8aOxoHGkcaExpTFt8aINcaYxb3GmsaAxpDGg8aTxobFuHM2xqPGjcamxoLGksaFxpXFnzfGrsalxo_GscaexqrGiDjGt8W_xrnGncapxrRzOca_xpvGp8ayxp_Fi8aIMTDHh8awx4LFtMKtZMSJZUNvbXBsZXTEoMKzMjgvMDQvMjAyMSAxMjoxMTo1MsKlxbJvdXDCp251bMWTdHnCpsWfxJZJRMKyMC45OTM4NDgzOTA5NzU0N8iN-xanFq8Wtxa_FscWzxbXFnMaINMaLxaXFp8aOxoHGkcaExpTFt8aINcaYxb3GmsaAxpDGg8aTxobFuHM2xqPGjcamxoLGksaFxpXFnzfGrsalxo_GscaexqrGiDjGt8W_xrnGncapxrRzOca_xpvGp8ayxp_Fi8aIMTDHh8awx4LFtMKtZMSJZUNvbXBsZXTEoMKzMjgvMDQvMjAyMSAxMjoxMTo1MsKlxbJvdXDCp251bMWTdHnCpsWfxJZJRMKyMC45OTM4NDgzOTA5NzU0N8iN-xanFq8Wtxa_FscWzxbXFnMaINMaLxaXFp8aOxoHGkcaExpTFt8aINcaYxb3GmsaAxpDGg8aTxobFuHM2xqPGjcamxoLGksaFxpXFnzfGrsalxo_GscaexqrGiDjGt8W_xrnGncapxrRzOca_xpvGp8ayxp_Fi8aIMTDHh8awx4LFtMKtZMSJZUNvbXBsZXTEoMKzMjgvMDQvMjAyMSAxMjoxMTo1MsKlxbJvdXDCp251bMWTdHnCpsWfxJZJRMKyMC45OTM4NDgzOTA5NzU0N8iN-xYDFgsWExYbFiMWKxYzFjsWQxZLFlMWWN8WYNsKvxIJhxYHEiMSKxIzEjsKawoLFrsKkc8WFMcSSbsSUxJbCr3N0xLluZ19kaXNhxLhlZcaQxLDGksWFMsaWxphyxprGnG_GnsagxqLGpHLGpsaoxLHGk3Mzxq3Fncawxp3Gn8ahxqPGpcanxpHGuzTGvsaZxpvHgca0x4TGt8eGxqnGuzXHisavx4zGsseCxrXHhca5xqpzNseVx4DHmMeOxrbGuMeHxYU3x6DHl8azx4PHpMeRxrrFhTjHqcaxx6vHmseQx5zGuznHsseNx6zHm8WuwqXGuzEwx7rHose8x5DCrWTEiWVDb21wbGV0xKDCszI4LzA0L8WWMjEgMTI6yIE6MDE-x7_FsMiBx4PHpMiFx6bGpceJx4vIjMarP8O0w7XDgsKPXCjDtse2yJfGuMe5x5vGvMe9x5_InseCx6PIhMeGx6fGpsimxqrHjsOxxrHDt8OOw5kXx5Y1yJjHusecxr3Hvsaax6HIgseEx6XIh8eoyIrFk8inx47JhcWaxZwCx7bJisizx5rGu8e8x57Gv8i5x6LIg8eFyIbHh8eoxqfJmMmBx67HsMeyx7THljbJi8i1yaTInMmQyJ_Iu8mqyKPIiMmXxqnHjcaEw7XHkceTx5XEocWiybbJociZyY3It8mmx4HJqMmTyKLJlci_yIvJsMSXw7QxJsSaw5TDvseWN8m3yaPIm8mPyIDIusmpyZTJrMWQyoHHrMiow7JeNT_IkMKRx7bKocqMyYzItsmlyJ3KkcmSyKHFiw-dsOJxpBRNMaTxanHvMa-x6HIgMWzyILHhceoyIbHiciJx4zFlsiMxq4_w7V4w5TDvcOzwrZGx5nImMe6yJrGvcegx7_Hgcifx4THp8iFx4jHq8iJx67Hjciox5DDuiTDnciQyJLIljXImca8x5_HvseAx6PIusemyITHh8eqyIjFksaByYLGrceQw7ZNw5LDscKpw7vDp8eZyYvItMmNx73Gv8eixp3HpciDx4bHqciHxqjGgMiLyZvGh8O2FHrDoUfCrhTIljbJjMeeyajInci5x4PJk8muyKPIv8apybPHj8aHw7PGtMaxxrPHmcm-yabKgMicyLjJkcqEya3Iosi-yZfEiMaqyKfJtMSXw6Z2xorGjBDIljfJv8ibyLfJkMmryKDIvMmVybDHrMqexqzKi8SXw63CocOKw4DCgxJvx5nKqMqTyqrJj8mqyIHIu8mUya8'
+    codec.decompress(decompress).then(result => {
+        console.log('resultado: ', result)
+    })
     $: if (quantitativeComplete) {
         const dateCompleted = new Date().toLocaleString();
-        codec.compress({quantitativeData, qualitativeData, dateCompleted}).then(result => {
+        codec.compress({quantitativeData, qualitativeData, dateCompleted, group, userID}).then(result => {
             compressedResult = result;
         });
     }
@@ -206,7 +206,7 @@
         {:else}
             {#each questions as question,i}
                 {#if i === index}
-                    <UsabilityQuestion userID={userID} group={group} index={index+1} maxIndex={questions.length}
+                    <UsabilityQuestion index={index+1} maxIndex={questions.length}
                                        id={question.id} on:complete={handleQuestionComplete}
                                        options={question.options}
                                        questionImages={question.questionImages[group]}
