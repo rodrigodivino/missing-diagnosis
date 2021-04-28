@@ -52,23 +52,23 @@
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
   $: ratioScale = scalePow().exponent(6.7)
-    .domain([1, 100])
-    .range([innerHeight, 0])
-    .clamp(true);
+          .domain([1, 100])
+          .range([innerHeight, 0])
+          .clamp(true);
 
   $: samplingScale = scaleBand()
-    .domain(columnsWithMissingValues)
-    .range([innerHeight, 0])
-    .paddingInner(0.2);
+          .domain(columnsWithMissingValues)
+          .range([innerHeight, 0])
+          .paddingInner(0.2);
 
   $: measurementScale = scaleBand()
-    .domain(columns)
-    .range([innerHeight, 0])
-    .paddingInner(0.2);
+          .domain(columns)
+          .range([innerHeight, 0])
+          .paddingInner(0.2);
 
   $: fakeColorScale = scaleLinear()
-    .domain([0, 1])
-    .range([0, innerWidth - 100]);
+          .domain([0, 1])
+          .range([0, innerWidth - 100]);
 
   $: colorScale = scaleLinear()
           .domain([1, 100])
@@ -90,22 +90,22 @@
       const cg = select(colorAxisDOM);
       cg.selectAll().remove();
       cg.call(colorAxis)
-        .selectAll("g.tick")
-        .selectAll("text")
-        .attr("font-size", 10)
-        .attr("y", 8) // 15 is for print mode
-        .text(t => +(t * 100) + "%");
+              .selectAll("g.tick")
+              .selectAll("text")
+              .attr("font-size", 10)
+              .attr("y", 8) // 15 is for print mode
+              .text(t => +(t * 100) + "%");
     }
   };
   $: placeAxes(colorAxisDOM, colorAxis);
 
   const drawEdge = (
-    source,
-    target,
-    value,
-    samplingScale,
-    measurementScale,
-    ratioScale
+          source,
+          target,
+          value,
+          samplingScale,
+          measurementScale,
+          ratioScale
   ) => {
     const samplingBand = samplingScale.bandwidth();
     const measurementBand = measurementScale.bandwidth();
@@ -124,22 +124,22 @@
     p.moveTo(0, sourceY);
 
     p.bezierCurveTo(
-      sourceX + xDisplacement,
-      sourceY,
-      valueX - 20 - xDisplacement,
-      valueY,
-      valueX - 20,
-      valueY
+            sourceX + xDisplacement,
+            sourceY,
+            valueX - 20 - xDisplacement,
+            valueY,
+            valueX - 20,
+            valueY
     );
 
     p.moveTo(valueX + 20, valueY);
     p.bezierCurveTo(
-      valueX + 20 + xDisplacement,
-      valueY,
-      targetX - xDisplacement,
-      targetY,
-      targetX,
-      targetY
+            valueX + 20 + xDisplacement,
+            valueY,
+            targetX - xDisplacement,
+            targetY,
+            targetX,
+            targetY
     );
 
     return p.toString();
@@ -172,18 +172,18 @@
   $: updateData(arcdata);
 
   let valueIsSelected = value =>
-    value <= Math.max(...selectedRatioInterval) &&
-    value >= Math.min(...selectedRatioInterval);
+          value <= Math.max(...selectedRatioInterval) &&
+          value >= Math.min(...selectedRatioInterval);
   let ratioBrushDOM;
   $: ratioBrush = brushY()
-    .extent([[innerWidth / 2 - 18, -2], [innerWidth / 2 + 18, innerHeight+2]])
-    .on("brush end", () => {
-      if (event.selection) {
-        selectedRatioInterval = event.selection.map(ratioScale.invert).map(d => d/100);
-      } else {
-        selectedRatioInterval = [1, 0];
-      }
-    });
+          .extent([[innerWidth / 2 - 18, -2], [innerWidth / 2 + 18, innerHeight+2]])
+          .on("brush end", () => {
+            if (event.selection) {
+              selectedRatioInterval = event.selection.map(ratioScale.invert).map(d => d/100);
+            } else {
+              selectedRatioInterval = [1, 0];
+            }
+          });
   const placeBrush = (ratioBrushDOM, ratioBrush) => {
     if (ratioBrushDOM && ratioBrush) {
       select(ratioBrushDOM).call(ratioBrush);
@@ -192,19 +192,19 @@
   $: placeBrush(ratioBrushDOM, ratioBrush);
 
   const handlePathColor = (
-    i,
-    j,
-    value,
-    selectedRatioInterval,
-    selectedSamplingVariables,
-    selectedMeasurementVariables
+          i,
+          j,
+          value,
+          selectedRatioInterval,
+          selectedSamplingVariables,
+          selectedMeasurementVariables
   ) => {
     if (
-      valueIsSelected(value) &&
-      (selectedSamplingVariables.includes(i) ||
-        selectedSamplingVariables.length === 0) &&
-      (selectedMeasurementVariables.includes(j) ||
-        selectedMeasurementVariables.length === 0)
+            valueIsSelected(value) &&
+            (selectedSamplingVariables.includes(i) ||
+                    selectedSamplingVariables.length === 0) &&
+            (selectedMeasurementVariables.includes(j) ||
+                    selectedMeasurementVariables.length === 0)
     ) {
       const iHasMissing = columnsWithMissingValues.includes(columns[i]);
       const jHasMissing = columnsWithMissingValues.includes(columns[j]);
@@ -218,26 +218,26 @@
     }
   };
   const handlePathClass = (
-    i,
-    j,
-    value,
-    selectedRatioInterval,
-    selectedSamplingVariables,
-    selectedMeasurementVariables
+          i,
+          j,
+          value,
+          selectedRatioInterval,
+          selectedSamplingVariables,
+          selectedMeasurementVariables
   ) => {
     if (valueIsSelected(value)) {
       if (
-        selectedRatioInterval[0] === 1 &&
-        selectedRatioInterval[1] === 0 &&
-        selectedSamplingVariables.length === 0 &&
-        selectedMeasurementVariables.length === 0
+              selectedRatioInterval[0] === 1 &&
+              selectedRatioInterval[1] === 0 &&
+              selectedSamplingVariables.length === 0 &&
+              selectedMeasurementVariables.length === 0
       ) {
         return "data";
       } else if (
-        (selectedSamplingVariables.includes(i) ||
-          selectedSamplingVariables.length === 0) &&
-        (selectedMeasurementVariables.includes(j) ||
-          selectedMeasurementVariables.length === 0)
+              (selectedSamplingVariables.includes(i) ||
+                      selectedSamplingVariables.length === 0) &&
+              (selectedMeasurementVariables.includes(j) ||
+                      selectedMeasurementVariables.length === 0)
       ) {
         return "dataSelected";
       }
@@ -248,8 +248,8 @@
 
   const getAmountOfSelectedInLine = (i, selectedRatioInterval) => {
     return (
-      arcdata[i].filter(value => valueIsSelected(value)).length /
-      (arcdata[i].length - 1)
+            arcdata[i].filter(value => valueIsSelected(value)).length /
+            (arcdata[i].length - 1)
     );
   };
 
@@ -261,7 +261,7 @@
       }
     }
     return (
-      column.filter(value => valueIsSelected(value)).length / column.length
+            column.filter(value => valueIsSelected(value)).length / column.length
     );
   };
 
@@ -270,7 +270,7 @@
     const samplingVariable = +e.target.getAttribute("column");
     if (selectedSamplingVariables.includes(samplingVariable)) {
       selectedSamplingVariables = selectedSamplingVariables.filter(
-        v => v !== samplingVariable
+              v => v !== samplingVariable
       );
     } else {
       selectedSamplingVariables.push(samplingVariable);
@@ -283,7 +283,7 @@
     const measurementVariable = +e.target.getAttribute("column");
     if (selectedMeasurementVariables.includes(measurementVariable)) {
       selectedMeasurementVariables = selectedMeasurementVariables.filter(
-        v => v !== measurementVariable
+              v => v !== measurementVariable
       );
     } else {
       selectedMeasurementVariables.push(measurementVariable);
@@ -300,20 +300,20 @@
 
   const toggleFocus = hoveredPair => {
     select(foreground)
-      .selectAll("path")
-      .each(function() {
-        if (
-          hoveredPair &&
-          hoveredPair[0] === +select(this).attr("i") &&
-          hoveredPair[1] === +select(this).attr("j")
-        ) {
-          select(this)
-            .raise()
-            .classed("focus", true);
-        } else {
-          select(this).classed("focus", false);
-        }
-      });
+            .selectAll("path")
+            .each(function() {
+              if (
+                      hoveredPair &&
+                      hoveredPair[0] === +select(this).attr("i") &&
+                      hoveredPair[1] === +select(this).attr("j")
+              ) {
+                select(this)
+                        .raise()
+                        .classed("focus", true);
+              } else {
+                select(this).classed("focus", false);
+              }
+            });
   };
   $: toggleFocus(hoveredPair);
 </script>
@@ -369,27 +369,27 @@
 </style>
 
 <g
-  class="outerRing"
-  transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
+        class="outerRing"
+        transform="translate({x * $canvasWidth}, {y * $canvasHeight})">
 
   <g class="marginConvention" transform="translate({margin.left},{margin.top})">
     <g class="background" />
     <g
-      class="foreground"
-      bind:this={foreground}
-      on:mouseover={handlePathMouseOver}
-      on:mouseout={() => {
+            class="foreground"
+            bind:this={foreground}
+            on:mouseover={handlePathMouseOver}
+            on:mouseout={() => {
         hoveredPair = null;
       }}>
       {#each columns as iName, i}
         {#each columns as jName, j}
           {#if i !== j && arcdata[i][j] !== null}
             <path
-              {i}
-              {j}
-              class={handlePathClass(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
-              stroke={handlePathColor(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
-              d={drawEdge(columns[i], columns[j], arcdata[i][j], samplingScale, measurementScale, ratioScale)} />
+                    {i}
+                    {j}
+                    class={handlePathClass(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
+                    stroke={handlePathColor(i, j, arcdata[i][j], selectedRatioInterval, selectedSamplingVariables, selectedMeasurementVariables)}
+                    d={drawEdge(columns[i], columns[j], arcdata[i][j], samplingScale, measurementScale, ratioScale)} />
           {/if}
         {/each}
       {/each}
@@ -398,37 +398,37 @@
     <g class="layer1">
       <g class="sampling-axis">
         <text class="axis-name" x={0} y={-10}>
-          {lang === 'pt' ? 'Variávies com Dados Perdidos':'Variables With Missing Values'}
+          {lang === 'pt' ? 'Variávies com Dados Faltantes':'Variables With Missing Values'}
         </text>
         <g class="samplingAxis" on:click={handleSamplingVariableClick}>
           {#each columns as columnMissing, i}
             {#if columnsWithMissingValues.includes(columnMissing)}
               <g
-                class="samplingAxisElements"
-                opacity={selectedSamplingVariables.includes(i) || selectedSamplingVariables.length === 0 ? 1 : 0.2}>
+                      class="samplingAxisElements"
+                      opacity={selectedSamplingVariables.includes(i) || selectedSamplingVariables.length === 0 ? 1 : 0.2}>
                 <rect
-                  class="axis-tick"
-                  x={-10}
-                  y={samplingScale(columnMissing)}
-                  width={10}
-                  height={samplingScale.bandwidth()}></rect>
+                        class="axis-tick"
+                        x={-10}
+                        y={samplingScale(columnMissing)}
+                        width={10}
+                        height={samplingScale.bandwidth()}></rect>
                 {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
                   <rect
-                    fill="black"
-                    x={-10}
-                    y={samplingScale(columnMissing)}
-                    width={10}
-                    height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)}></rect>
+                          fill="black"
+                          x={-10}
+                          y={samplingScale(columnMissing)}
+                          width={10}
+                          height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)}></rect>
                 {/if}
                 <text
-                  class="axis-tick"
-                  cursor="pointer"
-                  column={i}
-                  column-name={columnMissing}
-                  x={-12}
-                  y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
-                  text-anchor="end"
-                  alignment-baseline="middle">
+                        class="axis-tick"
+                        cursor="pointer"
+                        column={i}
+                        column-name={columnMissing}
+                        x={-12}
+                        y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
+                        text-anchor="end"
+                        alignment-baseline="middle">
                   {columnMissing + ` (${binsMatrix[i][i][binsMatrix[i][i].length - 1].count})`}
                 </text>
               </g>
@@ -438,36 +438,36 @@
 
       </g>
       <g
-        class="measurement-axis"
-        on:click={handleMeasurementVariableClick}
-        transform="translate({innerWidth},0)">
+              class="measurement-axis"
+              on:click={handleMeasurementVariableClick}
+              transform="translate({innerWidth},0)">
         <text class="axis-name" x={+5} y={-10}>{lang === 'pt' ? 'Todas as Variáveis':'All Variables'}</text>
         {#each columns as column, j}
           <g
-            class="samplingAxisElements"
-            opacity={selectedMeasurementVariables.includes(j) || selectedMeasurementVariables.length === 0 ? 1 : 0.2}>
+                  class="samplingAxisElements"
+                  opacity={selectedMeasurementVariables.includes(j) || selectedMeasurementVariables.length === 0 ? 1 : 0.2}>
             <rect
-              class="axis-tick"
-              x={0}
-              y={measurementScale(column)}
-              width={10}
-              height={measurementScale.bandwidth()} />
+                    class="axis-tick"
+                    x={0}
+                    y={measurementScale(column)}
+                    width={10}
+                    height={measurementScale.bandwidth()} />
             {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
               <rect
-                fill="black"
-                x={0}
-                y={measurementScale(column)}
-                width={10}
-                height={measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval)} />
+                      fill="black"
+                      x={0}
+                      y={measurementScale(column)}
+                      width={10}
+                      height={measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval)} />
             {/if}
             <text
-              class="axis-tick"
-              cursor="pointer"
-              column={j}
-              x={12}
-              y={measurementScale(column) + measurementScale.bandwidth() / 2}
-              text-anchor="start"
-              alignment-baseline="middle">
+                    class="axis-tick"
+                    cursor="pointer"
+                    column={j}
+                    x={12}
+                    y={measurementScale(column) + measurementScale.bandwidth() / 2}
+                    text-anchor="start"
+                    alignment-baseline="middle">
               {column}
             </text>
           </g>
@@ -478,10 +478,10 @@
         <rect class="axis-tick" x={-20} width={40} y={0} height={innerHeight} />
         {#each [5, 6,7, 7.5,8,8.5,9,9.2,9.3,9.4,9.5,9.6,9.7,9.8,9.9] as i}
           <text
-            class="axis-tick"
-            text-anchor="middle"
-            alignment-baseline="middle"
-            y={ratioScale(i * 10)}>
+                  class="axis-tick"
+                  text-anchor="middle"
+                  alignment-baseline="middle"
+                  y={ratioScale(i * 10)}>
             {(i * 10).toFixed(0) + '%'}
           </text>
         {/each}
@@ -493,11 +493,11 @@
         </g>
         {#each range(1000) as i}
           <rect
-            y={margin.bottom / 6}
-            x={i * ((innerWidth - 100) / 1000)}
-            width={(innerWidth - 100) / 1000 + 1}
-            height={margin.bottom / 5}
-            fill={interpolate(i / 1000)} ></rect>
+                  y={margin.bottom / 6}
+                  x={i * ((innerWidth - 100) / 1000)}
+                  width={(innerWidth - 100) / 1000 + 1}
+                  height={margin.bottom / 5}
+                  fill={interpolate(i / 1000)} ></rect>
         {/each}
 
 
@@ -511,32 +511,32 @@
         </rect>
 
         <rect
-          y={margin.bottom / 6}
-          x={0}
-          stroke="black"
-          stroke-width="1"
-          width={innerWidth - 100}
-          height={margin.bottom / 5}
-          fill="none"></rect>
+                y={margin.bottom / 6}
+                x={0}
+                stroke="black"
+                stroke-width="1"
+                width={innerWidth - 100}
+                height={margin.bottom / 5}
+                fill="none"></rect>
         <g
-          class="color-axis"
-          bind:this={colorAxisDOM}
-          transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" ></g>
+                class="color-axis"
+                bind:this={colorAxisDOM}
+                transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" ></g>
         <text
-          class="axis-name"
-          alignment-baseline="hanging"
-          x={(innerWidth - 100) * 0.5}
-          y={margin.bottom / 6 + margin.bottom / 2}>
+                class="axis-name"
+                alignment-baseline="hanging"
+                x={(innerWidth - 100) * 0.5}
+                y={margin.bottom / 6 + margin.bottom / 2}>
           <!-- 10 is for print mode -->
-          {lang === 'pt' ? 'Co-ocorrência de Dados Perdidos':'Co-Missing Occurrence Rate'}
+          {lang === 'pt' ? 'Co-ocorrência de Dados Faltantes':'Co-Missing Occurrence Rate'}
         </text>
 
         <text
-          text-anchor="start"
-          alignment-baseline="hanging"
-          font-size="14px"
-          x={0}
-          y={-5}>
+                text-anchor="start"
+                alignment-baseline="hanging"
+                font-size="14px"
+                x={0}
+                y={-5}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? '< Pouco':'< Too little'}
         </text>
@@ -559,11 +559,11 @@
           {lang === 'pt' ? 'Ocorrência Natural':'Natural occurrence'}
         </text>
         <text
-          text-anchor="end"
-          alignment-baseline="hanging"
-          font-size="14px"
-          x={innerWidth - 100}
-          y={-5}>
+                text-anchor="end"
+                alignment-baseline="hanging"
+                font-size="14px"
+                x={innerWidth - 100}
+                y={-5}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? 'Muito >':'Too Much >'}
         </text>

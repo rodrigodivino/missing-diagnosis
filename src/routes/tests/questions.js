@@ -7,10 +7,10 @@ export let questions = [
           proposed: ['./tests/q1/Q1-i.proposed.svg'],
         },
         options: [
-            {id: 'a', optionText: 'Quando os valores da Dimensão 6 estão perdidos, os valores da Dimensão 3 costumam ser baixos.'},
-            {id: 'b', optionText: 'Quando os valores da Dimensão 6 estão perdidos, os valores da Dimensão 3 costumam ser medianos.'},
-            {id: 'c', optionText: 'Quando os valores da Dimensão 6 estão perdidos, os valores da Dimensão 3 costumam ser altos.'},
-            {id: 'd', optionText: 'Não há relação entre os valores perdidos da Dimensão 6 e os valores da Dimensão 3.'}
+            {id: 'a', optionText: 'Quando não há valores na Dimensão 6, os valores da Dimensão 3 costumam ser baixos.'},
+            {id: 'b', optionText: 'Quando não há valores na Dimensão 6, os valores da Dimensão 3 costumam ser medianos.'},
+            {id: 'c', optionText: 'Quando não há valores na Dimensão 6, os valores da Dimensão 3 costumam ser altos.'},
+            {id: 'd', optionText: 'Não há relação entre os valores faltantes da Dimensão 6 e os valores da Dimensão 3.'}
         ],
     },
     {
