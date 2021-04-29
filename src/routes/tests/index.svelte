@@ -82,6 +82,10 @@
         group = 'nullity';
     }
 
+    function handleTutorialReady() {
+        instructionsMode = false;
+    }
+
     let qualitativeForm = null;
 </script>
 
@@ -215,14 +219,7 @@
                 <button class="group-button N-button" on:click={handleNGroupClick}>N</button>
             {/if}
         {:else}
-            {#if group === 'proposed'}
-                <Tutorial url1="https://www.youtube.com/embed/a3lcGnMhvsA" url2="https://www.youtube.com/embed/a3lcGnMhvsA"/>
-            {:else if group === 'nullity'}
-                <Tutorial url1="https://www.youtube.com/embed/a3lcGnMhvsA" url2="https://www.youtube.com/embed/a3lcGnMhvsA"/>
-            {:else}
-                <h1>Algo deu errado. Por favor em contato pelo e-mail rodrigodivino.ufpa@gmail.com e informe o que aconteceu</h1>
-            {/if}
-
+            <Tutorial on:ready={handleTutorialReady} url1={'proposed' ? "https://www.youtube.com/embed/a3lcGnMhvsA" : "https://www.youtube.com/embed/a3lcGnMhvsA" } url2={'proposed' ? "https://www.youtube.com/embed/a3lcGnMhvsA" : "https://www.youtube.com/embed/a3lcGnMhvsA" } />
         {/if}
     {:else}
         {#if testComplete}

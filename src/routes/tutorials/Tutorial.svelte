@@ -1,6 +1,13 @@
 <script>
     export let url1;
     export let url2;
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+
+    function handleReadyClick() {
+        dispatch('ready');
+    }
 </script>
 
 <style>
@@ -37,4 +44,4 @@
     <iframe width="560" height="315" src={url2} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
-<button class="finish-tutorial"> Assisti aos vídeos e estou pronto para utilizar a visualização. </button>
+<button class="finish-tutorial" on:click={handleReadyClick}> Assisti aos vídeos e estou pronto para utilizar a visualização. </button>
