@@ -54,11 +54,12 @@
 
     button.finish-button {
         margin-top: 2px;
+        margin-bottom: 20px;
     }
 
     form.options {
         margin-top: 20px;
-        margin-bottom: 50px;
+        margin-bottom: 20px;
     }
 
 </style>
@@ -66,22 +67,12 @@
 <header>
 
 
-    {#if !active}
-        <div class="button-wrapper">
-            <p>Leia o enunciado e as alternativas para ter uma idéia da questão.</p>
-            <p>Quando estiver pronto, clique em "começar" para mostrar a visualização.</p>
-        </div>
-    {/if}
+
 
     <h2>{`${index}/${maxIndex} - ${questionText}`}</h2>
 
-    {#if active}
-        <div class="image-wrapper">
-            {#each questionImages as questionImage}
-                <img src={questionImage} width="100%"/>
-            {/each}
-        </div>
-    {/if}
+
+
     <form class="options">
         {#each options as option}
             <input bind:group={answer} type="radio" id={option.id} name="answer" value={option.id}>
@@ -91,13 +82,31 @@
 
     {#if !active}
         <div class="button-wrapper">
-            <button type="button" class="active-button" on:click={handleActiveClick}>Começar</button>
+            <p>Leia o enunciado e as alternativas para ter uma idéia da questão.</p>
+            <p>Quando estiver pronto, clique em "começar" para mostrar a visualização.</p>
         </div>
     {/if}
 
 
+    {#if !active}
+        <div class="button-wrapper">
+            <button type="button" class="active-button" on:click={handleActiveClick}>Começar</button>
+        </div>
+    {/if}
+
     {#if active && answer}
         <button type="button" class="finish-button" on:click={handleFinishClick}>Confirmar e continuar</button>
     {/if}
+
+    {#if active}
+        <div class="image-wrapper">
+            {#each questionImages as questionImage}
+                <img src={questionImage} width="100%"/>
+            {/each}
+        </div>
+    {/if}
+
+
+
 
 </header>
