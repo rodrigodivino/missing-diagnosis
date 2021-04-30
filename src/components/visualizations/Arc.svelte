@@ -47,7 +47,7 @@
   const interpolate = i => {
     return scaleLinear().domain([0,0.05,0.4,0.6,0.95,1]).range([interpolateRdYlBu(1), interpolateRdYlBu(0.8), '#9C9C9C','#9C9C9C' ,interpolateRdYlBu(0.2), interpolateRdYlBu(0.0)])(i)
   };
-  const margin = { top: 50, bottom: 75, left: 150, right: 120 };
+  const margin = { top: 50, bottom: 150, left: 200, right: 160 };
   $: innerWidth = width * $canvasWidth - margin.left - margin.right;
   $: innerHeight = height * $canvasHeight - margin.top - margin.bottom;
 
@@ -126,15 +126,15 @@
     p.bezierCurveTo(
             sourceX + xDisplacement,
             sourceY,
-            valueX - 20 - xDisplacement,
+            valueX - 25 - xDisplacement,
             valueY,
-            valueX - 20,
+            valueX -25,
             valueY
     );
 
-    p.moveTo(valueX + 20, valueY);
+    p.moveTo(valueX + 25, valueY);
     p.bezierCurveTo(
-            valueX + 20 + xDisplacement,
+            valueX + 25 + xDisplacement,
             valueY,
             targetX - xDisplacement,
             targetY,
@@ -176,7 +176,7 @@
           value >= Math.min(...selectedRatioInterval);
   let ratioBrushDOM;
   $: ratioBrush = brushY()
-          .extent([[innerWidth / 2 - 18, -2], [innerWidth / 2 + 18, innerHeight+2]])
+          .extent([[innerWidth / 2 - 25 + 1, -2], [innerWidth / 2 + 25 - 1, innerHeight+2]])
           .on("brush end", () => {
             if (event.selection) {
               selectedRatioInterval = event.selection.map(ratioScale.invert).map(d => d/100);
@@ -358,7 +358,7 @@
   }
 
   text.axis-tick {
-    font-size: 0.8em;
+    font-size: 16px;
     font-weight: bold;
   }
 
@@ -425,6 +425,7 @@
                         cursor="pointer"
                         column={i}
                         column-name={columnMissing}
+                        font-size="16px"
                         x={-12}
                         y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
                         text-anchor="end"
@@ -474,8 +475,8 @@
         {/each}
       </g>
       <g class="ratio-axis" transform="translate({innerWidth / 2},0)">
-        <text class="axis-name" x={-5} y={-10}>{lang === 'pt' ? 'Probabilidade de MAR':'MAR Likelyhood'}</text>
-        <rect class="axis-tick" x={-20} width={40} y={0} height={innerHeight} />
+        <text class="axis-name" x={0} y={-10}>{lang === 'pt' ? 'Probabilidade de MAR':'MAR Likelyhood'}</text>
+        <rect class="axis-tick" x={-25} width={50} y={0} height={innerHeight} />
         {#each [5, 6,7, 7.5,8,8.5,9,9.2,9.3,9.4,9.5,9.6,9.7,9.8,9.9] as i}
           <text
                   class="axis-tick"
@@ -487,7 +488,7 @@
         {/each}
 
       </g>
-      <g class="color-legend" transform="translate(0,{innerHeight + 10})">
+      <g class="color-legend" transform="translate(0,{innerHeight + margin.bottom * 0.2})">
         <g>
 
         </g>
@@ -524,46 +525,40 @@
                 transform="translate(0,{margin.bottom / 6 + margin.bottom / 5})" ></g>
         <text
                 class="axis-name"
-                alignment-baseline="hanging"
                 x={(innerWidth - 100) * 0.5}
-                y={margin.bottom / 6 + margin.bottom / 2}>
-          <!-- 10 is for print mode -->
+                y={margin.bottom / 6 + margin.bottom / 5 + 25 + 10}>
           {lang === 'pt' ? 'Co-ocorrência de Dados Faltantes':'Co-Missing Occurrence Rate'}
         </text>
 
         <text
                 text-anchor="start"
-                alignment-baseline="hanging"
                 font-size="14px"
                 x={0}
-                y={-5}>
+                y={margin.bottom / 6 - 10}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? '< Pouco':'< Too little'}
         </text>
         <text
                 text-anchor="middle"
-                alignment-baseline="hanging"
                 font-size="14px"
                 x={innerWidth - 75 / 2}
-                y={-5}>
+                y={margin.bottom / 6 - 10}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? 'Não Aplicável':'Not Applicable'}
         </text>
         <text
                 text-anchor="middle"
-                alignment-baseline="hanging"
                 font-size="14px"
                 x={(innerWidth - 100)/2}
-                y={-5}>
+                y={margin.bottom / 6 - 10}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? 'Ocorrência Natural':'Natural occurrence'}
         </text>
         <text
                 text-anchor="end"
-                alignment-baseline="hanging"
                 font-size="14px"
                 x={innerWidth - 100}
-                y={-5}>
+                y={margin.bottom / 6 - 10}>
           <!-- 8 is for print mode -->
           {lang === 'pt' ? 'Muito >':'Too Much >'}
         </text>

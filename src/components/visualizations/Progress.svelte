@@ -26,7 +26,7 @@
     }
 
     text.axis-name {
-        font-size: 1em;
+        font-size: 16px;
     }
 </style>
 

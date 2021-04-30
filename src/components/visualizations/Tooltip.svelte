@@ -81,7 +81,7 @@
 <style>
     text.title {
         text-anchor: middle;
-        font-size: 0.8em;
+        font-size: 16px;
     }
 
     rect.focus {
@@ -119,8 +119,9 @@
             <text
                     alignment-baseline="middle"
                     class="title"
+                    font-size="16px"
                     x={innerWidth / 2}
-                    y={-margin.top / 2}>
+                    y={-margin.top / 2 + 2}>
                 <tspan alignment-baseline="middle" font-weight="bold">
                     {measurementVariable}
                 </tspan>
