@@ -76,7 +76,7 @@
         {#each data.columns as label, i}
             <g opacity={(highlightedLabels.length === 0 || highlightedLabels.includes(label)) ? 1:0.2}>
                 <text on:click={handleLabelClick(event, label)} cursor="pointer"
-                      transform="translate({xScale(label) + xScale.bandwidth() / 2}, -5)rotate(-45)"> {label} </text>
+                     font-size="16px" transform="translate({xScale(label) + xScale.bandwidth() / 2}, -5)rotate(-30)"> {label} </text>
                 <g transform="translate({xScale(label)},0)">
                     <NullityColumn {categoricalColorScale} categorical={data.types[i] === 'Categorical'} data={sortedData}
                                    column={label}
@@ -89,8 +89,8 @@
             {#each range(1000) as i}
                 <rect
                         y={margin.bottom / 6}
-                        x={i * ((innerWidth - 100) / 1000)}
-                        width={(innerWidth - 100) / 1000 + 1}
+                        x={i * ((innerWidth - 150) / 1000)}
+                        width={(innerWidth - 150) / 1000 + 1}
                         height={margin.bottom / 5}
                         fill={legendColorScale(i / 1000)}></rect>
             {/each}
@@ -100,17 +100,16 @@
                     fill="#71706F"
                     height={margin.bottom / 5}
                     stroke="#71706F"
-                    width={75}
-                    x={(innerWidth - 75)}
+                    width={100}
+                    x={(innerWidth - 100)}
                     y={margin.bottom / 6}>
             </rect>
 
             <text
-                    alignment-baseline="hanging"
-                    font-size="0.8em"
+                    font-size="16px"
                     text-anchor="middle"
-                    x={innerWidth - 75 / 2}
-                    y={0}>
+                    x={innerWidth - 100 / 2}
+                    y={10}>
                 <!-- 8 is for print mode -->
                 {lang==='pt'? 'Dado faltante':'Missing Data'}
             </text>
@@ -120,58 +119,53 @@
                     height={margin.bottom / 5}
                     stroke="black"
                     stroke-width="1"
-                    width={innerWidth - 100}
+                    width={innerWidth - 150}
                     x={0}
                     y={margin.bottom / 6}></rect>
 
 
             <text
-                    alignment-baseline="hanging"
-                    font-size="0.8em"
+                    font-size="16px"
                     text-anchor="start"
                     x={0}
-                    y={0}>
+                    y={10}>
                 <!-- 8 is for print mode -->
                 {lang==='pt'? '< Valor baixo':'< Low value'}
             </text>
 
             <text
-                    alignment-baseline="hanging"
-                    font-size="0.8em"
+                    font-size="16px"
                     text-anchor="middle"
                     x={(innerWidth - 100)/2}
-                    y={0}>
+                    y={10}>
                 <!-- 8 is for print mode -->
-                {lang==='pt'? '< Valor mediano':'Medium Value'}
+                {lang==='pt'? 'Valor mediano':'Medium Value'}
             </text>
             <text
-                    alignment-baseline="hanging"
-                    font-size="0.8em"
+                    font-size="16px"
                     text-anchor="end"
-                    x={innerWidth - 100}
-                    y={0}>
+                    x={innerWidth - 150}
+                    y={10}>
                 <!-- 8 is for print mode -->
-                {lang==='pt'? '< Valor alto':'High Value >'}
+                {lang==='pt'? 'Valor alto >':'High Value >'}
             </text>
         </g>
         {#if categoricalLegendsFor}
             <g class="categorical-legend" transform="translate(0,{innerHeight + 50})">
                 <text
-                        alignment-baseline="hanging"
-                        font-size="0.8em"
+                        font-size="16px"
                         text-anchor="start"
                         x={0}
-                        y={15}>
+                        y={15 + 10}>
                     <!-- 8 is for print mode -->
                     {categoricalLegendsFor + ': '}
                 </text>
-                {#each categoricalColorScale.domain() as label, i}
+                {#each categoricalColorScale.domain().filter(d=>d!==null) as label, i}
                     <text
-                            alignment-baseline="hanging"
-                            font-size="0.8em"
+                            font-size="16px"
                             text-anchor="middle"
                             x={(i+1)*200 + 75 / 2}
-                            y={0}>
+                            y={10}>
                         <!-- 8 is for print mode -->
                         {label}
                     </text>
