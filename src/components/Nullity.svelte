@@ -85,7 +85,7 @@
             </g>
         {/each}
         <!--        <rect height={innerHeight} width={innerWidth}></rect>-->
-        <g class="color-legend" transform="translate(0,{innerHeight + 5})">
+        <g class="color-legend" transform="translate(0,{innerHeight + 10})">
             {#each range(1000) as i}
                 <rect
                         y={margin.bottom / 6}
@@ -151,7 +151,7 @@
             </text>
         </g>
         {#if categoricalLegendsFor}
-            <g class="categorical-legend" transform="translate(0,{innerHeight + 50})">
+            <g class="categorical-legend" transform="translate(0,{innerHeight + 60})">
                 <text
                         font-size="16px"
                         text-anchor="start"
