@@ -38,6 +38,7 @@
         display: flex;
         align-content: center;
         justify-content: center;
+        flex-direction: column;
     }
 
     div.button-wrapper {
@@ -57,7 +58,7 @@
 
     form.options {
         margin-top: 20px;
-        margin-bottom: 30px;
+        margin-bottom: 50px;
     }
 
 </style>

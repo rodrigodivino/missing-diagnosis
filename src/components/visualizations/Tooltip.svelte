@@ -47,7 +47,7 @@
             yg.selectAll().remove();
             xg.call(xAxis)
                 .selectAll("text")
-                .attr("font-size", 9)
+                .attr("font-size", 12)
                 .style('shape-rendering', 'crispEdges')
                 .attr("y", 15) // 15 is for print Mode
                 .each(function (t, i) {
@@ -56,7 +56,7 @@
                         select(this)
                             .attr("y", 0) //+5 is for print Mode
                             .attr("x", 5)
-                            .attr("transform", "rotate(55)")
+                            .attr("transform", "translate(0,2)rotate(55)")
                             .attr("text-anchor", "start")
                             .text((tmiss)?(lang==='pt'?'não há':'miss'):t);
                     }
