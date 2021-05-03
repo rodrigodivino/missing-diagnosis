@@ -203,7 +203,7 @@
             <p>Este teste de usabilidade é composto por 14 questões de múltipla escolha. Em cada questão,
                 será pedido que você analise uma visualização ou conjunto de visualizações, e selecione a alternative
                 que
-                mais se assemelha à sua percepção dos dados exibidos</p>
+                mais se assemelha à sua percepção dos dados exibidos.</p>
             <p>Antes de prosseguir, <a
                     href="https://docs.google.com/spreadsheets/d/1UHNYK-Cty8Q8gpMsUXawd98lxwn0mkMhMYj9F9Os7EE/edit?usp=sharing"
                     target=”_blank”> acesse este
@@ -219,7 +219,7 @@
                 <button class="group-button N-button" on:click={handleNGroupClick}>N</button>
             {/if}
         {:else}
-            <Tutorial on:ready={handleTutorialReady} url1={'proposed' ? "https://www.youtube.com/embed/a3lcGnMhvsA" : "https://www.youtube.com/embed/a3lcGnMhvsA" } url2={'proposed' ? "https://www.youtube.com/embed/a3lcGnMhvsA" : "https://www.youtube.com/embed/a3lcGnMhvsA" } />
+            <Tutorial on:ready={handleTutorialReady} url1="https://www.youtube.com/embed/ghnDSykPVWU" url2={(group === 'proposed') ? "https://www.youtube.com/embed/rG3aC6tqSe0" : "https://www.youtube.com/embed/CSLmHuV7X88" } url3={(group === 'proposed') ? "https://www.youtube.com/embed/iUfloxzORXc" : "https://www.youtube.com/embed/9YtdX1Uasvo" } />
         {/if}
     {:else}
         {#if testComplete}
