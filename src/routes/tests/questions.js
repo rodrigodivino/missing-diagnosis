@@ -2,6 +2,7 @@ import {shuffle} from 'd3-array';
 
 const easy = [{
     id: 'Q1-i',
+    answer: 'a',
     questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
     questionImages: {
         nullity: ['./tests/q1/Q1-i.n.svg'],
@@ -25,6 +26,7 @@ const easy = [{
 },
     {
         id: 'Q1-ii',
+        answer: 'b',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q1/Q1-ii.n.svg'],
@@ -48,6 +50,7 @@ const easy = [{
     },
     {
         id: 'Q2-i',
+        answer: 'b',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q2/Q2-i.n.svg'],
@@ -74,6 +77,7 @@ const easy = [{
     },
     {
         id: 'Q2-ii',
+        answer: 'c',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q2/Q2-ii.n.svg'],
@@ -97,6 +101,7 @@ const easy = [{
     },
     {
         id: 'Q7-i',
+        answer: 'b',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q7/Q7-i.n.svg'],
@@ -120,6 +125,7 @@ const easy = [{
     },
     {
         id: 'Q7-ii',
+        answer: 'a',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q7/Q7-ii.n.svg'],
@@ -143,6 +149,7 @@ const easy = [{
     }];
 const medium = [{
     id: 'Q3-i',
+    answer: 'a',
     questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
     questionImages: {
         nullity: ['./tests/q3/Q3-i.n.svg'],
@@ -165,6 +172,7 @@ const medium = [{
 },
     {
         id: 'Q3-ii',
+        answer: 'c',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q3/Q3-ii.n.svg'],
@@ -187,6 +195,7 @@ const medium = [{
     },
     {
         id: 'Q4-i',
+        answer: 'b',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q4/Q4-iA.n.svg', './tests/q4/Q4-iB.n.svg'],
@@ -213,6 +222,7 @@ const medium = [{
     },
     {
         id: 'Q4-ii',
+        answer: 'c',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q4/Q4-iiA.n.svg', './tests/q4/Q4-iiB.n.svg'],
@@ -239,6 +249,7 @@ const medium = [{
     }];
 const hard = [{
     id: 'Q5-i',
+    answer: 'c',
     questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
     questionImages: {
         nullity: ['./tests/q5/Q5-i.n.svg'],
@@ -265,6 +276,7 @@ const hard = [{
 },
     {
         id: 'Q5-ii',
+        answer: 'b',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q5/Q5-ii.n.svg'],
@@ -291,6 +303,7 @@ const hard = [{
     },
     {
         id: 'Q6-i',
+        answer: 'c',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q6/Q6-iA.n.svg', './tests/q6/Q6-iB.n.svg', './tests/q6/Q6-iC.n.svg', './tests/q6/Q6-iD.n.svg'],
@@ -317,6 +330,7 @@ const hard = [{
     },
     {
         id: 'Q6-ii',
+        answer: 'b',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
             nullity: ['./tests/q6/Q6-iiA.n.svg', './tests/q6/Q6-iiB.n.svg', './tests/q6/Q6-iiC.n.svg', './tests/q6/Q6-iiD.n.svg'],
