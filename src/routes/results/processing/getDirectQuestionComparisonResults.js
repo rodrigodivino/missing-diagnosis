@@ -41,7 +41,7 @@ export function getDirectQuestionComparisonResults(results) {
         return {
             question: question.id,
             proposed: processedGroupResult.proposed,
-            nullity: processedGroupResult.proposed,
+            nullity: processedGroupResult.nullity,
         }
     });
 }
