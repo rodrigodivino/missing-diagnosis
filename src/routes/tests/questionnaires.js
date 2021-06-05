@@ -16,7 +16,7 @@ export let questionnaires = [
         id: 'sus4',
     },
     {
-        questionnaireText: 'Achei que os elementos visuais estavam bem integrados',
+        questionnaireText: 'Achei que os elementos visuais foram bem utilizados',
         id: 'sus5',
     },
     {
@@ -28,7 +28,7 @@ export let questionnaires = [
         id: 'sus7',
     },
     {
-        questionnaireText: 'Achei que a visualização é esquisita de se usar',
+        questionnaireText: 'Achei que a visualização é complicada de se usar',
         id: 'sus8',
     },
     {

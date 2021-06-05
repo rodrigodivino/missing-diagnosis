@@ -150,6 +150,36 @@
     <g transform={`translate(${margin.left},${margin.top})`}>
         <g bind:this={errorXAxis} transform={`translate(0,${innerHeight})`}></g>
         <g bind:this={errorYAxis}></g>
+
+        {#each data as datum}
+            <g transform={`translate(${scaleX(datum.question) + scaleX.bandwidth()/2 - segmentPadding},0)`}>
+                <line x1="0" y1={scaleYError(datum.proposed.errorCI[0])} x2="0" y2={scaleYError(datum.proposed.errorCI[1])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <line x1={-segmentWidth} y1={scaleYError(datum.proposed.errorCI[0])} x2={segmentWidth}
+                      y2={scaleYError(datum.proposed.errorCI[0])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <line x1={-segmentWidth} y1={scaleYError(datum.proposed.errorCI[1])} x2={segmentWidth}
+                      y2={scaleYError(datum.proposed.errorCI[1])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <text alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.proposed.errorRate)}
+                      fill={proposedColor}>x</text>
+            </g>
+        {/each}
+
+        {#each data as datum}
+            <g transform={`translate(${scaleX(datum.question) + scaleX.bandwidth()/2 + segmentPadding},0)`}>
+                <line x1="0" y1={scaleYError(datum.nullity.errorCI[0])} x2="0" y2={scaleYError(datum.nullity.errorCI[1])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <line x1={-segmentWidth} y1={scaleYError(datum.nullity.errorCI[0])} x2={segmentWidth}
+                      y2={scaleYError(datum.nullity.errorCI[0])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <line x1={-segmentWidth} y1={scaleYError(datum.nullity.errorCI[1])} x2={segmentWidth}
+                      y2={scaleYError(datum.nullity.errorCI[1])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <text alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.nullity.errorRate)}
+                      fill={nullityColor}>x</text>
+            </g>
+        {/each}
     </g>
 </svg>
 

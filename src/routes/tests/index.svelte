@@ -30,7 +30,7 @@
     $: if (quantitativeComplete) {
         const dateCompleted = new Date().toLocaleString();
         codec.compress({quantitativeData, qualitativeData, dateCompleted, group, userID}).then(result => {
-            compressedResult = result;
+            compressedResult = JSON.stringify({quantitativeData, qualitativeData, dateCompleted, group, userID});
         });
     }
 
@@ -199,27 +199,45 @@
     {#if instructionsMode}
         {#if !group}
             <h1>Teste de Usabilidade de Visualizações de Dados Faltantes</h1>
-            <h2 class="mobile-warn"> Importante: Este teste de usabilidade não é compatível com dispositivos móveis. Certifique-se de estar em um computador ou notebook.</h2>
-            <p>Este teste de usabilidade é composto por 14 questões de múltipla escolha. Em cada questão,
-                será pedido que você analise uma visualização ou conjunto de visualizações, e selecione a alternative
-                que
-                mais se assemelha à sua percepção dos dados exibidos.</p>
-            <p>Antes de prosseguir, <a
+            <h2 class="mobile-warn"> Importante: Este teste de usabilidade não é compatível com dispositivos móveis.
+                Certifique-se de estar em um computador ou notebook.</h2>
+            <ul>
+                <li>Este teste de usabilidade contém 14 questões de múltipla escolha.</li>
+                <li>Em cada questão, você verá uma ou mais imagens de visualizações de dados, junto com alternativas de múltipla escolha
+                </li>
+                <li>Selecione a alternativa que melhor explique os dados apresentados na imagem.</li>
+            </ul>
+
+            <h2 class="mobile-warn"> Importante: Não pule os vídeos, e leia as informações de cada página do teste com
+                calma.</h2>
+
+
+            <h3>Assista o vídeo à seguir, que mostra o procedimento deste teste de usabilidade.</h3>
+
+
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/8tPnX7OPo0Q"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+
+            <h3>Para prosseguir, <a
                     href="https://docs.google.com/spreadsheets/d/1UHNYK-Cty8Q8gpMsUXawd98lxwn0mkMhMYj9F9Os7EE/edit?usp=sharing"
                     target=”_blank”> acesse este
-                link</a> e siga as instruções da planilha. Quando retornar, clique no botão abaixo.</p>
+                link</a> e siga as instruções da planilha. Quando retornar, clique no botão abaixo.</h3>
 
             <button class="planilha-button" on:click={handlePlanilhaClick}> Já acessei a planilha, li as instruções, e
                 voltei
             </button>
 
             {#if planilhaVisited}
-                <p>O meu grupo é:</p>
+                <h3>O meu grupo é:</h3>
                 <button class="group-button P-button" on:click={handlePGroupClick}>P</button>
                 <button class="group-button N-button" on:click={handleNGroupClick}>N</button>
             {/if}
         {:else}
-            <Tutorial on:ready={handleTutorialReady} url1="https://www.youtube.com/embed/ghnDSykPVWU" url2={(group === 'proposed') ? "https://www.youtube.com/embed/rG3aC6tqSe0" : "https://www.youtube.com/embed/CSLmHuV7X88" } url3={(group === 'proposed') ? "https://www.youtube.com/embed/iUfloxzORXc" : "https://www.youtube.com/embed/9YtdX1Uasvo" } />
+            <Tutorial on:ready={handleTutorialReady} url1="https://www.youtube.com/embed/ghnDSykPVWU"
+                      url2={(group === 'proposed') ? "https://www.youtube.com/embed/rG3aC6tqSe0" : "https://www.youtube.com/embed/CSLmHuV7X88" }
+                      url3={(group === 'proposed') ? "https://www.youtube.com/embed/iUfloxzORXc" : "https://www.youtube.com/embed/9YtdX1Uasvo" }/>
         {/if}
     {:else}
         {#if testComplete}
@@ -277,7 +295,7 @@
                 {:else}
                     <p>Quando terminar de marcar as respostas, clique no botão abaixo:</p>
                 {/if}
-                <button class="qualitative-finish" on:click={handleSaveClick}> Salvar Respostas</button>
+                <button class="qualitative-finish" on:click={handleSaveClick}> Continuar</button>
             {:else}
                 {#each questions as question,i}
                     {#if i === index}

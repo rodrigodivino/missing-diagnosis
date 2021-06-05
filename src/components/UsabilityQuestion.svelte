@@ -41,6 +41,10 @@
         flex-direction: column;
     }
 
+    .inactive {
+        opacity: 0;
+    }
+
     div.button-wrapper {
         min-width: 300px;
         min-height: 100px;
@@ -67,10 +71,7 @@
 <header>
 
 
-
-
     <h2>{`${index}/${maxIndex} - ${questionText}`}</h2>
-
 
 
     <form class="options">
@@ -98,15 +99,11 @@
         <button type="button" class="finish-button" on:click={handleFinishClick}>Confirmar e continuar</button>
     {/if}
 
-    {#if active}
-        <div class="image-wrapper">
-            {#each questionImages as questionImage}
-                <img src={questionImage} width="100%"/>
-            {/each}
-        </div>
-    {/if}
-
-
+    <div class="image-wrapper" class:inactive={!active}>
+        {#each questionImages as questionImage}
+            <img src={questionImage} width="100%"/>
+        {/each}
+    </div>
 
 
 </header>
