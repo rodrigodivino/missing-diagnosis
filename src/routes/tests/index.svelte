@@ -29,8 +29,8 @@
     })
     $: if (quantitativeComplete) {
         const dateCompleted = new Date().toLocaleString();
-        codec.compress({quantitativeData, qualitativeData, dateCompleted, group, userID}).then(result => {
-            compressedResult = JSON.stringify({quantitativeData, qualitativeData, dateCompleted, group, userID});
+        codec.compress({quantitativeData, qualitativeData, dateCompleted, group}).then(result => {
+            compressedResult = JSON.stringify({quantitativeData, qualitativeData, dateCompleted, group});
         });
     }
 
@@ -204,20 +204,21 @@
                 Certifique-se de estar em um computador ou notebook.</h2>
             <ul>
                 <li>Este teste de usabilidade contém 14 questões de múltipla escolha.</li>
-                <li>Em cada questão, você verá uma ou mais imagens de visualizações de dados, junto com alternativas de múltipla escolha
+                <li>Em cada questão, você verá uma ou mais imagens de visualizações de dados, e um conjunto com alternativas de múltipla escolha.
                 </li>
-                <li>Selecione a alternativa que melhor explique os dados apresentados na imagem.</li>
+                <li>Em cada questão, selecione a alternativa que melhor explique os dados apresentados na imagem.</li>
                 <li>O teste dura cerca de 30 minutos.</li>
+                <li>Estamos testando a visualização, e não você! não há respostas certas ou erradas.</li>
             </ul>
 
             <h2 class="mobile-warn"> Importante: Não pule os vídeos, e leia as informações de cada página do teste com
                 calma.</h2>
 
 
-            <h3>Assista o vídeo à seguir, que mostra o procedimento deste teste de usabilidade.</h3>
+            <h3>Assista o vídeo à seguir, que demonstra o procedimento completo deste teste de usabilidade.</h3>
 
 
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/8tPnX7OPo0Q"
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/zSX0nXWKgfs"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
@@ -226,6 +227,7 @@
                     href="https://docs.google.com/spreadsheets/d/1UHNYK-Cty8Q8gpMsUXawd98lxwn0mkMhMYj9F9Os7EE/edit?usp=sharing"
                     target=”_blank”> acesse este
                 link</a> e siga as instruções da planilha. Quando retornar, clique no botão abaixo.</h3>
+
 
             <button class="planilha-button" on:click={handlePlanilhaClick}> Já acessei a planilha, li as instruções, e
                 voltei
@@ -237,9 +239,9 @@
                 <button class="group-button N-button" on:click={handleNGroupClick}>N</button>
             {/if}
         {:else}
-            <Tutorial on:ready={handleTutorialReady} url1="https://www.youtube.com/embed/ghnDSykPVWU"
-                      url2={(group === 'proposed') ? "https://www.youtube.com/embed/rG3aC6tqSe0" : "https://www.youtube.com/embed/CSLmHuV7X88" }
-                      url3={(group === 'proposed') ? "https://www.youtube.com/embed/iUfloxzORXc" : "https://www.youtube.com/embed/9YtdX1Uasvo" }/>
+            <Tutorial on:ready={handleTutorialReady} url1="https://www.youtube.com/embed/tremKl7AFK8"
+                      url2={(group === 'proposed') ? "https://www.youtube.com/embed/CTSj3WZtrcE" : "https://www.youtube.com/embed/a717CoK6Kng" }
+                      url3={(group === 'proposed') ? "https://www.youtube.com/embed/bxCIW4HtZkM" : "https://www.youtube.com/embed/O8rTLRKxsK0" }/>
         {/if}
     {:else}
         {#if testComplete}
@@ -248,6 +250,9 @@
                     <h1> Para finalizar:</h1>
                     <h2> Envie o seguinte código para e-mail "rodrigodivino.ufpa@gmail.com" com o assunto "Teste de
                         Usabilidade"</h2>
+                    <h3>Os dados contém informações apenas sobre as questões do teste.
+                        Ao enviar, você concorda que membros do LABVIS analisem esses dados internamente para melhorar o design da visualização.
+                    </h3>
                     <label for="result"></label>
                     <textarea bind:this={resultTextArea} readonly id='result'>{compressedResult}</textarea>
                     <button class="copy-button" on:click={handleCopyClick}>Copiar para Área de Transferência</button>
