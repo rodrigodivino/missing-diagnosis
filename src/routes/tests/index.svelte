@@ -164,8 +164,9 @@
     }
 
     button.copy-button {
-        margin-top: 5px;
         bottom: 10px;
+        max-width: 500px;
+        margin: 5px auto;
     }
 
     form .likert li label {
@@ -206,6 +207,7 @@
                 <li>Em cada questão, você verá uma ou mais imagens de visualizações de dados, junto com alternativas de múltipla escolha
                 </li>
                 <li>Selecione a alternativa que melhor explique os dados apresentados na imagem.</li>
+                <li>O teste dura cerca de 30 minutos.</li>
             </ul>
 
             <h2 class="mobile-warn"> Importante: Não pule os vídeos, e leia as informações de cada página do teste com

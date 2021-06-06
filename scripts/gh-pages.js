@@ -1,5 +1,7 @@
-import {EMAIL} from "../secrets/EMAIL";
-import {NAME} from "../secrets/NAME";
+// import {EMAIL} from "../secrets/EMAIL";
+// import {NAME} from "../secrets/NAME";
+
+const {EMAIL, NAME} = require('../secrets/SECRETS.js');
 
 var ghpages = require('gh-pages');
 
