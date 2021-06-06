@@ -209,6 +209,7 @@
                 <li>Em cada questão, selecione a alternativa que melhor explique os dados apresentados na imagem.</li>
                 <li>O teste dura cerca de 30 minutos.</li>
                 <li>Estamos testando a visualização, e não você! não há respostas certas ou erradas.</li>
+                <li>Não retroceda páginas, ou seu progresso será perdido. Após iniciar o teste, siga até o final.</li>
             </ul>
 
             <h2 class="mobile-warn"> Importante: Não pule os vídeos, e leia as informações de cada página do teste com
