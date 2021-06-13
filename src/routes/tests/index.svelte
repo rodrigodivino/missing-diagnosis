@@ -87,6 +87,17 @@
     }
 
     let qualitativeForm = null;
+
+    function sendMail() {
+        const answers = resultTextArea.value
+
+        var link = "mailto:rodrigodivino.ufpa@gmail.com?"
+            + "&subject=" + encodeURIComponent("Teste de Usabilidade")
+            + "&body=" + encodeURIComponent(answers)
+        ;
+
+        window.open(link, '_blank').focus();
+    }
 </script>
 
 <style>
@@ -164,6 +175,12 @@
     }
 
     button.copy-button {
+        bottom: 10px;
+        max-width: 500px;
+        margin: 5px auto;
+    }
+
+    button.send-email-button {
         bottom: 10px;
         max-width: 500px;
         margin: 5px auto;
@@ -257,6 +274,9 @@
                     <label for="result"></label>
                     <textarea bind:this={resultTextArea} readonly id='result'>{compressedResult}</textarea>
                     <button class="copy-button" on:click={handleCopyClick}>Copiar para Área de Transferência</button>
+
+                    <p>Envies os resultados através de qualquer cliente e-mail. O botão abaixo é um atalho para abrir o cliente padrão com o e-mail pronto para envio.</p>
+                    <button class="send-email-button" on:click={sendMail}>Abrir Cliente de e-mail</button>
 
                     <button class="email-confirmation" on:click={handleEmailClick}>Ok, já enviei o e-mail.</button>
 
