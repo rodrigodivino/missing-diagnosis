@@ -18,6 +18,8 @@
     let startTime = null;
     let elapsedTime = null;
 
+    $: console.log(id);
+
     function handleActiveClick() {
         startTime = new Date().getTime();
         active = true;
