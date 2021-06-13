@@ -4,6 +4,7 @@
     const dispatch = createEventDispatcher();
 
     export let id;
+    export let group;
     export let questionText;
     export let questionImages;
     export let options;
@@ -66,13 +67,22 @@
         margin-bottom: 20px;
     }
 
+    h2.mobile-warn {
+        color: firebrick;
+    }
+
 </style>
 
 <header>
 
 
     <h2>{`${index}/${maxIndex} - ${questionText}`}</h2>
-
+    {#if group === 'nullity' && id.includes('Q6')}
+        <h2 class="mobile-warn">ATENÇÃO: Esta questão possui 5 imagens. Use a barra de rolagem para ver todas.</h2>
+    {/if}
+    {#if group === 'nullity' && id.includes('Q4')}
+        <h2 class="mobile-warn">ATENÇÃO: Esta questão possui 2 imagens. Use a barra de rolagem para ver todas.</h2>
+    {/if}
 
     <form class="options">
         {#each options as option}

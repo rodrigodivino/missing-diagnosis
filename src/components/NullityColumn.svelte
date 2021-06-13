@@ -16,7 +16,7 @@
 
     function getColor(datum) {
         if (datum[column] === null) {
-            return '#71706F'
+            return 'firebrick'
         }
         return colorScale(datum[column])
     }

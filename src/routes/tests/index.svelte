@@ -307,7 +307,7 @@
             {:else}
                 {#each questions as question,i}
                     {#if i === index}
-                        <UsabilityQuestion index={index+1} maxIndex={questions.length}
+                        <UsabilityQuestion group={group} index={index+1} maxIndex={questions.length}
                                            id={question.id} on:complete={handleQuestionComplete}
                                            options={question.options}
                                            questionImages={question.questionImages[group]}

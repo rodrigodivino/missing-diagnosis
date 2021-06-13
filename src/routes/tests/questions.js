@@ -306,7 +306,7 @@ const hard = [{
         answer: 'c',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
-            nullity: ['./tests/q6/Q6-iA.n.svg', './tests/q6/Q6-iB.n.svg', './tests/q6/Q6-iC.n.svg', './tests/q6/Q6-iD.n.svg'],
+            nullity: ['./tests/q6/Q6-iMAIN.n.svg', './tests/q6/Q6-iA.n.svg', './tests/q6/Q6-iB.n.svg', './tests/q6/Q6-iC.n.svg', './tests/q6/Q6-iD.n.svg'],
             proposed: ['./tests/q6/Q6-i.p.svg'],
         },
         options: [
@@ -333,7 +333,7 @@ const hard = [{
         answer: 'b',
         questionText: 'Qual alternativa parece descrever melhor os dados visualizados?',
         questionImages: {
-            nullity: ['./tests/q6/Q6-iiA.n.svg', './tests/q6/Q6-iiB.n.svg', './tests/q6/Q6-iiC.n.svg', './tests/q6/Q6-iiD.n.svg'],
+            nullity: ['./tests/q6/Q6-iiMAIN.n.svg' ,'./tests/q6/Q6-iiA.n.svg', './tests/q6/Q6-iiB.n.svg', './tests/q6/Q6-iiC.n.svg', './tests/q6/Q6-iiD.n.svg'],
             proposed: ['./tests/q6/Q6-ii.p.svg'],
         },
         options: [
