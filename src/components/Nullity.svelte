@@ -63,7 +63,7 @@
     $: xScale = scaleBand().domain(data.columns).range([0, innerWidth]).padding(0.05)
     $: rectHeight = innerHeight / data.length;
 
-    $: categoricalColorScale = scaleOrdinal().domain([...new Set(categoricalSortedData.map(d => d[categoricalLegendsFor]))]).range([...schemeSet3, ...schemeSet2, ...schemeSet1])
+    $: categoricalColorScale = scaleOrdinal().domain([...new Set(categoricalSortedData.map(d => d[categoricalLegendsFor]))]).range([...schemeSet3.map(d=>d==='#fb8072'?'#9c755f':d), ...schemeSet2, ...schemeSet1])
     $: legendColorScale = scaleLinear().domain([0, 1]).range(['white', 'steelblue'])
 </script>
 
@@ -97,9 +97,9 @@
 
 
             <rect
-                    fill="#71706F"
+                    fill="firebrick"
                     height={margin.bottom / 5}
-                    stroke="#71706F"
+                    stroke="firebrick"
                     width={100}
                     x={(innerWidth - 100)}
                     y={margin.bottom / 6}>
