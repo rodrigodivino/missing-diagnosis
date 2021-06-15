@@ -158,11 +158,11 @@ const medium = [{
     options: [
         {
             id: 'a',
-            optionText: 'Quando há valores faltantes na Dimensão 2, há muitos valores faltando na Dimensão 5.'
+            optionText: 'Quando há valores faltantes na Dimensão 2, os valores da Dimensão 5 costumam estar faltando.'
         },
         {
             id: 'b',
-            optionText: 'Quando há valores faltantes na Dimensão 2, há poucos valores faltando na Dimensão 5.'
+            optionText: 'Quando há valores faltantes na Dimensão 2, os valores da Dimensão 5 costumam estar presentes.'
         },
         {
             id: 'c',
@@ -181,11 +181,11 @@ const medium = [{
         options: [
             {
                 id: 'a',
-                optionText: 'Quando há valores faltantes na Dimensão 4, há muitos valores faltando na Dimensão 2.'
+                optionText: 'Quando há valores faltantes na Dimensão 4, os valores da Dimensão 2 costumam estar faltando.'
             },
             {
                 id: 'b',
-                optionText: 'Quando há valores faltantes na Dimensão 4, há poucos valores faltando na Dimensão 2.'
+                optionText: 'Quando há valores faltantes na Dimensão 4, os valores da Dimensão 2 costumam estar presentes.'
             },
             {
                 id: 'c',
