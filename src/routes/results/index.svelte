@@ -24,8 +24,7 @@
     })
     directQuestionComparisonResults = getDirectQuestionComparisonResults(results)
     hypothesisConfirmationResults = getHypothesisConfirmationResults(results)
-    hypothesisComparisonResults = getHypothesisComparisonResults(results)
-    // SUSQuestionnaireResults = getSUSQuestionnaireResults(MOCK_RESULTS);
+    // SUSQuestionnaireResults = getSUSQuestionnaireResults(results);
 
     console.log('directQuestionComparisonResults', directQuestionComparisonResults)
 </script>
@@ -33,7 +32,6 @@
 <script>
     import DirectQuestionComparison from "./sections/DirectQuestionComparison.svelte";
     import HypothesisConfirmation from "./sections/HypothesisConfirmation.svelte";
-    import HypothesisComparison from "./sections/HypothesisComparison.svelte";
     import SUSQuestionnaire from "./sections/SUSQuestionnaire.svelte";
 
 </script>
@@ -59,9 +57,6 @@
 
     <h3>Hypothesis Confirmations</h3>
     <HypothesisConfirmation data={hypothesisConfirmationResults}/>
-
-<!--    <h3>Hypothesis Comparisons</h3>-->
-<!--    <HypothesisComparison data={hypothesisComparisonResults}/>-->
 
 <!--    <h2> Qualitative </h2>-->
 

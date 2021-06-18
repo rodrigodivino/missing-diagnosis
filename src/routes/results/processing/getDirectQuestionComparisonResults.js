@@ -4,8 +4,9 @@ import {resample} from "../../../utils/resample";
 import {questionOrder} from "../../tests/questionOrder";
 
 function getErrorRates(errors) {
-    return 1 - errors.filter(d=>d).length / errors.length
+    return errors.filter(d=>!d).length / errors.length
 }
+
 export function getDirectQuestionComparisonResults(results) {
     const ALPHA = 0.05;
     return questions.sort((a,b) => ascending(questionOrder.indexOf(a.id), questionOrder.indexOf(b.id))).map(question => {
