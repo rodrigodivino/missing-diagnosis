@@ -15,11 +15,11 @@ const easy = [{
         },
         {
             id: 'b',
-            optionText: 'Quando há valores faltantes na na Dimensão 6, os valores da Dimensão 3 costumam ser medianos.'
+            optionText: 'Quando há valores faltantes na Dimensão 6, os valores da Dimensão 3 costumam ser medianos.'
         },
         {
             id: 'c',
-            optionText: 'Quando há valores faltantes na na Dimensão 6, os valores da Dimensão 3 costumam ser altos.'
+            optionText: 'Quando há valores faltantes na Dimensão 6, os valores da Dimensão 3 costumam ser altos.'
         },
         {id: 'd', optionText: 'Não há relação entre os valores faltantes da Dimensão 6 e os valores da Dimensão 3.'}
     ],
@@ -35,15 +35,15 @@ const easy = [{
         options: [
             {
                 id: 'a',
-                optionText: 'Quando há valores faltantes na na Dimensão 4, os valores da Dimensão 2 costumam ser baixos.'
+                optionText: 'Quando há valores faltantes na Dimensão 4, os valores da Dimensão 2 costumam ser baixos.'
             },
             {
                 id: 'b',
-                optionText: 'Quando há valores faltantes na na Dimensão 4, os valores da Dimensão 2 costumam ser medianos.'
+                optionText: 'Quando há valores faltantes na Dimensão 4, os valores da Dimensão 2 costumam ser medianos.'
             },
             {
                 id: 'c',
-                optionText: 'Quando há valores faltantes na na Dimensão 4, os valores da Dimensão 2 costumam ser altos.'
+                optionText: 'Quando há valores faltantes na Dimensão 4, os valores da Dimensão 2 costumam ser altos.'
             },
             {id: 'd', optionText: 'Não há relação entre os valores faltantes da Dimensão 4 e os valores da Dimensão 2.'}
         ],
