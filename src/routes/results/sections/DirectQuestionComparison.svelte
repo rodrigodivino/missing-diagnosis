@@ -32,14 +32,14 @@
 
 
     $: console.log(data);
-    
+
     $: if (timeXAxis) {
         select(timeXAxis).call(axisBottom(scaleX).tickSizeOuter(0)).selectAll('.tick').each(function (t, i, nodes) {
             const line = select(this)
                 .selectAll('line')
 
-            if (i === nodes.length - 1) {
-                return line.remove();
+            if(i=== nodes.length - 1) {
+                return line.remove()
             }
 
             line
@@ -59,10 +59,9 @@
             const line = select(this)
                 .selectAll('line')
 
-            if (i === nodes.length - 1) {
-                return line.remove();
+            if(i=== nodes.length - 1) {
+                return line.remove()
             }
-
             line
                 .attr('transform', `translate(${scaleX.bandwidth() / 2},0)`)
                 .attr('shape-rendering', 'crispEdges')
@@ -91,12 +90,14 @@
         margin: 20px;
     }
 
-    line {
-        shape-rendering: crispEdges;
-    }
-
     rect {
         opacity: 0.1;
+    }
+
+    line.wall {
+        stroke: #BEBEBE;
+        stroke-width: 1px;
+        stroke-dasharray: 2 1;
     }
 </style>
 
@@ -107,6 +108,8 @@
     <g transform={`translate(${margin.left},${margin.top})`}>
         <g bind:this={timeXAxis} transform={`translate(0,${innerHeight})`}></g>
         <g bind:this={timeYAxis}></g>
+        <line class="wall" x1={innerWidth + 0.5} y1={0} x2={innerWidth + 0.5} y2={innerHeight}></line>
+        <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
 
 
         {#each data as datum}
@@ -144,6 +147,9 @@
     <g transform={`translate(${margin.left},${margin.top})`}>
         <g bind:this={errorXAxis} transform={`translate(0,${innerHeight})`}></g>
         <g bind:this={errorYAxis}></g>
+        <line class="wall" x1={innerWidth + 0.5} y1={0} x2={innerWidth + 0.5} y2={innerHeight}></line>
+        <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
+
 
         {#each data as datum}
             <g transform={`translate(${scaleX(datum.question) + scaleX.bandwidth()/2 - segmentPadding},0)`}>

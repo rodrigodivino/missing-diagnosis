@@ -5,8 +5,6 @@ import {mean, ascending, quantile} from 'd3'
 export function getHypothesisConfirmationResults(results) {
     const ALPHA = 0.05;
 
-    console.log('results', results)
-    console.log('hypotheses', hypotheses)
     const data = hypotheses.map(h => {
         const datum = {hypothesis: h.code}
         for (let group of ['proposed', 'nullity']) {
@@ -61,7 +59,6 @@ export function getHypothesisConfirmationResults(results) {
                 bootstrappedErrorDifferences
             };
         }
-        console.log('datum', datum)
         return datum
     })
     return results;

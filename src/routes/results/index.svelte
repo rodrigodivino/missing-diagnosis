@@ -27,12 +27,15 @@
     // SUSQuestionnaireResults = getSUSQuestionnaireResults(results);
 
     console.log('directQuestionComparisonResults', directQuestionComparisonResults)
+    console.log('hypothesisConfirmationResults', hypothesisConfirmationResults)
+    // console.log('SUSQuestionnaireResults', 'SUSQuestionnaireResults')
+
 </script>
 
 <script>
     import DirectQuestionComparison from "./sections/DirectQuestionComparison.svelte";
     import HypothesisConfirmation from "./sections/HypothesisConfirmation.svelte";
-    import SUSQuestionnaire from "./sections/SUSQuestionnaire.svelte";
+    // import SUSQuestionnaire from "./sections/SUSQuestionnaire.svelte";
 
 </script>
 
