@@ -30,6 +30,5 @@ export function getHypothesisComparisonResults(results) {
     for(let group of ['nullity', 'proposed']) {
         data
     }
-    console.log('inside hypothesis comparison', results)
     return results;
 }

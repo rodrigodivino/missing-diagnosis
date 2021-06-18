@@ -5,6 +5,8 @@
     import {getHypothesisConfirmationResults} from "./processing/getHypothesisConfirmationResults";
     import {getHypothesisComparisonResults} from "./processing/getHypothesisComparisonResults";
     import {getSUSQuestionnaireResults} from "./processing/getSUSQuestionnaireResults";
+    import {USER_RESULTS} from "./USER_RESULTS";
+    import {answerTable} from "../tests/answerTable";
 
     const codec = JsonUrl('lzw');
 
@@ -13,13 +15,19 @@
     let hypothesisConfirmationResults;
     let hypothesisComparisonResults;
     let SUSQuestionnaireResults;
-    Promise.all(MOCK_RESULTS.map(compressed => codec.decompress(compressed))).then(r => {
-		directQuestionComparisonResults = getDirectQuestionComparisonResults(r)
-        hypothesisConfirmationResults = getHypothesisConfirmationResults(r)
-        hypothesisComparisonResults = getHypothesisComparisonResults(r)
-        SUSQuestionnaireResults = getSUSQuestionnaireResults(r);
-    })
 
+    let results = USER_RESULTS;
+    results.forEach(r => {
+        return r.quantitativeData.forEach(q => {
+            q.correct = q.answer === answerTable[q.id]
+        })
+    })
+    directQuestionComparisonResults = getDirectQuestionComparisonResults(results)
+    hypothesisConfirmationResults = getHypothesisConfirmationResults(results)
+    hypothesisComparisonResults = getHypothesisComparisonResults(results)
+    // SUSQuestionnaireResults = getSUSQuestionnaireResults(MOCK_RESULTS);
+
+    console.log('directQuestionComparisonResults', directQuestionComparisonResults)
 </script>
 
 <script>
@@ -52,14 +60,13 @@
     <h3>Hypothesis Confirmations</h3>
     <HypothesisConfirmation data={hypothesisConfirmationResults}/>
 
-    <h3>Hypothesis Comparisons</h3>
-    <HypothesisComparison data={hypothesisComparisonResults}/>
+<!--    <h3>Hypothesis Comparisons</h3>-->
+<!--    <HypothesisComparison data={hypothesisComparisonResults}/>-->
 
-    <h2> Qualitative </h2>
+<!--    <h2> Qualitative </h2>-->
 
-    <h3> SUS Questionnaire </h3>
-    <SUSQuestionnaire data={SUSQuestionnaireResults}/>
-
+<!--    <h3> SUS Questionnaire </h3>-->
+<!--    <SUSQuestionnaire data={SUSQuestionnaireResults}/>-->
 
 
 </div>

@@ -15,6 +15,7 @@
     const maxTime = Math.max(...data.map(d => Math.max(Math.max(...d.nullity.timeCI), Math.max(...d.proposed.timeCI))));
     const maxError = 1;
 
+    console.log('maxTime', maxTime)
 
     const scaleX = scaleBand().domain(questionOrder).range([0, innerWidth]);
     const scaleYTime = scaleLinear().domain([0, maxTime * 1.1]).range([innerHeight, 0]).nice();
@@ -31,14 +32,7 @@
 
 
     $: console.log(data);
-
-    data.forEach(d => {
-        d.nullity.averageTime = 4;
-        d.nullity.timeCI = [1, 5];
-
-        d.proposed.averageTime = 3;
-        d.proposed.timeCI = [2, 6];
-    })
+    
     $: if (timeXAxis) {
         select(timeXAxis).call(axisBottom(scaleX).tickSizeOuter(0)).selectAll('.tick').each(function (t, i, nodes) {
             const line = select(this)
