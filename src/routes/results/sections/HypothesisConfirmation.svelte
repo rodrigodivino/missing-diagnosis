@@ -1,5 +1,5 @@
 <script>
-    import {axisBottom, scaleBand, select, scaleLinear, axisLeft, format} from "d3";
+    import {axisBottom, scaleBand, select, scaleLinear, axisLeft, format, schemeTableau10} from "d3";
     import {questionOrder} from "../../tests/questionOrder";
     import {hypotheses} from "../../tests/hypotheses";
 
@@ -20,6 +20,7 @@
     const scaleXError = scaleLinear().domain([-maxAbsError, maxAbsError]).range([0, innerWidth]).nice()
 
 
+    console.log('h data', data)
     $: timeXAxis = null;
     $: timeYAxis = null;
 
@@ -80,8 +81,18 @@
     // const maxTime = Math.max(...data.map(d => Math.max(Math.max(...d.nullity.timeCI), Math.max(...d.proposed.timeCI))));
 
     // console.log('maxTime', maxTime);
+
+    const segmentWidth = 5;
+    const segmentPadding = 12;
+
+    const nullityColor = '#9E9E9E';
+    const proposedColor = schemeTableau10[2];
+
 </script>
 <style>
+    line {
+        shape-rendering: crispEdges;
+    }
     line.wall {
         /*shape-rendering: crispEdges;*/
         stroke: #BEBEBE;
@@ -103,6 +114,34 @@
         <line class="zero" x1={scaleXTime(0) + 0.5} y1={0} x2={scaleXTime(0) + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={innerWidth + 0.5} y1={0} x2={innerWidth +0.5} y2={innerHeight}></line>
         <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
+
+        {#each data as datum}
+            <g transform={`translate(0, ${scaleY(datum.hypothesis) + scaleY.bandwidth()/2 - segmentPadding})`}>
+                <line y1="0" x1={scaleXTime(datum.proposed.timeCI[0])} y2="0" x2={scaleXTime(datum.proposed.timeCI[1])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXTime(datum.proposed.timeCI[0])} y2={segmentWidth}
+                      x2={scaleXTime(datum.proposed.timeCI[0])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXTime(datum.proposed.timeCI[1])} y2={segmentWidth}
+                      x2={scaleXTime(datum.proposed.timeCI[1])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <circle cx={scaleXTime(datum.proposed.averageTime)} r={segmentWidth} fill={proposedColor}></circle>
+            </g>
+        {/each}
+
+        {#each data as datum}
+            <g transform={`translate(0, ${scaleY(datum.hypothesis) + scaleY.bandwidth()/2 + segmentPadding})`}>
+                <line y1="0" x1={scaleXTime(datum.nullity.timeCI[0])} y2="0" x2={scaleXTime(datum.nullity.timeCI[1])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXTime(datum.nullity.timeCI[0])} y2={segmentWidth}
+                      x2={scaleXTime(datum.nullity.timeCI[0])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXTime(datum.nullity.timeCI[1])} y2={segmentWidth}
+                      x2={scaleXTime(datum.nullity.timeCI[1])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <circle cx={scaleXTime(datum.nullity.averageTime)} r={segmentWidth} fill={nullityColor}></circle>
+            </g>
+        {/each}
     </g>
 </svg>
 
@@ -114,5 +153,35 @@
         <line class="zero" x1={scaleXError(0) + 0.5} y1={0} x2={scaleXError(0) + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={innerWidth + 0.5} y1={0} x2={innerWidth + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
+
+        {#each data as datum}
+            <g transform={`translate(0, ${scaleY(datum.hypothesis) + scaleY.bandwidth()/2 - segmentPadding})`}>
+                <line y1="0" x1={scaleXError(datum.proposed.errorCI[0])} y2="0" x2={scaleXError(datum.proposed.errorCI[1])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXError(datum.proposed.errorCI[0])} y2={segmentWidth}
+                      x2={scaleXError(datum.proposed.errorCI[0])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXError(datum.proposed.errorCI[1])} y2={segmentWidth}
+                      x2={scaleXError(datum.proposed.errorCI[1])}
+                      stroke={proposedColor} stroke-width="1"></line>
+                <text alignment-baseline="middle" text-anchor="middle" x={scaleXError(datum.proposed.averageError)}
+                      fill={proposedColor}>x</text>
+            </g>
+        {/each}
+
+        {#each data as datum}
+            <g transform={`translate(0, ${scaleY(datum.hypothesis) + scaleY.bandwidth()/2 + segmentPadding})`}>
+                <line y1="0" x1={scaleXError(datum.nullity.errorCI[0])} y2="0" x2={scaleXError(datum.nullity.errorCI[1])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXError(datum.nullity.errorCI[0])} y2={segmentWidth}
+                      x2={scaleXError(datum.nullity.errorCI[0])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <line y1={-segmentWidth} x1={scaleXError(datum.nullity.errorCI[1])} y2={segmentWidth}
+                      x2={scaleXError(datum.nullity.errorCI[1])}
+                      stroke={nullityColor} stroke-width="1"></line>
+                <text alignment-baseline="middle" text-anchor="middle" x={scaleXError(datum.nullity.averageError)}
+                      fill={nullityColor}>x</text>
+            </g>
+        {/each}
     </g>
 </svg>

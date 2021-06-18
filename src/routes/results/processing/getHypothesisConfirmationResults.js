@@ -20,7 +20,7 @@ export function getHypothesisConfirmationResults(results) {
 
             const bootstrappedTimeDifferences = [];
             const bootstrappedErrorDifferences = [];
-            for (let N = 0; N < 20; N++) {
+            for (let N = 0; N < 20000; N++) {
                 const resampledControlTimes = resample(controlTimes);
                 const resampledControlErrors = resample(controlErrors);
                 const resampledTestTimes = resample(testTimes);
