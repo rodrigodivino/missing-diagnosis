@@ -24,11 +24,12 @@
     })
     directQuestionComparisonResults = getDirectQuestionComparisonResults(results)
     hypothesisConfirmationResults = getHypothesisConfirmationResults(results)
-    // SUSQuestionnaireResults = getSUSQuestionnaireResults(results);
+    SUSQuestionnaireResults = getSUSQuestionnaireResults(results);
 
+    console.log('user results', results)
     console.log('directQuestionComparisonResults', directQuestionComparisonResults)
     console.log('hypothesisConfirmationResults', hypothesisConfirmationResults)
-    // console.log('SUSQuestionnaireResults', 'SUSQuestionnaireResults')
+    console.log('SUSQuestionnaireResults', SUSQuestionnaireResults)
 
 </script>
 
