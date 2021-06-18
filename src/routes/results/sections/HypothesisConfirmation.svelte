@@ -14,8 +14,10 @@
 
     const scaleY = scaleBand().domain(hypotheses.map(h => h.code)).range([0, innerWidth])
 
-    const scaleXTime = scaleLinear().domain([-1, 1]).range([0, innerWidth])
-    const scaleXError = scaleLinear().domain([-1, 1]).range([0, innerWidth])
+    const maxAbsTime = Math.max(... data.flatMap(datum => [datum['nullity'], datum['proposed']]).flatMap(d => d.timeCI.map(Math.abs))) * 1.1;
+    const maxAbsError = 1;
+    const scaleXTime = scaleLinear().domain([-maxAbsTime, maxAbsTime]).range([0, innerWidth]).nice()
+    const scaleXError = scaleLinear().domain([-maxAbsError, maxAbsError]).range([0, innerWidth]).nice()
 
 
     $: timeXAxis = null;
@@ -80,11 +82,17 @@
     // console.log('maxTime', maxTime);
 </script>
 <style>
-    line.zero, line.wall {
+    line.wall {
         /*shape-rendering: crispEdges;*/
         stroke: #BEBEBE;
         stroke-width: 1px;
         stroke-dasharray: 2 1;
+    }
+
+    line.zero {
+        stroke: #222221;
+        stroke-width: 1px;
+        stroke-dasharray: 0 0;
     }
 </style>
 <p>Time</p>
@@ -106,7 +114,5 @@
         <line class="zero" x1={scaleXError(0) + 0.5} y1={0} x2={scaleXError(0) + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={innerWidth + 0.5} y1={0} x2={innerWidth + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
-
-
     </g>
 </svg>

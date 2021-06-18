@@ -61,6 +61,6 @@ export function getHypothesisConfirmationResults(results) {
         }
         return datum
     })
-    return results;
+    return data;
 }
 
