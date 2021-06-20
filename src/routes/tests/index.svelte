@@ -14,7 +14,8 @@
     let compressedResult = null;
     $: quantitativeComplete = index >= questions.length;
     let qualitativeComplete = false;
-    $: testComplete = quantitativeComplete && qualitativeComplete;
+    let openComplete = false;
+    $: testComplete = quantitativeComplete && qualitativeComplete && openComplete;
 
     let instructionsMode = true;
 
@@ -27,14 +28,23 @@
     codec.decompress(decompress).then(result => {
         console.log('resultado: ', result)
     })
-    $: if (quantitativeComplete) {
+    $: if (openComplete) {
         const dateCompleted = new Date().toLocaleString();
         codec.compress({quantitativeData, qualitativeData, dateCompleted, group}).then(result => {
-            compressedResult = JSON.stringify({quantitativeData, qualitativeData, dateCompleted, group});
+            compressedResult = JSON.stringify({
+                quantitativeData,
+                qualitativeData,
+                dateCompleted,
+                group,
+                positiveRemarks: savedPositiveRemarks,
+                negativeRemarks: savedNegativeRemarks
+            });
         });
     }
 
     let resultTextArea = null;
+    let positiveRemarks = null;
+    let negativeRemarks = null;
     let qualitativeIncomplete = false;
 
     function handleCopyClick() {
@@ -99,6 +109,23 @@
             + "&body=" + body;
 
         window.open(link);
+    }
+
+    let savedPositiveRemarks = null;
+    let savedNegativeRemarks = null;
+    let incompleteOpen = false;
+
+    function handleOpenClick() {
+        savedPositiveRemarks = positiveRemarks.value;
+        savedNegativeRemarks = negativeRemarks.value;
+        console.log(positiveRemarks.value)
+        console.log(negativeRemarks.value)
+        if (positiveRemarks.value.length > 1 && negativeRemarks.value.length > 1) {
+            incompleteOpen = false;
+            openComplete = true;
+        } else {
+            incompleteOpen = true;
+        }
     }
 </script>
 
@@ -172,7 +199,7 @@
         font-size: 20px;
     }
 
-    button.qualitative-finish {
+    button.qualitative-finish, button.open-finish {
         margin-bottom: 50px;
     }
 
@@ -223,7 +250,8 @@
                 Certifique-se de estar em um computador ou notebook.</h2>
             <ul>
                 <li>Este teste de usabilidade contém 14 questões de múltipla escolha.</li>
-                <li>Em cada questão, você verá uma ou mais imagens de visualizações de dados, e um conjunto com alternativas de múltipla escolha.
+                <li>Em cada questão, você verá uma ou mais imagens de visualizações de dados, e um conjunto com
+                    alternativas de múltipla escolha.
                 </li>
                 <li>Em cada questão, selecione a alternativa que melhor explique os dados apresentados na imagem.</li>
                 <li>O teste dura cerca de 30 minutos.</li>
@@ -271,13 +299,15 @@
                     <h2> Envie o seguinte código para e-mail "rodrigodivino.ufpa@gmail.com" com o assunto "Teste de
                         Usabilidade"</h2>
                     <h3>Os dados contém informações apenas sobre as questões do teste.
-                        Ao enviar, você concorda que membros do LABVIS analisem esses dados internamente para melhorar o design da visualização.
+                        Ao enviar, você concorda que membros do LABVIS analisem esses dados internamente para melhorar o
+                        design da visualização.
                     </h3>
                     <label for="result"></label>
                     <textarea bind:this={resultTextArea} readonly id='result'>{compressedResult}</textarea>
                     <button class="copy-button" on:click={handleCopyClick}>Copiar para Área de Transferência</button>
 
-                    <p>Envie os resultados através de qualquer cliente e-mail. O botão abaixo é um atalho para abrir o cliente padrão com o e-mail pronto para envio.</p>
+                    <p>Envie os resultados através de qualquer cliente e-mail. O botão abaixo é um atalho para abrir o
+                        cliente padrão com o e-mail pronto para envio.</p>
                     <button class="send-email-button" on:click={sendMail}>Abrir Cliente de e-mail</button>
 
                     <button class="email-confirmation" on:click={handleEmailClick}>Ok, já enviei o e-mail.</button>
@@ -291,41 +321,64 @@
             {/if}
         {:else}
             {#if quantitativeComplete}
-                <h1>Marque abaixo as opções com as quais você mais se identificou durante o uso da visualização:</h1>
-                <form bind:this={qualitativeForm}>
-                    {#each questionnaires as questionnaire, i}
-                        <label class="statement">{questionnaire.questionnaireText}</label>
-                        <ul class='likert'>
-                            <li>
-                                <input type="radio" name={questionnaire.id} value="strong_disagree">
-                                <label>Discordo Bastante</label>
-                            </li>
-                            <li>
-                                <input type="radio" name={questionnaire.id} value="disagree">
-                                <label>Discordo</label>
-                            </li>
-                            <li>
-                                <input type="radio" name={questionnaire.id} value="neutral">
-                                <label>Neutro</label>
-                            </li>
-                            <li>
-                                <input type="radio" name={questionnaire.id} value="agree">
-                                <label>Concordo</label>
-                            </li>
-                            <li>
-                                <input type="radio" name={questionnaire.id} value="strong_agree">
-                                <label>Concordo Bastante</label>
-                            </li>
-                        </ul>
-                    {/each}
-                </form>
-                {#if qualitativeIncomplete}
-                    <p class="warn">Para prosseguir, marque uma resposta em todas as {questionnaires.length}
-                        perguntas.</p>
+                {#if qualitativeComplete}
+                    <h3>Escreva abaixo comentários sobre o que você achou de POSITIVO durante o uso da visualização.
+                        Escreva no mínimo uma frase no campo abaixo.
+                    </h3>
+                    <label for="positive"></label>
+                    <textarea required bind:this={positiveRemarks} id='positive'></textarea>
+                    <br><br><br>
+                    <h3>Escreva abaixo comentários sobre o que você achou de NEGATIVO durante o uso da visualização.
+                        Escreva no mínimo uma frase no campo abaixo.
+                    </h3>
+                    <label for="negative"></label>
+                    <textarea required bind:this={negativeRemarks} id='negative'></textarea>
+
+                    {#if incompleteOpen}
+                        <p class="warn">Por favor, escreva no mínimo uma frase em cada um dos campos.</p>
+                    {/if}
+                    <br>
+                    <p>Após preencher os campos, clique no botão abaixo para prosseguir.</p>
+                    <button class="open-finish" on:click={handleOpenClick}>Continuar</button>
                 {:else}
-                    <p>Quando terminar de marcar as respostas, clique no botão abaixo:</p>
+                    <h1>Marque abaixo as opções com as quais você mais se identificou durante o uso da
+                        visualização:</h1>
+                    <form bind:this={qualitativeForm}>
+                        {#each questionnaires as questionnaire, i}
+                            <label class="statement">{questionnaire.questionnaireText}</label>
+                            <ul class='likert'>
+                                <li>
+                                    <input type="radio" name={questionnaire.id} value="strong_disagree">
+                                    <label>Discordo Bastante</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name={questionnaire.id} value="disagree">
+                                    <label>Discordo</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name={questionnaire.id} value="neutral">
+                                    <label>Neutro</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name={questionnaire.id} value="agree">
+                                    <label>Concordo</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name={questionnaire.id} value="strong_agree">
+                                    <label>Concordo Bastante</label>
+                                </li>
+                            </ul>
+                        {/each}
+                    </form>
+                    {#if qualitativeIncomplete}
+                        <p class="warn">Para prosseguir, marque uma resposta em todas as {questionnaires.length}
+                            perguntas.</p>
+                    {:else}
+                        <p>Quando terminar de marcar as respostas, clique no botão abaixo:</p>
+                    {/if}
+                    <button class="qualitative-finish" on:click={handleSaveClick}> Continuar</button>
                 {/if}
-                <button class="qualitative-finish" on:click={handleSaveClick}> Continuar</button>
+
             {:else}
                 {#each questions as question,i}
                     {#if i === index}

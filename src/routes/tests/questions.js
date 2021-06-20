@@ -357,5 +357,7 @@ const hard = [{
     }];
 
 export let questions = [
-    ...shuffle(easy), ...shuffle(medium), ...shuffle(hard)
+    ...shuffle(easy),
+    ...shuffle(medium),
+    ...shuffle(hard)
 ]
