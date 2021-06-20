@@ -91,12 +91,14 @@
     function sendMail() {
         const answers = resultTextArea.value
 
-        var link = "mailto:rodrigodivino.ufpa@gmail.com?"
-            + "&subject=" + encodeURIComponent("Teste de Usabilidade")
-            + "&body=" + encodeURIComponent(answers)
-        ;
+        const subject = "Teste de Usabilidade";
+        const body = answers;
 
-        window.open(link, '_blank').focus();
+        const link = "mailto:rodrigodivino.ufpa@gmail.com?"
+            + "&subject=" + subject
+            + "&body=" + body;
+
+        window.open(link);
     }
 </script>
 
@@ -275,7 +277,7 @@
                     <textarea bind:this={resultTextArea} readonly id='result'>{compressedResult}</textarea>
                     <button class="copy-button" on:click={handleCopyClick}>Copiar para Área de Transferência</button>
 
-                    <p>Envies os resultados através de qualquer cliente e-mail. O botão abaixo é um atalho para abrir o cliente padrão com o e-mail pronto para envio.</p>
+                    <p>Envie os resultados através de qualquer cliente e-mail. O botão abaixo é um atalho para abrir o cliente padrão com o e-mail pronto para envio.</p>
                     <button class="send-email-button" on:click={sendMail}>Abrir Cliente de e-mail</button>
 
                     <button class="email-confirmation" on:click={handleEmailClick}>Ok, já enviei o e-mail.</button>
