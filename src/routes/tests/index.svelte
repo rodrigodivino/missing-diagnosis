@@ -288,7 +288,7 @@
             {/if}
         {:else}
             <Tutorial on:ready={handleTutorialReady} url1="https://www.youtube.com/embed/tremKl7AFK8"
-                      url2={(group === 'proposed') ? "https://www.youtube.com/embed/Wk8dOZucPaU" : "https://www.youtube.com/embed/QNOJhRkYoPQ" }
+                      url2={(group === 'proposed') ? "https://www.youtube.com/embed/Y3TJnNavvoo" : "https://www.youtube.com/embed/QNOJhRkYoPQ" }
                       url3={(group === 'proposed') ? "https://www.youtube.com/embed/bxCIW4HtZkM" : "https://www.youtube.com/embed/D4pCgo4Yjhw" }/>
         {/if}
     {:else}
