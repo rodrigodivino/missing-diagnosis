@@ -2,7 +2,7 @@ import {questionnaires} from "../../tests/questionnaires";
 
 export function getSUSQuestionnaireResults(results) {
     return questionnaires.map(q => {
-        const data = {}
+        const data = {...q}
         for (let group of ['proposed', 'nullity']) {
             data[group] = {};
             const groupData = results.filter(r => r.group === group)

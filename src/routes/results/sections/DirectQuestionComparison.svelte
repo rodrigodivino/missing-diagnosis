@@ -1,5 +1,4 @@
 <script>
-    import {questions} from "../../tests/questions";
     import {scaleBand, scaleLinear, select, axisBottom, axisLeft, schemeTableau10, format} from 'd3'
     import {questionOrder} from "../../tests/questionOrder";
 

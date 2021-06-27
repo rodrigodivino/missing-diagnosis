@@ -67,6 +67,7 @@
 <script>
     import DirectQuestionComparison from "./sections/DirectQuestionComparison.svelte";
     import HypothesisConfirmation from "./sections/HypothesisConfirmation.svelte";
+    import SUSQuestionnaire from "./sections/SUSQuestionnaire.svelte";
     // import SUSQuestionnaire from "./sections/SUSQuestionnaire.svelte";
 
 </script>
@@ -93,10 +94,10 @@
     <h3>Hypothesis Confirmations</h3>
     <HypothesisConfirmation data={hypothesisConfirmationResults}/>
 
-<!--    <h2> Qualitative </h2>-->
+    <h2> Qualitative </h2>
 
-<!--    <h3> SUS Questionnaire </h3>-->
-<!--    <SUSQuestionnaire data={SUSQuestionnaireResults}/>-->
+    <h3> SUS Questionnaire </h3>
+    <SUSQuestionnaire data={SUSQuestionnaireResults}/>
 
 
 </div>
