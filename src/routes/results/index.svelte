@@ -7,7 +7,7 @@
     import {getSUSQuestionnaireResults} from "./processing/getSUSQuestionnaireResults";
     import {USER_RESULTS} from "./USER_RESULTS";
     import {answerTable} from "../tests/answerTable";
-    import {outlierTreatment} from "./processing/outlierTreatment";
+    import {outlierTreatment, questionTookTooMoreThan5Minutes} from "./processing/outlierTreatment";
 
     const codec = JsonUrl('lzw');
 
@@ -24,6 +24,34 @@
         })
     })
     let {finalUserData, userOutliers, questionOutliers} = outlierTreatment(rawResultsDoNotUseWithoutFilter)
+
+    userOutliers.forEach(userOutlier => {
+        console.warn(`
+        ---USER OUTLIER (FULLY REMOVED)---
+
+        Group: ${userOutlier.group}
+
+        Outlier Questions: ${JSON.stringify(userOutlier.quantitativeData.filter(q => questionTookTooMoreThan5Minutes(q)), null, 2)}
+
+        User Completion ID: ${userOutlier.dateCompleted}
+
+        `)
+    })
+
+    questionOutliers.forEach(question => {
+        console.warn(`
+        ---QUESTION OUTLIER (ONLY QUESTION REMOVED)---
+
+        Group: ${question.user.group}
+
+        Outlier Questions: ${JSON.stringify(question.outlierQuestions, null, 2)}
+
+        User Completion ID: ${question.user.dateCompleted}
+
+        `)
+    })
+
+    console.log('questionOutliers', questionOutliers);
 
     directQuestionComparisonResults = getDirectQuestionComparisonResults(finalUserData)
     hypothesisConfirmationResults = getHypothesisConfirmationResults(finalUserData)
