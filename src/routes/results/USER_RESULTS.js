@@ -529,6 +529,49 @@ export const USER_RESULTS = [
         "group": "proposed",
         "positiveRemarks": "A ligação das dimensões passando por uma barra quantitativa indicando valores em porcentagem, foi importante e facilitou bastante o entendimento da visualização.",
         "negativeRemarks": "Só foi possível entender as visualização com gráfico de barras com a ajuda da visualização de fluxo, o gráfico de barras por si só não é intuitivo.\nÉ necessária uma apresentação prévia sobre a visualização, como o tutorial disponibilizado no início deste teste, para que o público possa extrair as informações necessárias da visualização."
+    },
+
+    // V. dom., 27 de jun. 11:02
+    {
+        "quantitativeData": [{"answer": "c", "elapsedTime": 18.319, "id": "Q2-ii"}, {
+            "answer": "b",
+            "elapsedTime": 16.248,
+            "id": "Q1-ii"
+        }, {"answer": "a", "elapsedTime": 21.112, "id": "Q1-i"}, {
+            "answer": "b",
+            "elapsedTime": 14.504,
+            "id": "Q2-i"
+        }, {"answer": "b", "elapsedTime": 19.168, "id": "Q7-i"}, {
+            "answer": "a",
+            "elapsedTime": 9.856,
+            "id": "Q7-ii"
+        }, {"answer": "c", "elapsedTime": 12.551, "id": "Q3-ii"}, {
+            "answer": "b",
+            "elapsedTime": 49.679,
+            "id": "Q4-ii"
+        }, {"answer": "a", "elapsedTime": 8.496, "id": "Q3-i"}, {
+            "answer": "a",
+            "elapsedTime": 10.632,
+            "id": "Q4-i"
+        }, {"answer": "b", "elapsedTime": 21.376, "id": "Q5-ii"}, {
+            "answer": "a",
+            "elapsedTime": 47.855,
+            "id": "Q6-ii"
+        }, {"answer": "b", "elapsedTime": 54.623, "id": "Q6-i"}, {"answer": "c", "elapsedTime": 14.44, "id": "Q5-i"}],
+        "qualitativeData": [{"id": "sus1", "answer": "agree"}, {"id": "sus2", "answer": "disagree"}, {
+            "id": "sus3",
+            "answer": "strong_agree"
+        }, {"id": "sus4", "answer": "strong_disagree"}, {"id": "sus5", "answer": "agree"}, {
+            "id": "sus6",
+            "answer": "strong_disagree"
+        }, {"id": "sus7", "answer": "strong_agree"}, {"id": "sus8", "answer": "strong_disagree"}, {
+            "id": "sus9",
+            "answer": "agree"
+        }, {"id": "sus10", "answer": "strong_disagree"}],
+        "dateCompleted": "27/06/2021 10:58:26",
+        "group": "nullity",
+        "positiveRemarks": "A organização (em gradiente) de um determinado eixo facilita a percepção de padrões nos demais eixos, caso haja.",
+        "negativeRemarks": "As cores utilizadas poderiam ser diferentes"
     }
 ]
 
