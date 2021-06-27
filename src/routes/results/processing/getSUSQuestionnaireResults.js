@@ -9,7 +9,8 @@ export function getSUSQuestionnaireResults(results) {
                 .flatMap(g => g.qualitativeData).filter(d => d.id === q.id)
 
             for(const vote of ['strong_disagree', 'disagree', 'neutral', 'agree', 'strong_agree']) {
-                data[group][vote] = groupData.filter(d => d.answer === vote).length;
+                data[group][vote] = groupData.filter(d => d.answer === vote).length / groupData.length;
+                data[group]['metadata'] = {group, id: q.id};
             }
         }
         return data;

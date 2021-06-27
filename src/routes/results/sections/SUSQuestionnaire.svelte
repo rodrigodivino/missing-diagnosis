@@ -2,6 +2,7 @@
     import {scaleBand, scaleLinear, select, axisBottom, axisLeft, schemeTableau10, format} from 'd3'
     import {questionOrder} from "../../tests/questionOrder";
     import {susOrder} from "../../tests/susOrder";
+    import {stack, stackOrderNone, stackOffsetNone} from 'd3'
 
     export let data;
 
@@ -14,8 +15,8 @@
     const scaleX = scaleBand().domain(susOrder).range([0, innerWidth]);
     const scaleY = scaleLinear().domain([0, 1]).range([innerHeight, 0]);
 
-    const segmentWidth = 5;
-    const segmentPadding = 8;
+    const segmentWidth = 20;
+    const segmentPadding = 2;
 
     $: xAxis = null;
     $: yAxis = null;
@@ -44,6 +45,24 @@
     $: if (yAxis) {
         select(yAxis).call(axisLeft(scaleY).tickSizeOuter(0).tickFormat(format('.0%')));
     }
+
+    const stacker = stack()
+        .keys(["strong_disagree", "disagree", "neutral", "agree", "strong_agree"])
+        .order(stackOrderNone)
+        .offset(stackOffsetNone);
+
+    const proposedStack = stacker(data.map(d => d.proposed))
+    const nullityStack = stacker(data.map(d => d.nullity))
+
+    const colors = {
+        "strong_disagree": '#A8201A',
+        "disagree": '#D58936',
+        "neutral": "#E8EBF7",
+        "agree": "#007CBE",
+        "strong_agree": "#150578"
+    }
+    console.log(proposedStack)
+
 </script>
 
 <style>
@@ -52,9 +71,10 @@
     }
 
     rect {
-        opacity: 0.1;
+        stroke: #222221;
+        stroke-width: 1px;
+        shape-rendering: crispEdges;
     }
-
     line.wall {
         stroke: #BEBEBE;
         stroke-width: 1px;
@@ -70,6 +90,29 @@
         <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
 
 
+        {#each proposedStack as proposedStackItem}
+            <g>
+                {#each proposedStackItem as proposedStackBar}
+                    <rect fill={colors[proposedStackItem.key]}
+                          width={segmentWidth}
+                          y={scaleY(proposedStackBar[1])}
+                          height={scaleY(proposedStackBar[0]) - scaleY(proposedStackBar[1])}
+                          x={scaleX(proposedStackBar.data.metadata.id) + scaleX.bandwidth()/2 - segmentWidth - segmentPadding}
+                          ></rect>
+                {/each}
+            </g>
+        {/each}
+        {#each nullityStack as nullityStackItem}
+            <g>
+                {#each nullityStackItem as nullityStackBar}
+                    <rect fill={colors[nullityStackItem.key]}
+                          width={segmentWidth}
+                          y={scaleY(nullityStackBar[1])}
+                          height={scaleY(nullityStackBar[0]) - scaleY(nullityStackBar[1])}
+                          x={scaleX(nullityStackBar.data.metadata.id) + scaleX.bandwidth()/2 + segmentPadding}></rect>
+                {/each}
+            </g>
+        {/each}
 <!--        {#each data as datum}-->
 <!--            <g transform={`translate(${scaleX(datum.question) + scaleX.bandwidth()/2 - segmentPadding},0)`}>-->
 <!--                <line x1="0" y1={scaleYTime(datum.proposed.timeCI[0])} x2="0" y2={scaleYTime(datum.proposed.timeCI[1])}-->
