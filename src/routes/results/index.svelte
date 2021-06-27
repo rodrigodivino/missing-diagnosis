@@ -7,6 +7,7 @@
     import {getSUSQuestionnaireResults} from "./processing/getSUSQuestionnaireResults";
     import {USER_RESULTS} from "./USER_RESULTS";
     import {answerTable} from "../tests/answerTable";
+    import {outlierTreatment} from "./processing/outlierTreatment";
 
     const codec = JsonUrl('lzw');
 
@@ -16,17 +17,19 @@
     let hypothesisComparisonResults;
     let SUSQuestionnaireResults;
 
-    let results = USER_RESULTS;
-    results.forEach(r => {
+    let rawResultsDoNotUseWithoutFilter = USER_RESULTS;
+    rawResultsDoNotUseWithoutFilter.forEach(r => {
         return r.quantitativeData.forEach(q => {
             q.correct = q.answer === answerTable[q.id]
         })
     })
-    directQuestionComparisonResults = getDirectQuestionComparisonResults(results)
-    hypothesisConfirmationResults = getHypothesisConfirmationResults(results)
-    SUSQuestionnaireResults = getSUSQuestionnaireResults(results);
+    let {finalUserData, userOutliers, questionOutliers} = outlierTreatment(rawResultsDoNotUseWithoutFilter)
 
-    console.log('user results', results)
+    directQuestionComparisonResults = getDirectQuestionComparisonResults(finalUserData)
+    hypothesisConfirmationResults = getHypothesisConfirmationResults(finalUserData)
+    SUSQuestionnaireResults = getSUSQuestionnaireResults(finalUserData);
+
+    console.log('user results', finalUserData)
     console.log('directQuestionComparisonResults', directQuestionComparisonResults)
     console.log('hypothesisConfirmationResults', hypothesisConfirmationResults)
     console.log('SUSQuestionnaireResults', SUSQuestionnaireResults)

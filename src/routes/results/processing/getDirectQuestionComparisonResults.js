@@ -12,7 +12,7 @@ export function getDirectQuestionComparisonResults(results) {
     return questions.sort((a,b) => ascending(questionOrder.indexOf(a.id), questionOrder.indexOf(b.id))).map(question => {
         const processedGroupResult = {};
         for (let group of ['proposed', 'nullity']) {
-            const groupData = results.filter(g => g.group === group).map(r => r.quantitativeData).map(d => d.find(d => d.id === question.id));
+            const groupData = results.filter(g => g.group === group).map(r => r.quantitativeData).map(d => d.find(d => d.id === question.id)).filter(d => d);
             const times = groupData.map(d => d.elapsedTime)
             const errors = groupData.map(d => d.answer === question.answer)
             const averageTime = mean(times)
