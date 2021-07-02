@@ -9,8 +9,12 @@ export function getHypothesisConfirmationResults(results) {
         const datum = {hypothesis: h.code}
         for (let group of ['proposed', 'nullity']) {
             const groupResults = results.filter(d => d.group === group)
-            const hypothesisControlQuestions = groupResults.flatMap(userResult => userResult.quantitativeData.filter(q => q.id.includes(h.control)))
-            const hypothesisTestQuestions = groupResults.flatMap(userResult => userResult.quantitativeData.filter(q => q.id.includes(h.test)))
+            const hypothesisControlQuestions = groupResults.flatMap(userResult => {
+                return userResult.quantitativeData.filter(q => h.control.includes(q.id));
+            })
+            const hypothesisTestQuestions = groupResults.flatMap(userResult => {
+                return userResult.quantitativeData.filter(q => h.test.includes(q.id));
+            })
 
             const controlTimes = hypothesisControlQuestions.map(q => q.elapsedTime);
             const controlErrors = hypothesisControlQuestions.map(q => q.correct);

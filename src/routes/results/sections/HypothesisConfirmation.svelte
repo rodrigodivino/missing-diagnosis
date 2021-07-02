@@ -5,14 +5,14 @@
 
     export let data;
 
-    const margin = {left: 50, right: 20, bottom: 50, top: 20}
+    const margin = {left: 200, right: 20, bottom: 50, top: 20}
     const width = 512;
-    const height = 512;
+    const height = 600;
 
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
-    const scaleY = scaleBand().domain(hypotheses.map(h => h.code)).range([0, innerWidth])
+    const scaleY = scaleBand().domain(hypotheses.map(h => h.code)).range([0, innerHeight])
 
     const maxAbsTime = Math.max(... data.flatMap(datum => [datum['nullity'], datum['proposed']]).flatMap(d => d.timeCI.map(Math.abs))) * 1.1;
     const maxAbsError = 1;
@@ -105,6 +105,11 @@
         stroke-width: 1px;
         stroke-dasharray: 0 0;
     }
+
+    text.difficulty {
+        font-size: 12px;
+        fill: #222221;
+    }
 </style>
 <p>Time</p>
 <svg height={height} width={width}>
@@ -114,7 +119,8 @@
         <line class="zero" x1={scaleXTime(0) + 0.5} y1={0} x2={scaleXTime(0) + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={innerWidth + 0.5} y1={0} x2={innerWidth +0.5} y2={innerHeight}></line>
         <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
-
+        <text class="difficulty" y="-5" x={innerWidth / 2 + 10} text-anchor="start">Harder ⟶</text>
+        <text class="difficulty" y="-5" x={innerWidth / 2 - 10} text-anchor="end">⟵ Easier</text>
         {#each data as datum}
             <g transform={`translate(0, ${scaleY(datum.hypothesis) + scaleY.bandwidth()/2 - segmentPadding})`}>
                 <line y1="0" x1={scaleXTime(datum.proposed.timeCI[0])} y2="0" x2={scaleXTime(datum.proposed.timeCI[1])}
@@ -153,7 +159,8 @@
         <line class="zero" x1={scaleXError(0) + 0.5} y1={0} x2={scaleXError(0) + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={innerWidth + 0.5} y1={0} x2={innerWidth + 0.5} y2={innerHeight}></line>
         <line class="wall" x1={0} y1={0.5} x2={innerWidth + 0.5} y2={0.5}></line>
-
+        <text class="difficulty" y="-5" x={innerWidth / 2 + 10} text-anchor="start">Harder ⟶</text>
+        <text class="difficulty" y="-5" x={innerWidth / 2 - 10} text-anchor="end">⟵ Easier</text>
         {#each data as datum}
             <g transform={`translate(0, ${scaleY(datum.hypothesis) + scaleY.bandwidth()/2 - segmentPadding})`}>
                 <line y1="0" x1={scaleXError(datum.proposed.errorCI[0])} y2="0" x2={scaleXError(datum.proposed.errorCI[1])}
