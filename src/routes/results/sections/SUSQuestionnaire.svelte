@@ -72,7 +72,7 @@
 
     rect {
         stroke: #222221;
-        stroke-width: 1px;
+        stroke-width: 0.5px;
         shape-rendering: crispEdges;
     }
     line.wall {
