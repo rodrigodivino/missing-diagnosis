@@ -47,7 +47,7 @@
     }
 
     const stacker = stack()
-        .keys(["strong_disagree", "disagree", "neutral", "agree", "strong_agree"])
+        .keys(["strong_negative", "negative", "neutral", "positive", "strong_positive"])
         .order(stackOrderNone)
         .offset(stackOffsetNone);
 
@@ -55,11 +55,11 @@
     const nullityStack = stacker(data.map(d => d.nullity))
 
     const colors = {
-        "strong_disagree": '#A8201A',
-        "disagree": '#D58936',
+        "strong_negative": '#A8201A',
+        "negative": '#D58936',
         "neutral": "#E8EBF7",
-        "agree": "#007CBE",
-        "strong_agree": "#150578"
+        "positive": "#007CBE",
+        "strong_positive": "#150578"
     }
     console.log(proposedStack)
 

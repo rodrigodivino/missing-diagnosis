@@ -16,7 +16,7 @@
 
     const scaleX = scaleBand().domain(questionOrder).range([0, innerWidth]);
     const scaleYTime = scaleLinear().domain([0, maxTime * 1.1]).range([innerHeight, 0]).nice();
-    const scaleYError = scaleLinear().domain([0, maxError * 1.1]).range([innerHeight, 0]).nice();
+    const scaleYError = scaleLinear().domain([0, 1]).range([innerHeight, 0]).nice();
 
     const segmentWidth = 5;
     const segmentPadding = 8;
@@ -158,7 +158,7 @@
                 <line x1={-segmentWidth} y1={scaleYError(datum.proposed.errorCI[1])} x2={segmentWidth}
                       y2={scaleYError(datum.proposed.errorCI[1])}
                       stroke={proposedColor} stroke-width="1"></line>
-                <text alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.proposed.errorRate)}
+                <text font-size="18px" font-weight="bolder" alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.proposed.errorRate)}
                       fill={proposedColor}>x</text>
             </g>
         {/each}
@@ -173,7 +173,7 @@
                 <line x1={-segmentWidth} y1={scaleYError(datum.nullity.errorCI[1])} x2={segmentWidth}
                       y2={scaleYError(datum.nullity.errorCI[1])}
                       stroke={nullityColor} stroke-width="1"></line>
-                <text alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.nullity.errorRate)}
+                <text font-size="18px" font-weight="bolder" alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.nullity.errorRate)}
                       fill={nullityColor}>x</text>
             </g>
         {/each}

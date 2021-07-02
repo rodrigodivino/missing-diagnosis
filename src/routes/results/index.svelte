@@ -8,6 +8,7 @@
     import {USER_RESULTS} from "./USER_RESULTS";
     import {answerTable} from "../tests/answerTable";
     import {outlierTreatment, questionTookTooMoreThan5Minutes} from "./processing/outlierTreatment";
+    import {getSUSScoreResults} from "./processing/getSUSScoreResults";
 
     const codec = JsonUrl('lzw');
 
@@ -16,6 +17,7 @@
     let hypothesisConfirmationResults;
     let hypothesisComparisonResults;
     let SUSQuestionnaireResults;
+    let SUSScoreResults;
 
     let rawResultsDoNotUseWithoutFilter = USER_RESULTS;
     rawResultsDoNotUseWithoutFilter.forEach(r => {
@@ -38,6 +40,10 @@
         `)
     })
 
+    console.log('Total Participants: ', finalUserData.length)
+    console.log('P: ', finalUserData.filter(u => u.group === 'proposed').length)
+    console.log('N: ', finalUserData.filter(u => u.group === 'nullity').length)
+
     questionOutliers.forEach(question => {
         console.warn(`
         ---QUESTION OUTLIER (ONLY QUESTION REMOVED)---
@@ -56,6 +62,7 @@
     directQuestionComparisonResults = getDirectQuestionComparisonResults(finalUserData)
     hypothesisConfirmationResults = getHypothesisConfirmationResults(finalUserData)
     SUSQuestionnaireResults = getSUSQuestionnaireResults(finalUserData);
+    SUSScoreResults = getSUSScoreResults(finalUserData)
 
     console.log('user results', finalUserData)
     console.log('directQuestionComparisonResults', directQuestionComparisonResults)
@@ -68,6 +75,7 @@
     import DirectQuestionComparison from "./sections/DirectQuestionComparison.svelte";
     import HypothesisConfirmation from "./sections/HypothesisConfirmation.svelte";
     import SUSQuestionnaire from "./sections/SUSQuestionnaire.svelte";
+    import SUSScore from "./sections/SUSScore.svelte";
     // import SUSQuestionnaire from "./sections/SUSQuestionnaire.svelte";
 
 </script>
@@ -99,6 +107,12 @@
     <h3> SUS Questionnaire </h3>
     <SUSQuestionnaire data={SUSQuestionnaireResults}/>
 
+    <h5>SUS Score:</h5>
+
+    <p>Proposed: {SUSScoreResults.proposed.avg.toFixed(2)} (CI: {SUSScoreResults.proposed.CI[0].toFixed(2)} / {SUSScoreResults.proposed.CI[1].toFixed(2)})</p>
+    <p>Nullity: {SUSScoreResults.nullity.avg.toFixed(2)} (CI: {SUSScoreResults.nullity.CI[0].toFixed(2)} / {SUSScoreResults.nullity.CI[1].toFixed(2)})</p>
+
+    <SUSScore data="{SUSScoreResults}"/>
 
 </div>
 

@@ -572,6 +572,319 @@ export const USER_RESULTS = [
         "group": "nullity",
         "positiveRemarks": "A organização (em gradiente) de um determinado eixo facilita a percepção de padrões nos demais eixos, caso haja.",
         "negativeRemarks": "As cores utilizadas poderiam ser diferentes"
+    },
+
+    // H. seg, 28 de jun. 20:29
+    {
+        "quantitativeData": [{"answer": "a", "elapsedTime": 143.138, "id": "Q1-i"}, {
+            "answer": "b",
+            "elapsedTime": 36.652,
+            "id": "Q7-i"
+        }, {"answer": "a", "elapsedTime": 112.972, "id": "Q7-ii"}, {
+            "answer": "c",
+            "elapsedTime": 91.295,
+            "id": "Q2-ii"
+        }, {"answer": "b", "elapsedTime": 186.743, "id": "Q2-i"}, {
+            "answer": "b",
+            "elapsedTime": 8.964,
+            "id": "Q1-ii"
+        }, {"answer": "a", "elapsedTime": 58.197, "id": "Q3-i"}, {
+            "answer": "c",
+            "elapsedTime": 8.049,
+            "id": "Q3-ii"
+        }, {"answer": "d", "elapsedTime": 154.595, "id": "Q4-i"}, {
+            "answer": "d",
+            "elapsedTime": 59.792,
+            "id": "Q4-ii"
+        }, {"answer": "c", "elapsedTime": 51.416, "id": "Q5-i"}, {
+            "answer": "a",
+            "elapsedTime": 50.72,
+            "id": "Q6-i"
+        }, {"answer": "a", "elapsedTime": 130.379, "id": "Q6-ii"}, {
+            "answer": "b",
+            "elapsedTime": 132.774,
+            "id": "Q5-ii"
+        }],
+        "qualitativeData": [{"id": "sus1", "answer": "agree"}, {"id": "sus2", "answer": "disagree"}, {
+            "id": "sus3",
+            "answer": "strong_agree"
+        }, {"id": "sus4", "answer": "strong_disagree"}, {"id": "sus5", "answer": "strong_agree"}, {
+            "id": "sus6",
+            "answer": "strong_disagree"
+        }, {"id": "sus7", "answer": "disagree"}, {"id": "sus8", "answer": "neutral"}, {
+            "id": "sus9",
+            "answer": "agree"
+        }, {"id": "sus10", "answer": "strong_disagree"}],
+        "dateCompleted": "6/28/2021, 8:27:21 PM",
+        "group": "nullity",
+        "positiveRemarks": "- Enxergar tendências à partir de cores\n- Capacidade de comparar várias características umas com as outras.",
+        "negativeRemarks": "- A tarefa se torna mais complexa com a adição de mais dimensões, e é preciso reorganizar a visualização para fazer as devidas comparações."
+    },
+
+    // J. seg., 28 de jun. 20:52
+    {
+        "quantitativeData": [{"answer": "b", "elapsedTime": 21.394, "id": "Q1-ii"}, {
+            "answer": "a",
+            "elapsedTime": 12.759,
+            "id": "Q7-ii"
+        }, {"answer": "a", "elapsedTime": 19.908, "id": "Q1-i"}, {
+            "answer": "b",
+            "elapsedTime": 22.252,
+            "id": "Q7-i"
+        }, {"answer": "c", "elapsedTime": 20.991, "id": "Q2-ii"}, {
+            "answer": "b",
+            "elapsedTime": 15.159,
+            "id": "Q2-i"
+        }, {"answer": "b", "elapsedTime": 42.027, "id": "Q4-ii"}, {
+            "answer": "b",
+            "elapsedTime": 19.766,
+            "id": "Q4-i"
+        }, {"answer": "c", "elapsedTime": 10.842, "id": "Q3-ii"}, {
+            "answer": "a",
+            "elapsedTime": 17.859,
+            "id": "Q3-i"
+        }, {"answer": "c", "elapsedTime": 23.583, "id": "Q5-i"}, {
+            "answer": "b",
+            "elapsedTime": 23.451,
+            "id": "Q5-ii"
+        }, {"answer": "b", "elapsedTime": 96.278, "id": "Q6-ii"}, {"answer": "c", "elapsedTime": 57.456, "id": "Q6-i"}],
+        "qualitativeData": [{"id": "sus1", "answer": "strong_agree"}, {
+            "id": "sus2",
+            "answer": "strong_disagree"
+        }, {"id": "sus3", "answer": "agree"}, {"id": "sus4", "answer": "agree"}, {
+            "id": "sus5",
+            "answer": "strong_agree"
+        }, {"id": "sus6", "answer": "strong_disagree"}, {"id": "sus7", "answer": "strong_agree"}, {
+            "id": "sus8",
+            "answer": "strong_disagree"
+        }, {"id": "sus9", "answer": "agree"}, {"id": "sus10", "answer": "strong_agree"}],
+        "dateCompleted": "28/06/2021 20:48:14",
+        "group": "nullity",
+        "positiveRemarks": "Conseguir enxergar claramente a correlação, quando há, entre as colunas.\nNão imagino um aumento significativo de complexidade ao visualizar até 15 colunas.\nO uso de cores que facilitam enxergar claramente a progressão de valores.\nConseguir enxergar claramente uma coluna ordenada.\n",
+        "negativeRemarks": "Não conseguir identificar claramente qual coluna está se comparando com qual.\nNão conseguir identificar claramente quando não há uma correlação entre as colunas quando há dados faltantes levemente agrupados, pois há dúvida se há um padrão ou não, ou seja, qual o limite da correlação? Eu devo saber ou a visualização deve me dizer?\n\n"
+    },
+
+    // R. 28 de jun. 21:51
+    {
+        "quantitativeData": [{"answer": "b", "elapsedTime": 129.638, "id": "Q1-ii"}, {
+            "answer": "c",
+            "elapsedTime": 16.964,
+            "id": "Q2-ii"
+        }, {"answer": "a", "elapsedTime": 18.428, "id": "Q1-i"}, {
+            "answer": "b",
+            "elapsedTime": 6.707,
+            "id": "Q7-i"
+        }, {"answer": "b", "elapsedTime": 14.311, "id": "Q2-i"}, {
+            "answer": "a",
+            "elapsedTime": 25.941,
+            "id": "Q7-ii"
+        }, {"answer": "c", "elapsedTime": 46.646, "id": "Q3-i"}, {
+            "answer": "b",
+            "elapsedTime": 61.247,
+            "id": "Q4-i"
+        }, {"answer": "c", "elapsedTime": 19.193, "id": "Q4-ii"}, {
+            "answer": "c",
+            "elapsedTime": 12.488,
+            "id": "Q3-ii"
+        }, {"answer": "c", "elapsedTime": 22.894, "id": "Q5-i"}, {
+            "answer": "d",
+            "elapsedTime": 33.536,
+            "id": "Q6-i"
+        }, {"answer": "b", "elapsedTime": 21.851, "id": "Q6-ii"}, {
+            "answer": "b",
+            "elapsedTime": 10.893,
+            "id": "Q5-ii"
+        }],
+        "qualitativeData": [{"id": "sus1", "answer": "agree"}, {"id": "sus2", "answer": "disagree"}, {
+            "id": "sus3",
+            "answer": "strong_agree"
+        }, {"id": "sus4", "answer": "strong_disagree"}, {"id": "sus5", "answer": "agree"}, {
+            "id": "sus6",
+            "answer": "strong_disagree"
+        }, {"id": "sus7", "answer": "neutral"}, {"id": "sus8", "answer": "strong_disagree"}, {
+            "id": "sus9",
+            "answer": "strong_agree"
+        }, {"id": "sus10", "answer": "disagree"}],
+        "dateCompleted": "28/06/2021 21:50:36",
+        "group": "proposed",
+        "positiveRemarks": "O histograma complementa a técnica principal, possibilitando um maior entendimento dos dados.",
+        "negativeRemarks": "Dificuldade de percepção das relações na técnica principal, quando tem mais de uma linha da mesma cor saindo da mesma dimensão (ex.: questão 11)\n"
+    },
+
+    // P. ter., 29 de jun. 15:01
+    {
+        "quantitativeData": [{"answer": "c", "elapsedTime": 42.129, "id": "Q2-ii"}, {
+            "answer": "b",
+            "elapsedTime": 58.513,
+            "id": "Q2-i"
+        }, {"answer": "a", "elapsedTime": 33.84, "id": "Q7-ii"}, {
+            "answer": "a",
+            "elapsedTime": 17.703,
+            "id": "Q1-i"
+        }, {"answer": "b", "elapsedTime": 27.992, "id": "Q1-ii"}, {
+            "answer": "b",
+            "elapsedTime": 19.463,
+            "id": "Q7-i"
+        }, {"answer": "c", "elapsedTime": 34.136, "id": "Q4-ii"}, {
+            "answer": "c",
+            "elapsedTime": 77.249,
+            "id": "Q3-ii"
+        }, {"answer": "a", "elapsedTime": 53.817, "id": "Q3-i"}, {
+            "answer": "b",
+            "elapsedTime": 75.689,
+            "id": "Q4-i"
+        }, {"answer": "c", "elapsedTime": 30.441, "id": "Q6-i"}, {
+            "answer": "b",
+            "elapsedTime": 47.513,
+            "id": "Q5-ii"
+        }, {"answer": "c", "elapsedTime": 22.527, "id": "Q5-i"}, {"answer": "b", "elapsedTime": 20.399, "id": "Q6-ii"}],
+        "qualitativeData": [{"id": "sus1", "answer": "strong_agree"}, {
+            "id": "sus2",
+            "answer": "disagree"
+        }, {"id": "sus3", "answer": "agree"}, {"id": "sus4", "answer": "disagree"}, {
+            "id": "sus5",
+            "answer": "strong_agree"
+        }, {"id": "sus6", "answer": "strong_disagree"}, {"id": "sus7", "answer": "strong_agree"}, {
+            "id": "sus8",
+            "answer": "strong_disagree"
+        }, {"id": "sus9", "answer": "strong_agree"}, {"id": "sus10", "answer": "strong_disagree"}],
+        "dateCompleted": "6/29/2021, 3:00:40 PM",
+        "group": "proposed",
+        "positiveRemarks": "Facilidade em linkar as dimensões faltantes com as outras dimensões;\nHistogramas permitem uma análise mais específica.",
+        "negativeRemarks": "Fica um pouco difícil definir onde a cor da linha se encaixa na escala de cor da parte inferior. Talvez utilizar linhas mais grossas ou cores mais fortes deixaria mais visível; ou mesmo permitir clicar na linha e destacar a posição na escala de cor."
+    },
+
+    // A. ter., 29 de jun. 15:11
+    {
+        "quantitativeData": [{"answer": "c", "elapsedTime": 70.416, "id": "Q1-i"}, {
+            "answer": "b",
+            "elapsedTime": 18.269,
+            "id": "Q2-i"
+        }, {"answer": "c", "elapsedTime": 21.577, "id": "Q2-ii"}, {
+            "answer": "b",
+            "elapsedTime": 27.114,
+            "id": "Q1-ii"
+        }, {"answer": "a", "elapsedTime": 14.101, "id": "Q7-ii"}, {
+            "answer": "b",
+            "elapsedTime": 10.867,
+            "id": "Q7-i"
+        }, {"answer": "a", "elapsedTime": 32.309, "id": "Q3-i"}, {
+            "answer": "b",
+            "elapsedTime": 57.882,
+            "id": "Q4-i"
+        }, {"answer": "c", "elapsedTime": 17.893, "id": "Q4-ii"}, {
+            "answer": "c",
+            "elapsedTime": 17.416,
+            "id": "Q3-ii"
+        }, {"answer": "c", "elapsedTime": 40.334, "id": "Q5-i"}, {
+            "answer": "c",
+            "elapsedTime": 34.643,
+            "id": "Q6-i"
+        }, {"answer": "b", "elapsedTime": 20.017, "id": "Q6-ii"}, {
+            "answer": "b",
+            "elapsedTime": 25.072,
+            "id": "Q5-ii"
+        }],
+        "qualitativeData": [{"id": "sus1", "answer": "agree"}, {"id": "sus2", "answer": "disagree"}, {
+            "id": "sus3",
+            "answer": "neutral"
+        }, {"id": "sus4", "answer": "disagree"}, {"id": "sus5", "answer": "strong_agree"}, {
+            "id": "sus6",
+            "answer": "disagree"
+        }, {"id": "sus7", "answer": "strong_agree"}, {"id": "sus8", "answer": "disagree"}, {
+            "id": "sus9",
+            "answer": "agree"
+        }, {"id": "sus10", "answer": "neutral"}],
+        "dateCompleted": "29/06/2021 15:08:55",
+        "group": "proposed",
+        "positiveRemarks": "Variáveis visuais como as cores, foram bem utilizadas, trocaria o verde pelo azul, para tirar a noção de aprovação e desaprovação dos dados. A porcentagem de correlação dos dados (barras do meio) é muito útil responde logo de cara qual dimensão utilizar.",
+        "negativeRemarks": "Acho que quando utilizado com bases grandes a complexidade da visualização aumenta. Logo seria necessário fazer testes com bases complexas e identificar os possível problemas da visualização. É necessário mostrar melhor como funciona o gráfico de porcentagem abaixo, ele não foi muito útil quando para resolver as questões das tarefas."
+    },
+
+    // N. ter., 29 de jun. 17:53
+    {
+        "quantitativeData": [{"answer": "c", "elapsedTime": 23.518, "id": "Q2-ii"}, {
+            "answer": "b",
+            "elapsedTime": 12.909,
+            "id": "Q2-i"
+        }, {"answer": "a", "elapsedTime": 10.254, "id": "Q7-ii"}, {
+            "answer": "b",
+            "elapsedTime": 12.085,
+            "id": "Q7-i"
+        }, {"answer": "a", "elapsedTime": 5.38, "id": "Q1-i"}, {
+            "answer": "b",
+            "elapsedTime": 5.71,
+            "id": "Q1-ii"
+        }, {"answer": "a", "elapsedTime": 9.004, "id": "Q3-i"}, {
+            "answer": "c",
+            "elapsedTime": 20.522,
+            "id": "Q3-ii"
+        }, {"answer": "b", "elapsedTime": 44.673, "id": "Q4-i"}, {
+            "answer": "c",
+            "elapsedTime": 37.709,
+            "id": "Q4-ii"
+        }, {"answer": "b", "elapsedTime": 89.77, "id": "Q6-ii"}, {
+            "answer": "c",
+            "elapsedTime": 17.608,
+            "id": "Q6-i"
+        }, {"answer": "b", "elapsedTime": 19.199, "id": "Q5-ii"}, {"answer": "c", "elapsedTime": 16.471, "id": "Q5-i"}],
+        "qualitativeData": [{"id": "sus1", "answer": "agree"}, {"id": "sus2", "answer": "neutral"}, {
+            "id": "sus3",
+            "answer": "agree"
+        }, {"id": "sus4", "answer": "agree"}, {"id": "sus5", "answer": "agree"}, {
+            "id": "sus6",
+            "answer": "disagree"
+        }, {"id": "sus7", "answer": "agree"}, {"id": "sus8", "answer": "disagree"}, {
+            "id": "sus9",
+            "answer": "neutral"
+        }, {"id": "sus10", "answer": "neutral"}],
+        "dateCompleted": "6/29/2021, 5:52:24 PM",
+        "group": "proposed",
+        "positiveRemarks": "A escala não linear para indicar a ligação entre valores perdidos de uma dimensão em relação a outra é bastante objetiva.\nO posicionamento dos gráficos também ficou muito bom, pude seguir a ordem de leitura em todas as tarefas sem precisar ficar \"voltando\" pra consultar os links na escala quando chegava nos histogramas.",
+        "negativeRemarks": "A escala continua de cores na ocorrência de dados faltantes, acredito que abstrair numa escala categórica traria um ganho na capacidade de comparação entre os links sem perda significativa na informação comunicada.\nEu também preferiria que as barras de menos (laranjas) começassem no eixo, tenderia a deixar a distribuição esperada sempre visível sem causar detrimento a percepção de distância entre esperado e observado."
+    },
+
+    // E. ter., 29 de jun. 20:55
+    {
+        "quantitativeData": [{"answer": "a", "elapsedTime": 77.092, "id": "Q7-ii"}, {
+            "answer": "a",
+            "elapsedTime": 80.788,
+            "id": "Q1-i"
+        }, {"answer": "d", "elapsedTime": 16.394, "id": "Q7-i"}, {
+            "answer": "c",
+            "elapsedTime": 18.915,
+            "id": "Q2-ii"
+        }, {"answer": "b", "elapsedTime": 14.626, "id": "Q2-i"}, {
+            "answer": "b",
+            "elapsedTime": 138.39,
+            "id": "Q1-ii"
+        }, {"answer": "d", "elapsedTime": 79.692, "id": "Q4-ii"}, {
+            "answer": "a",
+            "elapsedTime": 19.5,
+            "id": "Q3-i"
+        }, {"answer": "c", "elapsedTime": 12.955, "id": "Q3-ii"}, {
+            "answer": "d",
+            "elapsedTime": 20.411,
+            "id": "Q4-i"
+        }, {"answer": "a", "elapsedTime": 112.705, "id": "Q6-ii"}, {
+            "answer": "c",
+            "elapsedTime": 56.818,
+            "id": "Q5-i"
+        }, {"answer": "b", "elapsedTime": 26.34, "id": "Q5-ii"}, {"answer": "d", "elapsedTime": 35.51, "id": "Q6-i"}],
+        "qualitativeData": [{"id": "sus1", "answer": "neutral"}, {"id": "sus2", "answer": "disagree"}, {
+            "id": "sus3",
+            "answer": "neutral"
+        }, {"id": "sus4", "answer": "neutral"}, {"id": "sus5", "answer": "agree"}, {
+            "id": "sus6",
+            "answer": "neutral"
+        }, {"id": "sus7", "answer": "disagree"}, {"id": "sus8", "answer": "disagree"}, {
+            "id": "sus9",
+            "answer": "agree"
+        }, {"id": "sus10", "answer": "disagree"}],
+        "dateCompleted": "29/06/2021 20:53:21",
+        "group": "nullity",
+        "positiveRemarks": "facilidade de identificar os faltantes é o bom uso da cor vermelha",
+        "negativeRemarks": "a barra de cor com os valores altos na horizontal, falta de interatividade para ordenar os items e highlight"
     }
 ]
 
