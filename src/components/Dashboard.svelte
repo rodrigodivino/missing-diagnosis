@@ -48,13 +48,13 @@
     <g class="list-legend" transform='translate({$canvasWidth * 0.7},0)'>
         <g transform="translate(40, {$canvasHeight * 0.0125})">
             <rect fill="mediumseagreen" height={$canvasHeight * 0.025} width={$canvasHeight * 0.025}></rect>
-            <text alignment-baseline="middle" font-size="16px" x={$canvasHeight * 0.025 + 5}
+            <text dominant-baseline="middle" font-size="16px" x={$canvasHeight * 0.025 + 5}
                   y={$canvasHeight * 0.0125 + 1.5}> {lang === 'pt' ? 'Mais que o esperado':'More than expected'}
             </text>
         </g>
         <g transform="translate({40 + $canvasWidth * 0.15}, {$canvasHeight * 0.0125})">
             <rect fill="tomato" height={$canvasHeight * 0.025} width={$canvasHeight * 0.025}></rect>
-            <text alignment-baseline="middle" font-size="16px" x={$canvasHeight * 0.025 + 5}
+            <text dominant-baseline="middle" font-size="16px" x={$canvasHeight * 0.025 + 5}
                   y={$canvasHeight * 0.0125 + 1.5}> {lang === 'pt' ? 'Menos que o esperado':'Less than expected'}
             </text>
         </g>

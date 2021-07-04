@@ -171,7 +171,7 @@
                 <line y1={-segmentWidth} x1={scaleXError(datum.proposed.errorCI[1])} y2={segmentWidth}
                       x2={scaleXError(datum.proposed.errorCI[1])}
                       stroke={proposedColor} stroke-width="1"></line>
-                <text font-size="18px" font-weight="bolder" alignment-baseline="middle" text-anchor="middle" x={scaleXError(datum.proposed.averageError)}
+                <text font-size="18px" font-weight="bolder" dominant-baseline="middle" text-anchor="middle" x={scaleXError(datum.proposed.averageError)}
                       fill={proposedColor}>x</text>
             </g>
         {/each}
@@ -186,7 +186,7 @@
                 <line y1={-segmentWidth} x1={scaleXError(datum.nullity.errorCI[1])} y2={segmentWidth}
                       x2={scaleXError(datum.nullity.errorCI[1])}
                       stroke={nullityColor} stroke-width="1"></line>
-                <text font-size="18px" font-weight="bolder" alignment-baseline="middle" text-anchor="middle" x={scaleXError(datum.nullity.averageError)}
+                <text font-size="18px" font-weight="bolder" dominant-baseline="middle" text-anchor="middle" x={scaleXError(datum.nullity.averageError)}
                       fill={nullityColor}>x</text>
             </g>
         {/each}

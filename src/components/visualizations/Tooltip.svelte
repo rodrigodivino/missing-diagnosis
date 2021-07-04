@@ -117,19 +117,19 @@
                     transform="translate(0,{innerHeight})"></g>
             <g bind:this={yAxisDOM} class="y-axis"></g>
             <text
-                    alignment-baseline="middle"
+                    dominant-baseline="middle"
                     class="title"
                     font-size="16px"
                     x={innerWidth / 2}
                     y={-margin.top / 2 + 2}>
-                <tspan alignment-baseline="middle" font-weight="bold">
+                <tspan dominant-baseline="middle" font-weight="bold">
                     {measurementVariable}
                 </tspan>
                 {lang==='pt' ? 'quando não há ':'when missing '}
-                <tspan alignment-baseline="middle" font-weight="bold">
+                <tspan dominant-baseline="middle" font-weight="bold">
                     {samplingVariable}
                 </tspan>
-                <tspan alignment-baseline="middle">({nOfMissingSamples})</tspan>
+                <tspan dominant-baseline="middle">({nOfMissingSamples})</tspan>
             </text>
         </g>
         <g class="foreground">

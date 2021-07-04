@@ -17,7 +17,22 @@
 
 
     $: if (XAxis) {
-        select(XAxis).call(axisBottom(scaleX).tickSizeOuter(0))
+        select(XAxis).call(axisBottom(scaleX).tickSizeOuter(0)).selectAll('.tick').each(function (t, i, nodes) {
+            const line = select(this)
+                .selectAll('line')
+
+            if(i=== nodes.length - 1) {
+                return line.remove()
+            }
+            line
+                .attr('shape-rendering', 'crispEdges')
+                .clone()
+                .attr('y2', -innerHeight)
+                .attr('stroke-width', 0.5)
+                .attr('stroke', '#DEDEDE')
+                .attr('stroke-dasharray', '2 1')
+                .attr('shape-rendering', 'crispEdges')
+        })
     }
 
     const segmentWidth = 6;

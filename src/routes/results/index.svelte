@@ -51,6 +51,52 @@
     console.log('answers of the proposed group in task T3-i: ', finalUserData.filter(u => u.group === 'proposed').map(u => u.quantitativeData.find(q => q.id === 'Q3-i').answer) )
     console.log('answers of the nullity group in task T4-ii: ', finalUserData.filter(u => u.group === 'nullity').map(u => u.quantitativeData.find(q => q.id === 'Q4-ii').answer) )
     console.log('answers of the nullity group in task T6-i: ', finalUserData.filter(u => u.group === 'nullity').map(u => u.quantitativeData.find(q => q.id === 'Q6-i')?.answer) )
+    console.log('answers of the nullity group in task T6-ii: ', finalUserData.filter(u => u.group === 'nullity').map(u => u.quantitativeData.find(q => q.id === 'Q6-ii')?.answer) )
+
+    function unique(item,i,allItems){
+        return i === allItems.indexOf(item);
+    }
+
+    function notCommon(item) {
+        return (item !== 'visualizacao') && (item !== 'faltantes') && (item !== 'perdido') && (item !== 'dados') && (item !== 'dado')
+    }
+    function replaceSpecialChars(str) {
+        if(!str) return undefined;
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    }
+
+    console.log('---- WORDS ----')
+    console.log('Positive words for proposed: ',
+        finalUserData
+            .filter(u => u.group === 'proposed')
+            .flatMap(u => replaceSpecialChars(u.positiveRemarks)?.match(/(\w+)/g).filter(w => w?.length > 4).filter(unique).filter(notCommon).join(" "))
+            .join(" ")
+    )
+
+    console.log('Positive words for nullity: ',
+        finalUserData
+            .filter(u => u.group === 'nullity')
+            .flatMap(u => replaceSpecialChars(u.positiveRemarks)?.match(/(\w+)/g).filter(w => w?.length > 4).filter(unique).filter(notCommon).join(" "))
+            .join(" ")
+    )
+
+
+    console.log('Negative words for proposed: ',
+        finalUserData
+            .filter(u => u.group === 'proposed')
+            .flatMap(u => replaceSpecialChars(u.negativeRemarks)?.match(/(\w+)/g).filter(w => w?.length > 4).filter(unique).filter(notCommon).join(" "))
+            .join(" ")
+    )
+
+    console.log('Negative words for nullity: ',
+        finalUserData
+            .filter(u => u.group === 'nullity')
+            .flatMap(u => replaceSpecialChars(u.negativeRemarks)?.match(/(\w+)/g).filter(w => w?.length > 4).filter(unique).filter(notCommon).join(" "))
+            .join(" ")
+    )
+
+
+
 
     questionOutliers.forEach(question => {
         console.warn(`

@@ -429,7 +429,7 @@
                         x={-12}
                         y={samplingScale(columnMissing) + samplingScale.bandwidth() / 2}
                         text-anchor="end"
-                        alignment-baseline="middle">
+                        dominant-baseline="middle">
                   {columnMissing + ` (${binsMatrix[i][i][binsMatrix[i][i].length - 1].count})`}
                 </text>
               </g>
@@ -468,7 +468,7 @@
                     x={12}
                     y={measurementScale(column) + measurementScale.bandwidth() / 2}
                     text-anchor="start"
-                    alignment-baseline="middle">
+                    dominant-baseline="middle">
               {column}
             </text>
           </g>
@@ -481,7 +481,7 @@
           <text
                   class="axis-tick"
                   text-anchor="middle"
-                  alignment-baseline="middle"
+                  dominant-baseline="middle"
                   y={ratioScale(i * 10)}>
             {(i * 10).toFixed(0) + '%'}
           </text>

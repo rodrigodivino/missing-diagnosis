@@ -177,7 +177,7 @@
         .attr("x", xScale.bandwidth() / 2)
         .attr("y", -xScale.bandwidth() / 4)
         .attr("transform", "rotate(90)")
-        .attr("alignment-baseline", "middle")
+        .attr("dominant-baseline", "middle")
         .style("text-anchor", "start");
       yg.call(yAxis);
       cg.call(colorLegend);

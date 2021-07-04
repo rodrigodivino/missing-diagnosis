@@ -22,7 +22,7 @@
         stroke: black;
         font-size: 0.8em;
         text-anchor: middle;
-        alignment-baseline: middle;
+        dominant-baseline: middle;
     }
 
     text.axis-name {
@@ -50,7 +50,7 @@
                 {((convergence / 100) * 100).toFixed(2)}%
             </text>
             <text
-                    alignment-baseline="middle"
+                    dominant-baseline="middle"
                     class="axis-name"
                     x={10}
                     y={innerHeight / 2}>
