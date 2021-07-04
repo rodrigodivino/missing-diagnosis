@@ -5,8 +5,8 @@
 
     export let data;
 
-    const margin = {left: 200, right: 20, bottom: 50, top: 20}
-    const width = 512;
+    const margin = {left: 70, right: 20, bottom: 50, top: 20}
+    const width = 400;
     const height = 600;
 
     const innerWidth = width - margin.left - margin.right;

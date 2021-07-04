@@ -31,7 +31,7 @@
     $: console.log(data);
 
     $: if (timeXAxis) {
-        select(timeXAxis).call(axisBottom(scaleX).tickSizeOuter(0)).selectAll('.tick').each(function (t, i, nodes) {
+        select(timeXAxis).call(axisBottom(scaleX).tickSizeOuter(0).tickFormat(t => t.replaceAll('Q', 'T'))).selectAll('.tick').each(function (t, i, nodes) {
             const line = select(this)
                 .selectAll('line')
 
@@ -52,7 +52,7 @@
     }
 
     $: if (errorXAxis) {
-        select(errorXAxis).call(axisBottom(scaleX).tickSizeOuter(0)).selectAll('.tick').each(function (t, i, nodes) {
+        select(errorXAxis).call(axisBottom(scaleX).tickSizeOuter(0).tickFormat(t => t.replaceAll('Q', 'T'))).selectAll('.tick').each(function (t, i, nodes) {
             const line = select(this)
                 .selectAll('line')
 
@@ -158,7 +158,7 @@
                 <line x1={-segmentWidth} y1={scaleYError(datum.proposed.errorCI[1])} x2={segmentWidth}
                       y2={scaleYError(datum.proposed.errorCI[1])}
                       stroke={proposedColor} stroke-width="1"></line>
-                <text font-size="18px" font-weight="bolder" alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.proposed.errorRate)}
+                <text font-size="18px" font-weight="bolder" dominant-baseline="middle" text-anchor="middle" y={scaleYError(datum.proposed.errorRate)}
                       fill={proposedColor}>x</text>
             </g>
         {/each}
@@ -173,7 +173,7 @@
                 <line x1={-segmentWidth} y1={scaleYError(datum.nullity.errorCI[1])} x2={segmentWidth}
                       y2={scaleYError(datum.nullity.errorCI[1])}
                       stroke={nullityColor} stroke-width="1"></line>
-                <text font-size="18px" font-weight="bolder" alignment-baseline="middle" text-anchor="middle" y={scaleYError(datum.nullity.errorRate)}
+                <text font-size="18px" font-weight="bolder" dominant-baseline="middle" text-anchor="middle" y={scaleYError(datum.nullity.errorRate)}
                       fill={nullityColor}>x</text>
             </g>
         {/each}

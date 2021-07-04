@@ -885,6 +885,92 @@ export const USER_RESULTS = [
         "group": "nullity",
         "positiveRemarks": "facilidade de identificar os faltantes é o bom uso da cor vermelha",
         "negativeRemarks": "a barra de cor com os valores altos na horizontal, falta de interatividade para ordenar os items e highlight"
+    },
+
+    // D. sex., 2 de jul. 13:26
+    {
+        "quantitativeData": [{"answer": "b", "elapsedTime": 51.262, "id": "Q7-i"}, {
+            "answer": "a",
+            "elapsedTime": 16.083,
+            "id": "Q7-ii"
+        }, {"answer": "b", "elapsedTime": 21.955, "id": "Q2-i"}, {
+            "answer": "a",
+            "elapsedTime": 29.482,
+            "id": "Q1-i"
+        }, {"answer": "c", "elapsedTime": 9.591, "id": "Q2-ii"}, {
+            "answer": "b",
+            "elapsedTime": 11.08,
+            "id": "Q1-ii"
+        }, {"answer": "b", "elapsedTime": 85.145, "id": "Q4-i"}, {
+            "answer": "c",
+            "elapsedTime": 28.892,
+            "id": "Q3-ii"
+        }, {"answer": "c", "elapsedTime": 29.488, "id": "Q3-i"}, {
+            "answer": "c",
+            "elapsedTime": 49.391,
+            "id": "Q4-ii"
+        }, {"answer": "b", "elapsedTime": 30.104, "id": "Q6-ii"}, {
+            "answer": "d",
+            "elapsedTime": 47.4,
+            "id": "Q5-ii"
+        }, {"answer": "c", "elapsedTime": 15.961, "id": "Q6-i"}, {"answer": "c", "elapsedTime": 18.04, "id": "Q5-i"}],
+        "qualitativeData": [{"id": "sus1", "answer": "agree"}, {"id": "sus2", "answer": "disagree"}, {
+            "id": "sus3",
+            "answer": "disagree"
+        }, {"id": "sus4", "answer": "disagree"}, {"id": "sus5", "answer": "neutral"}, {
+            "id": "sus6",
+            "answer": "disagree"
+        }, {"id": "sus7", "answer": "disagree"}, {"id": "sus8", "answer": "neutral"}, {
+            "id": "sus9",
+            "answer": "disagree"
+        }, {"id": "sus10", "answer": "agree"}],
+        "dateCompleted": "02/07/2021 13:25:13",
+        "group": "proposed",
+        "positiveRemarks": "Boa coordenação entre as visualizações.\nA técnica estilo aluvial favorece muito o estabelecimento da relação entre atributos distintos.\n",
+        "negativeRemarks": "Codificação de cores. Seria interessante usar espectros mais distintos, pessoas com daltonismo podem confundir o tom de verde e laranja utilizados.\nA técnica de histograma talvez não seja tão clara para a maior parte dos usuários, mas ele auxilia bastante para visualizar a correlação entre valores faltantes de um atributo em outro atributo."
+    },
+
+    // I. sex., 2 de jul. 15:42
+    {
+        "quantitativeData": [{"answer": "a", "elapsedTime": 23.382, "id": "Q7-ii"}, {
+            "answer": "b",
+            "elapsedTime": 32.061,
+            "id": "Q1-i"
+        }, {"answer": "b", "elapsedTime": 14.714, "id": "Q7-i"}, {
+            "answer": "c",
+            "elapsedTime": 23.294,
+            "id": "Q2-ii"
+        }, {"answer": "b", "elapsedTime": 8.85, "id": "Q1-ii"}, {
+            "answer": "b",
+            "elapsedTime": 10.281,
+            "id": "Q2-i"
+        }, {"answer": "a", "elapsedTime": 18.247, "id": "Q3-i"}, {
+            "answer": "b",
+            "elapsedTime": 55.222,
+            "id": "Q4-i"
+        }, {"answer": "b", "elapsedTime": 42.276, "id": "Q3-ii"}, {
+            "answer": "d",
+            "elapsedTime": 39.558,
+            "id": "Q4-ii"
+        }, {"answer": "a", "elapsedTime": 116.442, "id": "Q6-i"}, {
+            "answer": "b",
+            "elapsedTime": 45.953,
+            "id": "Q5-ii"
+        }, {"answer": "d", "elapsedTime": 26.231, "id": "Q6-ii"}, {"answer": "c", "elapsedTime": 25.31, "id": "Q5-i"}],
+        "qualitativeData": [{"id": "sus1", "answer": "agree"}, {"id": "sus2", "answer": "disagree"}, {
+            "id": "sus3",
+            "answer": "agree"
+        }, {"id": "sus4", "answer": "neutral"}, {"id": "sus5", "answer": "agree"}, {
+            "id": "sus6",
+            "answer": "neutral"
+        }, {"id": "sus7", "answer": "neutral"}, {"id": "sus8", "answer": "disagree"}, {
+            "id": "sus9",
+            "answer": "neutral"
+        }, {"id": "sus10", "answer": "agree"}],
+        "dateCompleted": "02/07/2021 15:36:53",
+        "group": "nullity",
+        "positiveRemarks": "Facilita a identificação de problemas através da relação direta com os dados faltantes.",
+        "negativeRemarks": "os dados não ordenados, é mais difícil de fazer as relações com as demais dimensões."
     }
 ]
 

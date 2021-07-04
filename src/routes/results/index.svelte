@@ -7,6 +7,7 @@
     import {getSUSQuestionnaireResults} from "./processing/getSUSQuestionnaireResults";
     import {USER_RESULTS} from "./USER_RESULTS";
     import {answerTable} from "../tests/answerTable";
+    import {descending, mean} from 'd3'
     import {outlierTreatment, questionTookTooMoreThan5Minutes} from "./processing/outlierTreatment";
     import {getSUSScoreResults} from "./processing/getSUSScoreResults";
 
@@ -43,6 +44,13 @@
     console.log('Total Participants: ', finalUserData.length)
     console.log('P: ', finalUserData.filter(u => u.group === 'proposed').length)
     console.log('N: ', finalUserData.filter(u => u.group === 'nullity').length)
+
+    console.log('average time: ', mean(finalUserData.map(u => mean(u.quantitativeData.map(q => q.elapsedTime)))))
+    console.log('non outlier time: ', finalUserData.map(u => Math.max(...u.quantitativeData.map(q => q.elapsedTime))).sort(descending))
+
+    console.log('answers of the proposed group in task T3-i: ', finalUserData.filter(u => u.group === 'proposed').map(u => u.quantitativeData.find(q => q.id === 'Q3-i').answer) )
+    console.log('answers of the nullity group in task T4-ii: ', finalUserData.filter(u => u.group === 'nullity').map(u => u.quantitativeData.find(q => q.id === 'Q4-ii').answer) )
+    console.log('answers of the nullity group in task T6-i: ', finalUserData.filter(u => u.group === 'nullity').map(u => u.quantitativeData.find(q => q.id === 'Q6-i')?.answer) )
 
     questionOutliers.forEach(question => {
         console.warn(`
