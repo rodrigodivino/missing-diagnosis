@@ -58,7 +58,7 @@
     }
 
     function notCommon(item) {
-        return (item !== 'visualizacao') && (item !== 'faltantes') && (item !== 'perdido') && (item !== 'dados') && (item !== 'dado')
+        return (item !== 'visualizacao') && (item !== 'tecnica') && (item !== 'faltantes') && (item !== 'perdido') && (item !== 'dados') && (item !== 'dado')
     }
     function replaceSpecialChars(str) {
         if(!str) return undefined;

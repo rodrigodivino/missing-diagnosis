@@ -81,7 +81,7 @@
     }
   };
 
-  let lang = 'pt';
+  let lang = 'en';
 </script>
 
 <style>

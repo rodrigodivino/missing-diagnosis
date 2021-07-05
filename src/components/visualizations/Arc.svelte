@@ -112,11 +112,11 @@
 
     const p = path();
 
-    const sourceY = samplingScale(source) + value * samplingBand;
+    const sourceY = samplingScale(source) + (ratioScale(value * 100) / innerHeight) * samplingBand;
     const sourceX = 0;
     const valueY = ratioScale(value * 100);
     const valueX = innerWidth / 2;
-    const targetY = measurementScale(target) + value * measurementBand;
+    const targetY = measurementScale(target) + (ratioScale(value * 100) / innerHeight) * measurementBand;
     const targetX = innerWidth;
 
     const xDisplacement = innerWidth / 4;
@@ -398,7 +398,7 @@
     <g class="layer1">
       <g class="sampling-axis">
         <text class="axis-name" x={0} y={-10}>
-          {lang === 'pt' ? 'Variávies com Dados Faltantes':'Variables With Missing Values'}
+          {lang === 'pt' ? 'Variávies com Dados Faltantes':'Dimensions With Missing Values'}
         </text>
         <g class="samplingAxis" on:click={handleSamplingVariableClick}>
           {#each columns as columnMissing, i}
@@ -442,7 +442,7 @@
               class="measurement-axis"
               on:click={handleMeasurementVariableClick}
               transform="translate({innerWidth},0)">
-        <text class="axis-name" x={+5} y={-10}>{lang === 'pt' ? 'Todas as Variáveis':'All Variables'}</text>
+        <text class="axis-name" x={+5} y={-10}>{lang === 'pt' ? 'Todas as Variáveis':'All Dimensions'}</text>
         {#each columns as column, j}
           <g
                   class="samplingAxisElements"
@@ -527,7 +527,7 @@
                 class="axis-name"
                 x={(innerWidth - 100) * 0.5}
                 y={margin.bottom / 6 + margin.bottom / 5 + 25 + 10}>
-          {lang === 'pt' ? 'Co-ocorrência de Dados Faltantes':'Co-Missing Occurrence Rate'}
+          {lang === 'pt' ? 'Co-ocorrência de Dados Faltantes':'Missing Co-Occurrence Rate'}
         </text>
 
         <text
