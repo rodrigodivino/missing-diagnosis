@@ -416,7 +416,7 @@
                   <rect
                           fill="black"
                           x={-10}
-                          y={samplingScale(columnMissing)}
+                          y={samplingScale(columnMissing) + samplingScale.bandwidth() - (samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)) }
                           width={10}
                           height={samplingScale.bandwidth() * getAmountOfSelectedInLine(i, selectedRatioInterval)}></rect>
                 {/if}
@@ -452,14 +452,14 @@
                     x={0}
                     y={measurementScale(column)}
                     width={10}
-                    height={measurementScale.bandwidth()} />
+                    height={measurementScale.bandwidth()}></rect>
             {#if selectedRatioInterval[0] !== 1 || selectedRatioInterval[1] !== 0}
               <rect
                       fill="black"
                       x={0}
-                      y={measurementScale(column)}
+                      y={measurementScale(column) + measurementScale.bandwidth() - (measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval))}
                       width={10}
-                      height={measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval)} />
+                      height={measurementScale.bandwidth() * getAmountOfSelectedInColumn(j, selectedRatioInterval)}></rect>
             {/if}
             <text
                     class="axis-tick"
